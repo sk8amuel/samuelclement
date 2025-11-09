@@ -1,0 +1,719 @@
+/* ========== RESET BASE ========== */
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== BODY HOME (INDEX) ========== */
+body.home {
+  background: #000;
+  color: #f5f5f5;
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  min-height: 100vh;
+}
+
+/* ========== HEADER TOP ========== */
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  padding: 10px 18px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  z-index: 100;
+  background: transparent;
+}
+
+.top-left {
+  display: flex;
+  align-items: baseline;
+  padding: 5px 0 0;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.brand {
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.role {
+  font-size: 11px;
+  color: #bbbbbb;
+}
+
+.top-nav a {
+  margin-left: 28px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  color: #f5f5f5;
+  text-transform: uppercase;
+}
+
+.top-nav a.active,
+.top-nav a:hover {
+  text-decoration: underline;
+}
+
+/* ========== LINEA SOTTO HEADER ========== */
+.top-line {
+  position: fixed;
+  top: 40px;
+  left: 10px;
+  right: 10px;
+  height: 0.5px;
+  background: #f5f5f5;
+  z-index: 90;
+}
+
+/* ========== MAIN INDEX ========== */
+.home-main {
+  padding-top: 70px;
+  padding-bottom: 160px;
+}
+
+/* ========== GRIGLIA PROGETTI HOME ========== */
+.projects-grid {
+  width: 92%;
+  margin: 80px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px 32px;
+}
+
+.project-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  color: #f5f5f5;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-number {
+  font-size: 10px;
+  color: #aaaaaa;
+  letter-spacing: 0.14em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.project-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Hover / attivo */
+.project-item:hover,
+.project-item.is-active {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.project-item:hover .project-number,
+.project-item.is-active .project-number {
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+}
+
+/* ========== BOTTOM LEFT FISSO ========== */
+.fixed-bottom-left {
+  position: fixed;
+  left: 16px;
+  bottom: 12px;
+  font-size: 10px;
+  color: #f5f5f5;
+  z-index: 120;
+}
+
+.fixed-bottom-left a {
+  margin-left: 6px;
+  color: #f5f5f5;
+  text-decoration: underline;
+  font-size: 10px;
+}
+
+/* ========== BOX PROGETTO FISSO (INDEX) ========== */
+.fixed-project-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 110px;
+  z-index: 130;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+.fp-index,
+.fp-info {
+  color: #ffffff;
+}
+
+/* Numero centrale */
+.fp-index {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 100px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Testo a destra del numero */
+.fp-info {
+  position: absolute;
+  left: calc(50% + 110px);
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  pointer-events: auto;
+}
+
+.fp-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.fp-line {
+  font-size: 11px;
+}
+
+/* ========== RESPONSIVE INDEX ========== */
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .fp-index {
+    font-size: 80px;
+  }
+
+  .fp-info {
+    left: calc(50% + 90px);
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 60px;
+  }
+
+  .fp-index {
+    font-size: 60px;
+  }
+
+  .fp-info {
+    left: calc(50% + 60px);
+    bottom: 6px;
+  }
+}
+
+/* ========== PRELOADER ========== */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+#preloader img {
+  max-width: 22%;
+  max-height: 22%;
+  object-fit: contain;
+  display: block;
+}
+
+body.preloader-done #preloader {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.preloader-active {
+  overflow: hidden;
+}
+
+/* ========== FLIP SCENE (INDEX / ABOUT) ========== */
+.page-flip-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  perspective: 1400px;
+  perspective-origin: 50% 25%;
+}
+
+.page-flip {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 40px);
+  margin-top: 70px; /* sotto header */
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  transform: rotateY(0deg);
+  transition:
+    transform 0.95s cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 0.95s cubic-bezier(0.19, 1, 0.22, 1),
+    filter 0.95s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
+}
+
+.page-flip::before {
+  content: "";
+  position: absolute;
+  inset: -40px -40px 40px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at bottom, rgba(0,0,0,0.7), transparent);
+  opacity: 0.35;
+  transition: opacity 0.95s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.page-face {
+  position: absolute;
+  inset: 0;
+  padding-bottom: 160px;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+}
+
+/* Index front */
+.page-index {
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* About back (ghost) */
+.page-about {
+  z-index: 1;
+  transform: rotateY(180deg);
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+/* Stato ABOUT attivo (flip) */
+body.is-about .page-flip {
+  transform: rotateY(180deg);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
+  filter: saturate(1.02);
+}
+
+body.is-about .page-flip::before {
+  opacity: 0.45;
+}
+
+/* Quando ABOUT è davanti */
+body.is-about .page-about {
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* INDEX passa dietro */
+body.is-about .page-index {
+  z-index: 1;
+  opacity: 0.10;
+  pointer-events: none;
+}
+
+/* Nascondi box progetti in ABOUT */
+body.is-about .fixed-project-box {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ========== ABOUT FULL VIEWPORT LAYOUT ========== */
+
+/* Faccia ABOUT: sfondo nero pieno */
+.page-face.page-about {
+  background: #00000030;
+  color: #f5f5f5;
+}
+
+/* Contenuto ABOUT: fullscreen sotto l'header (sia ghost che front) */
+.page-about .about-main {
+  position: absolute;
+  inset: 0;
+  padding: 70px 60px 70px; /* header + margini */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOP: 4 colonne */
+.page-about .about-top {
+  display: grid;
+  grid-template-columns: 1.3fr 1.6fr 1.6fr 1.3fr;
+  gap: 40px;
+  font-size: 10px;
+  line-height: 1.7;
+  z-index: 2;
+}
+
+.page-about .about-block {
+  margin-bottom: 6px;
+}
+
+.page-about .about-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin-bottom: 6px;
+  color: #f5f5f5;
+}
+
+.page-about .about-block p {
+  margin-bottom: 4px;
+}
+
+.page-about .about-block a {
+  color: #f5f5f5;
+  text-decoration: none;
+}
+
+.page-about .about-block a:hover {
+  text-decoration: underline;
+}
+
+/* Foto colonna destra */
+.page-about .about-photo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.page-about .about-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Titolo ABOUT gigante in basso a sinistra */
+.page-about .about-hero-word {
+  position: absolute;
+  left: 60px;
+  bottom: 70px;
+  font-size: clamp(96px, 18vw, 240px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: #ffffff;
+  opacity: 0.9;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+/* BOTTOM: 3 colonne info allineate in basso */
+.page-about .about-bottom {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1.8fr 1.2fr;
+  gap: 40px;
+  font-size: 10px;
+  line-height: 1.8;
+  z-index: 2;
+}
+
+.page-about .about-bottom-block p {
+  margin-bottom: 4px;
+}
+
+/* FULL-WIDTH IMAGE (in fondo) */
+.page-about .about-image-full {
+  margin-top: 40px;
+}
+
+.page-about .about-image-full img {
+  width: 30%;
+  display: block;
+  object-fit: cover;
+  /* NUOVE PROPRIETÀ */
+  float: right; /* Sposta l'immagine a destra e permette al testo di affiancarsi */
+  margin-left: 20px; /* Aggiunge un po' di spazio tra l'immagine e il testo a sinistra */
+}
+
+/* ========== RESPONSIVE ABOUT ========== */
+@media (max-width: 1200px) {
+  .page-about .about-main {
+    padding: 60px 40px 50px;
+  }
+
+  .page-about .about-top {
+    gap: 30px;
+  }
+
+  .page-about .about-hero-word {
+    left: 40px;
+    bottom: 40px;
+    font-size: clamp(72px, 16vw, 180px);
+  }
+}
+
+@media (max-width: 900px) {
+  .page-about .about-main {
+    padding: 60px 30px 40px;
+  }
+
+  .page-about .about-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .page-about .about-photo {
+    grid-column: span 2;
+    max-width: 260px;
+    justify-content: flex-start;
+  }
+
+  .page-about .about-bottom {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .page-about .about-hero-word {
+    left: 30px;
+    bottom: 30px;
+    font-size: clamp(56px, 18vw, 120px);
+  }
+}
+
+
+/* ========== RESPONSIVE ABOUT ========== */
+@media (max-width: 1200px) {
+  body.is-about .about-main {
+    padding: 60px 40px 50px;
+  }
+
+  body.is-about .about-top {
+    gap: 30px;
+  }
+
+  body.is-about .about-hero-word {
+    left: 40px;
+    bottom: 40px;
+    font-size: clamp(72px, 16vw, 180px);
+  }
+}
+
+@media (max-width: 900px) {
+  body.is-about .about-main {
+    padding: 60px 30px 40px;
+  }
+
+  body.is-about .about-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  body.is-about .about-photo {
+    grid-column: span 2;
+    max-width: 260px;
+    justify-content: flex-start;
+  }
+
+  body.is-about .about-bottom {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  body.is-about .about-hero-word {
+    left: 30px;
+    bottom: 30px;
+    font-size: clamp(56px, 18vw, 120px);
+  }
+}
+
+/* ========== PROJECT MODAL ========== */
+.project-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+.project-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+.project-modal-inner {
+  position: relative;
+  width: 88vw;
+  max-width: 1240px;
+  height: 82vh;
+  background: #020202;
+  border: 1px solid #333;
+  padding: 16px 16px 18px;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+/* Stato visibile */
+.project-modal.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project-modal.is-visible .project-modal-overlay {
+  opacity: 1;
+}
+
+.project-modal.is-visible .project-modal-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Close */
+.project-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #f5f5f5;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.project-modal-close:hover {
+  opacity: 0.7;
+}
+
+/* GRID INTERNO MODAL */
+.project-modal-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 18px;
+  height: 100%;
+  margin-top: 10px;
+}
+
+/* LEFT: IMMAGINI */
+.project-modal-left {
+  border-right: 1px solid #181818;
+  padding-right: 8px;
+  overflow: hidden;
+}
+
+.project-modal-images {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-modal-images img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  background: #050505;
+}
+
+/* RIGHT: TESTO */
+.project-modal-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: sticky;
+  top: 0;
+  height: 100%;
+}
+
+.pm-label {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7c7c7c;
+  margin-bottom: 4px;
+}
+
+.pm-title {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.pm-meta {
+  font-size: 9px;
+  color: #b5b5b5;
+  margin-bottom: 10px;
+}
+
+.pm-body {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #dcdcdc;
+  max-width: 320px;
+}
+
+/* Responsive modal */
+@media (max-width: 800px) {
+  .project-modal-inner {
+    width: 94vw;
+    height: 86vh;
+    padding: 12px;
+  }
+
+  .project-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-modal-left {
+    border-right: none;
+    border-bottom: 1px solid #181818;
+    padding-right: 0;
+    padding-bottom: 8px;
+  }
+
+  .project-modal-right {
+    position: static;
+    padding-top: 6px;
+  }
+}

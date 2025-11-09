@@ -1,0 +1,188 @@
+/* ---------- PROJECTS PAGE STYLES ---------- */
+
+body.projects {
+  background: #000;
+  color: #ffffff;
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  min-height: 100vh;
+}
+
+/* layout principale */
+.projects-main {
+  padding-top: 80px;
+  padding-bottom: 90px;
+  width: 92%;
+  margin: 0 auto;
+}
+
+.projects-list {
+  width: 100%;
+}
+
+/* header colonne */
+.projects-header {
+  display: grid;
+  grid-template-columns: 32px 60px 1.8fr 1.4fr 1.6fr 70px;
+  column-gap: 18px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid #202020;
+}
+
+.ph-cell {
+  display: flex;
+  align-items: center;
+}
+
+.ph-icon {
+  justify-content: center;
+}
+
+/* riga progetto */
+.project-item {
+  display: grid;
+  grid-template-columns: 32px 60px 1.8fr 1.4fr 1.6fr 70px;
+  column-gap: 18px;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #111;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.project-item:hover {
+  background-color: #0e0e0e;
+}
+
+.project-item.is-open {
+  background-color: #181818;
+}
+
+/* celle */
+.pi-cell {
+  display: flex;
+  align-items: center;
+}
+
+.pi-icon {
+  justify-content: center;
+}
+
+/* ---------- Icone cartelle ---------- */
+
+/* cartella chiusa di default */
+.folder-icon {
+  display: inline-block;
+  width: 13px;
+  height: 12px;
+  background: url("../img/closed-folder-icon.png") no-repeat center center;
+  background-size: contain;
+  transition: opacity 0.2s ease;
+}
+
+/* cartella aperta quando la riga ha .is-open */
+.project-item.is-open .folder-icon {
+  background-image: url("../img/open-folder-icon.png");
+  opacity: 0.9;
+}
+
+/* ---------- Dettaglio progetto ---------- */
+
+.project-detail {
+  overflow: hidden;
+  max-height: 0;
+  border-bottom: 1px solid #111;
+  background-color: #050505;
+  transition: max-height 0.3s ease;
+}
+
+.project-detail-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1.8fr);
+  column-gap: 24px;
+  padding: 14px 10px 18px 42px;
+  align-items: flex-start;
+}
+
+/* immagine */
+.detail-image-wrap {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #111;
+  overflow: hidden;
+}
+
+.detail-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.detail-image-wrap:hover img {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+/* testo descrizione */
+.detail-text {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #ffffff;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .projects-header {
+    grid-template-columns: 26px 42px 1.8fr 1.4fr 1.2fr 54px;
+    font-size: 8px;
+  }
+
+  .project-item {
+    grid-template-columns: 26px 42px 1.8fr 1.4fr 1.2fr 54px;
+    font-size: 9px;
+  }
+
+  .project-detail-inner {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+    padding-left: 36px;
+  }
+
+  .detail-image-wrap {
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 600px) {
+  .projects-main {
+    width: 96%;
+  }
+
+  .projects-header {
+    display: none;
+  }
+
+  .project-item {
+    grid-template-columns: 22px 40px 1.8fr 1fr;
+    grid-auto-flow: row;
+    row-gap: 2px;
+  }
+
+  .project-item .pi-cell:nth-child(5),
+  .project-item .pi-cell:nth-child(6) {
+    justify-content: flex-end;
+    font-size: 8px;
+  }
+
+  .project-detail-inner {
+    padding-left: 32px;
+  }
+}
