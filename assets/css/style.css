@@ -13,7 +13,7 @@
   --grid-columns: 12;
   /* Linee continue, non tratteggiate */
   /* Doppia linea posizionata sul bordo SINISTRO di ogni colonna */
-  --grid-bg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><line x1='0' x2='0' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/><line x1='3' x2='3' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/></svg>");
+ --grid-bg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><line x1='0' x2='0' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1' stroke-dasharray='1 0.5'/><line x1='3' x2='3' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1' stroke-dasharray='1 0.5'/></svg>");
   /* Container e gap uniformi per la struttura */
   --container-width: 92%;
   --column-gap: 16px;
@@ -54,6 +54,30 @@ body.home::before {
 /* Keep content above the grid overlay, ma escludi header e top-line */
 body.home > :not(.top-header):not(.top-line) { z-index: 1; }
 
+/* Apply grid background ALSO to Projects page */
+body.projects::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--grid-bg);
+  background-repeat: repeat-x;
+  background-size: calc(
+    (100% - (var(--grid-columns) - 1) * var(--column-gap)) / var(--grid-columns)
+    + var(--column-gap)
+  ) 100%;
+  background-position: left top;
+  opacity: 1;
+}
+
+/* Keep content above the grid overlay on Projects, esclusi header e top-line */
+body.projects > :not(.top-header):not(.top-line) { z-index: 1; }
+
 /* ========== BODY HOME (INDEX) ========== */
 body.home {
   background: #000;
@@ -69,12 +93,14 @@ body.home {
   left: 0;
   right: 0;
   height: 40px;
-  padding: 10px 0 0; /* elimina padding orizzontale per allineare alla griglia */
+  padding: 10px 0 0; /* padding verticale */
   width: var(--container-width);
   margin: 0 auto; /* centrato rispetto allo schermo */
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: flex-start;
+  column-gap: var(--column-gap);
+  align-items: center; /* allineamento verticale uniforme */
+  justify-items: start; /* i grid items appoggiano al bordo sinistro della colonna */
   z-index: 10000; /* header sopra overlay e qualsiasi elemento */
   background: transparent;
 }
@@ -87,7 +113,7 @@ body.home {
   font-size: 11px;
   grid-column: 1 / span 6; /* parte dalla prima colonna del container */
   position: relative;
-  padding-left: var(--start-line-offset);
+  padding-left: var(--start-line-offset); /* aggancia il testo alla linea verticale della colonna */
 }
 
 .brand {
@@ -102,9 +128,9 @@ body.home {
   color: #bbbbbb;
 }
 
-/* Nav a destra allineata alla colonna */
+/* Nav a destra (stato originale: item del header su 9–12, layout flex) */
 .top-nav {
-  grid-column: 9 / span 4; /* nav nelle ultime colonne con un gutter destro */
+  grid-column: 10 / span 2; /* sposta la nav più a destra sulle ultime 3 colonne */
   display: flex;
   justify-content: flex-end;
   position: relative;
@@ -125,13 +151,15 @@ body.home {
 }
 
 .top-nav a {
-  margin-left: 28px;
+  margin-left: 32px;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-decoration: none;
   color: #f5f5f5;
   text-transform: uppercase;
 }
+
+/* Link nav: nessun posizionamento per colonna, usa il layout flex */
 
 .top-nav a.active,
 .top-nav a:hover {
@@ -230,13 +258,12 @@ body.home {
 /* ========== BOTTOM LEFT FISSO ========== */
 .fixed-bottom-left {
   position: fixed;
-  left: 16px; /* ripristina posizione fissa rispetto allo schermo */
+  left: 58px; /* spostato un po' più a destra rispetto a prima */
   bottom: 12px;
   font-size: 10px;
   color: #f5f5f5;
   z-index: 120;
 }
-
 .fixed-bottom-left a {
   margin-left: 6px;
   color: #f5f5f5;
