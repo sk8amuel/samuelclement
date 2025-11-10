@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Template — Samuel Clement</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/projects.css" />
+    <link rel="stylesheet" href="../assets/css/project-page.css" />
+    <style>
+      /* Overlay transizione: riutilizzabile in ogni pagina progetto */
+      .page-transition-overlay {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 350ms ease;
+        z-index: 9999;
+      }
+      .page-transition-overlay.active { opacity: 1; }
+      /* Stili minimi del template */
+      .project-page {
+        min-height: 100vh;
+        background: #000;
+        color: #fff;
+        padding: 32px;
+      }
+      .project-header { display: flex; justify-content: space-between; align-items: center; }
+      .project-title { font-size: clamp(28px, 6vw, 56px); font-weight: 800; letter-spacing: 0.02em; }
+      .project-meta { opacity: 0.7; }
+      .project-hero { margin-top: 24px; }
+      .project-hero img { width: 100%; height: auto; display: block; }
+      .project-content { max-width: 1100px; margin: 32px auto; line-height: 1.6; }
+      .back-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 16px; opacity: 0.85; }
+      .back-link:hover { opacity: 1; }
+    </style>
+  </head>
+  <body class="project-page" data-page="project">
+    <div class="page-transition-overlay" id="transitionOverlay"></div>
+    <!-- Header globale identico all'index -->
+    <header class="top-header">
+      <div class="top-left">
+        <a href="../index.html" class="brand" data-transition>SAMUEL CLEMENT</a>
+        <span class="role">/Communication and Visual Designer</span>
+      </div>
+      <nav class="top-nav">
+        <a href="../projects.html" class="nav-link" data-transition>PROJECTS</a>
+        <a href="../index.html" class="nav-link" data-transition>INDEX</a>
+        <a href="../index.html#about" class="nav-link" data-transition>ABOUT</a>
+      </nav>
+    </header>
+    <div class="top-line"></div>
+    <main class="project-main">
+      <div class="project-header-inline">
+        <h1 class="project-title">Titolo Progetto</h1>
+        <div class="project-meta">Anno • Categoria • Ruolo</div>
+      </div>
+      <section class="project-hero">
+        <img src="../assets/img/samuel-clement.png" alt="Hero del progetto" />
+      </section>
+      <section class="project-content">
+        <p>
+          Questo è un template di pagina progetto. Sostituisci titolo, meta, immagini e contenuti.
+        </p>
+        <p>
+          Tutti i link con <code>data-transition</code> useranno l’overlay nero per una transizione fluida.
+        </p>
+        <a href="../projects.html" class="back-link" data-transition>
+          ← Torna ai progetti
+        </a>
+      </section>
+    </main>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/project-page.js"></script>
+  </body>
+</html>

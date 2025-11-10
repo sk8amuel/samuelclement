@@ -307,3 +307,49 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeProjectModal();
   });
 });
+// Simple page transition: intercept links with data-transition
+(function() {
+  const overlayId = 'transitionOverlay';
+  function getOverlay() {
+    return document.getElementById(overlayId);
+  }
+  function ensureOverlay() {
+    let ov = getOverlay();
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.id = overlayId;
+      ov.className = 'page-transition-overlay';
+      document.body.appendChild(ov);
+    }
+    return ov;
+  }
+
+  function fadeInOverlay() {
+    const ov = ensureOverlay();
+    requestAnimationFrame(() => {
+      ov.classList.add('active');
+    });
+  }
+
+  function fadeOutOverlay() {
+    const ov = getOverlay();
+    if (ov) ov.classList.remove('active');
+  }
+
+  // On page load, briefly fade out overlay if present (entry transition)
+  window.addEventListener('DOMContentLoaded', () => {
+    fadeOutOverlay();
+    // Attach click handlers
+    document.querySelectorAll('a[data-transition]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if (!href || href.startsWith('#')) return;
+        e.preventDefault();
+        fadeInOverlay();
+        setTimeout(() => {
+          window.location.href = href;
+        }, 320); // match CSS transition duration
+      });
+    });
+  });
+})();

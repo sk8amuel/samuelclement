@@ -1,0 +1,47 @@
+/* ---------- Single Project Page Styles ---------- */
+
+body.project-page {
+  background: #000;
+  color: #fff;
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  min-height: 100vh;
+}
+
+.project-main {
+  width: 92%;
+  margin: 0 auto;
+  padding-top: 96px; /* spazio sotto header */
+  padding-bottom: 120px;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+.project-header-inline { display: flex; justify-content: space-between; align-items: baseline; grid-column: 4 / span 6; }
+.project-title { font-size: clamp(28px, 6vw, 56px); font-weight: 800; letter-spacing: 0.02em; }
+.project-meta { opacity: 0.7; font-size: 12px; }
+
+.project-hero { margin-top: 24px; grid-column: 3 / span 8; }
+.project-hero img { width: 100%; height: auto; display: block; }
+
+.project-content { grid-column: 4 / span 6; margin: 32px 0; line-height: 1.8; font-size: 14px; }
+
+.back-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 24px; opacity: 0.85; }
+.back-link:hover { opacity: 1; }
+
+/* Info blocco progetto */
+.project-info { width: 92%; margin: 12px auto 0; opacity: 0.9; }
+.project-info ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+.project-info li { font-size: 12px; line-height: 1.6; }
+.project-info li span { opacity: 0.7; margin-right: 8px; }
+
+@media (max-width: 900px) {
+  .project-main { width: 95%; padding-top: 84px; }
+  .project-title { font-size: clamp(24px, 8vw, 42px); }
+  .project-header-inline, .project-hero, .project-content { grid-column: 1 / -1; }
+}
+
+@media (max-width: 700px) {
+  .project-info { width: 95%; }
+  .project-info ul { grid-template-columns: 1fr; }
+}

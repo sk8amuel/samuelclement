@@ -8,6 +8,52 @@
   box-sizing: border-box;
 }
 
+/* ========== GLOBAL GRID BACKGROUND (12 columns, dashed double lines) ========== */
+:root {
+  --grid-columns: 12;
+  /* Linee continue, non tratteggiate */
+  /* Doppia linea posizionata sul bordo SINISTRO di ogni colonna */
+  --grid-bg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><line x1='0' x2='0' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/><line x1='3' x2='3' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='1'/></svg>");
+  /* Container e gap uniformi per la struttura */
+  --container-width: 92%;
+  --column-gap: 16px;
+  /* Stile delle righe di inizio blocco */
+  --start-line-color: rgba(255, 255, 255, 0.12);
+  --start-line-width: 1px;
+  --start-line-gap: 3px; /* distanza tra le due linee */
+  /* Offset contenuti: appena a destra della seconda linea, leggermente più vicino */
+  --start-line-offset: calc(var(--start-line-gap) + var(--start-line-width) - 0.5px);
+}
+
+/* Apply grid background ONLY to homepage */
+body.home {
+  background-image: none; /* nessun background di fallback */
+}
+
+/* Ensure grid visible over body backgrounds (fixed overlay) */
+body.home::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--grid-bg);
+  background-repeat: repeat-x;
+  background-size: calc(
+    (100% - (var(--grid-columns) - 1) * var(--column-gap)) / var(--grid-columns)
+    + var(--column-gap)
+  ) 100%;
+  background-position: left top;
+  opacity: 1;
+}
+
+/* Keep content above the grid overlay, ma escludi header e top-line */
+body.home > :not(.top-header):not(.top-line) { z-index: 1; }
+
 /* ========== BODY HOME (INDEX) ========== */
 body.home {
   background: #000;
@@ -23,11 +69,13 @@ body.home {
   left: 0;
   right: 0;
   height: 40px;
-  padding: 10px 18px 0;
-  display: flex;
+  padding: 10px 0 0; /* elimina padding orizzontale per allineare alla griglia */
+  width: var(--container-width);
+  margin: 0 auto; /* centrato rispetto allo schermo */
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   align-items: flex-start;
-  justify-content: space-between;
-  z-index: 100;
+  z-index: 10000; /* header sopra overlay e qualsiasi elemento */
   background: transparent;
 }
 
@@ -37,6 +85,9 @@ body.home {
   padding: 5px 0 0;
   gap: 4px;
   font-size: 11px;
+  grid-column: 1 / span 6; /* parte dalla prima colonna del container */
+  position: relative;
+  padding-left: var(--start-line-offset);
 }
 
 .brand {
@@ -49,6 +100,28 @@ body.home {
 .role {
   font-size: 11px;
   color: #bbbbbb;
+}
+
+/* Nav a destra allineata alla colonna */
+.top-nav {
+  grid-column: 9 / span 4; /* nav nelle ultime colonne con un gutter destro */
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  padding-left: var(--start-line-offset);
+}
+
+/* Righe verticali di inizio blocco nell'header */
+.top-left::before,
+.top-nav::before {
+  content: none;
+  display: none;
+}
+
+.top-left::after,
+.top-nav::after {
+  content: none;
+  display: none;
 }
 
 .top-nav a {
@@ -69,26 +142,48 @@ body.home {
 .top-line {
   position: fixed;
   top: 40px;
-  left: 10px;
-  right: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width); /* centrata e con stessi bordi del container */
   height: 0.5px;
   background: #f5f5f5;
-  z-index: 90;
+  z-index: 999999; /* sopra overlay e transizioni globali */
+  pointer-events: none; /* non cattura click */
 }
 
 /* ========== MAIN INDEX ========== */
 .home-main {
   padding-top: 70px;
   padding-bottom: 160px;
+  width: var(--container-width);
+  margin: 0 auto; /* centrato */
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--column-gap);
+  row-gap: 24px;
 }
 
 /* ========== GRIGLIA PROGETTI HOME ========== */
 .projects-grid {
-  width: 92%;
-  margin: 80px auto 0;
+  margin-top: 80px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px 32px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--column-gap);
+  row-gap: 32px;
+  grid-column: 1 / -1; /* occupa l’intero container, bordi allineati */
+  position: relative;
+  padding-left: var(--start-line-offset);
+}
+
+/* Riga verticale di inizio blocco per la griglia progetti */
+.projects-grid::before {
+  content: none;
+  display: none;
+}
+
+.projects-grid::after {
+  content: none;
+  display: none;
 }
 
 .project-item {
@@ -99,6 +194,7 @@ body.home {
   color: #f5f5f5;
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.2s ease;
+  grid-column: span 3; /* 4 card per riga su 12 colonne */
 }
 
 .project-number {
@@ -134,7 +230,7 @@ body.home {
 /* ========== BOTTOM LEFT FISSO ========== */
 .fixed-bottom-left {
   position: fixed;
-  left: 16px;
+  left: 16px; /* ripristina posizione fissa rispetto allo schermo */
   bottom: 12px;
   font-size: 10px;
   color: #f5f5f5;
@@ -151,7 +247,7 @@ body.home {
 /* ========== BOX PROGETTO FISSO (INDEX) ========== */
 .fixed-project-box {
   position: fixed;
-  left: 0;
+  left: 0;  /* full-width centrato allo schermo */
   right: 0;
   bottom: 0;
   height: 110px;
@@ -202,8 +298,9 @@ body.home {
 /* ========== RESPONSIVE INDEX ========== */
 @media (max-width: 1024px) {
   .projects-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
+  .project-item { grid-column: span 4; } /* 3 card per riga */
 
   .fp-index {
     font-size: 80px;
@@ -216,10 +313,11 @@ body.home {
 
 @media (max-width: 768px) {
   .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 18px;
     margin-top: 60px;
   }
+  .project-item { grid-column: span 6; } /* 2 card per riga */
 
   .fp-index {
     font-size: 60px;
@@ -359,12 +457,19 @@ body.is-about .fixed-project-box {
 /* Contenuto ABOUT: fullscreen sotto l'header (sia ghost che front) */
 .page-about .about-main {
   position: absolute;
-  inset: 0;
-  padding: 70px 60px 70px; /* header + margini */
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  padding: 70px 0 70px; /* header + margini orizzontali allineati al container */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
+
+/* (ripristino) nessun collage nello sfondo */
 
 /* TOP: 4 colonne */
 .page-about .about-top {
@@ -455,15 +560,14 @@ body.is-about .fixed-project-box {
   width: 30%;
   display: block;
   object-fit: cover;
-  /* NUOVE PROPRIETÀ */
-  float: right; /* Sposta l'immagine a destra e permette al testo di affiancarsi */
-  margin-left: 20px; /* Aggiunge un po' di spazio tra l'immagine e il testo a sinistra */
+  float: right;
+  margin-left: 20px;
 }
 
 /* ========== RESPONSIVE ABOUT ========== */
 @media (max-width: 1200px) {
   .page-about .about-main {
-    padding: 60px 40px 50px;
+    padding: 60px 0 50px;
   }
 
   .page-about .about-top {
@@ -479,7 +583,7 @@ body.is-about .fixed-project-box {
 
 @media (max-width: 900px) {
   .page-about .about-main {
-    padding: 60px 30px 40px;
+    padding: 60px 0 40px;
   }
 
   .page-about .about-top {
@@ -503,13 +607,20 @@ body.is-about .fixed-project-box {
     bottom: 30px;
     font-size: clamp(56px, 18vw, 120px);
   }
+
+  .page-about .about-image-full img {
+    width: 60%;
+    float: none;
+    margin-left: 0;
+    margin-top: 10px;
+  }
 }
 
 
 /* ========== RESPONSIVE ABOUT ========== */
 @media (max-width: 1200px) {
   body.is-about .about-main {
-    padding: 60px 40px 50px;
+    padding: 60px 0 50px;
   }
 
   body.is-about .about-top {
@@ -525,7 +636,7 @@ body.is-about .fixed-project-box {
 
 @media (max-width: 900px) {
   body.is-about .about-main {
-    padding: 60px 30px 40px;
+    padding: 60px 0 40px;
   }
 
   body.is-about .about-top {
@@ -547,6 +658,18 @@ body.is-about .fixed-project-box {
   body.is-about .about-hero-word {
     left: 30px;
     bottom: 30px;
+    font-size: clamp(56px, 18vw, 120px);
+  }
+}
+
+/* --- Override responsive per nuova griglia --- */
+@media (max-width: 900px) {
+  .page-about .about-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .page-about .about-hero-word {
+    grid-column: 1 / -1;
     font-size: clamp(56px, 18vw, 120px);
   }
 }
@@ -717,3 +840,14 @@ body.is-about .fixed-project-box {
     padding-top: 6px;
   }
 }
+/* Overlay transizione globale riutilizzabile */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: 9999;
+}
+.page-transition-overlay.active { opacity: 1; }
