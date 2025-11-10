@@ -11,7 +11,7 @@ body.projects {
 .projects-main {
   padding-top: 80px;
   padding-bottom: 90px;
-  width: 92%;
+  width: var(--container-width);
   margin: 0 auto;
 }
 
@@ -22,32 +22,34 @@ body.projects {
 /* header colonne */
 .projects-header {
   display: grid;
-  grid-template-columns: 32px 60px 1.8fr 1.4fr 1.6fr 70px;
-  column-gap: 18px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--column-gap);
+  justify-items: start;
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: #ffffff;
-  padding: 6px 10px 8px;
+  padding: 6px 0 8px;
   border-bottom: 1px solid #202020;
 }
 
 .ph-cell {
   display: flex;
   align-items: center;
+  padding-left: var(--start-line-offset);
 }
 
 .ph-icon {
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* riga progetto */
 .project-item {
   display: grid;
-  grid-template-columns: 32px 60px 1.8fr 1.4fr 1.6fr 70px;
-  column-gap: 18px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--column-gap);
   align-items: center;
-  padding: 6px 10px;
+  padding: 6px 0;
   font-size: 10px;
   cursor: pointer;
   border-bottom: 1px solid #111;
@@ -66,10 +68,11 @@ body.projects {
 .pi-cell {
   display: flex;
   align-items: center;
+  padding-left: var(--start-line-offset);
 }
 
 .pi-icon {
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* ---------- Icone cartelle ---------- */
@@ -102,9 +105,9 @@ body.projects {
 
 .project-detail-inner {
   display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1.8fr);
-  column-gap: 24px;
-  padding: 14px 10px 18px 42px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--column-gap);
+  padding: 14px 0 18px 0;
   align-items: flex-start;
 }
 
@@ -141,19 +144,18 @@ body.projects {
 
 @media (max-width: 900px) {
   .projects-header {
-    grid-template-columns: 26px 42px 1.8fr 1.4fr 1.2fr 54px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     font-size: 8px;
   }
 
   .project-item {
-    grid-template-columns: 26px 42px 1.8fr 1.4fr 1.2fr 54px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     font-size: 9px;
   }
 
   .project-detail-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     row-gap: 10px;
-    padding-left: 36px;
   }
 
   .detail-image-wrap {
@@ -163,7 +165,7 @@ body.projects {
 
 @media (max-width: 600px) {
   .projects-main {
-    width: 96%;
+    width: var(--container-width);
   }
 
   .projects-header {
@@ -171,7 +173,7 @@ body.projects {
   }
 
   .project-item {
-    grid-template-columns: 22px 40px 1.8fr 1fr;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     grid-auto-flow: row;
     row-gap: 2px;
   }
@@ -182,7 +184,26 @@ body.projects {
     font-size: 8px;
   }
 
-  .project-detail-inner {
-    padding-left: 32px;
-  }
+  .project-detail-inner { }
 }
+
+/* ========== Mappatura su 12 colonne ========== */
+/* Header: 1 icon, 2 code, 3-7 title, 8-9 area, 10-11 client, 12 arrow */
+.projects-header .ph-cell:nth-child(1) { grid-column: 1; }
+.projects-header .ph-cell:nth-child(2) { grid-column: 2; }
+.projects-header .ph-cell:nth-child(3) { grid-column: 3 / span 5; }
+.projects-header .ph-cell:nth-child(4) { grid-column: 8 / span 2; }
+.projects-header .ph-cell:nth-child(5) { grid-column: 10 / span 2; }
+.projects-header .ph-cell:nth-child(6) { grid-column: 12; justify-content: flex-start; }
+
+/* Row: stessa mappa delle colonne */
+.project-item .pi-cell:nth-child(1) { grid-column: 1; }
+.project-item .pi-cell:nth-child(2) { grid-column: 2; }
+.project-item .pi-cell:nth-child(3) { grid-column: 3 / span 5; }
+.project-item .pi-cell:nth-child(4) { grid-column: 8 / span 2; }
+.project-item .pi-cell:nth-child(5) { grid-column: 10 / span 2; }
+.project-item .pi-cell:nth-child(6) { grid-column: 12; justify-content: flex-start; }
+
+/* Dettaglio: immagine su 1-3, testo su 4-12 */
+.project-detail-inner .detail-image-wrap { grid-column: 1 / span 3; }
+.project-detail-inner .detail-text { grid-column: 4 / span 9; padding-left: var(--start-line-offset); }
