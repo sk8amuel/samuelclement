@@ -11,9 +11,23 @@
 /* ========== GLOBAL GRID BACKGROUND (12 columns, dashed double lines) ========== */
 :root {
   --grid-columns: 12;
-  /* Linee continue, non tratteggiate */
-  /* Doppia linea posizionata sul bordo SINISTRO di ogni colonna */
- --grid-bg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><line x1='0' x2='0' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1' stroke-dasharray='1 0.5'/><line x1='3' x2='3' y1='0' y2='100' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1' stroke-dasharray='1 0.5'/></svg>");
+  --grid-line-opacity: 0.08; /* opacità unica delle linee griglia */
+  --overlay-opacity: 1; /* opacità dell'overlay su entrambe le pagine */
+  /* Doppia linea sul bordo SINISTRO di ogni colonna, con gap fisso in px */
+  --grid-bg: 
+    linear-gradient(
+      to right,
+      rgba(255,255,255,var(--grid-line-opacity)) 0,
+      rgba(255,255,255,var(--grid-line-opacity)) var(--start-line-width),
+      transparent var(--start-line-width)
+    ),
+    linear-gradient(
+      to right,
+      transparent var(--start-line-gap),
+      rgba(255,255,255,var(--grid-line-opacity)) var(--start-line-gap),
+      rgba(255,255,255,var(--grid-line-opacity)) calc(var(--start-line-gap) + var(--start-line-width)),
+      transparent calc(var(--start-line-gap) + var(--start-line-width))
+    );
   /* Container e gap uniformi per la struttura */
   --container-width: 92%;
   --column-gap: 16px;
@@ -48,7 +62,7 @@ body.home::before {
     + var(--column-gap)
   ) 100%;
   background-position: left top;
-  opacity: 1;
+  opacity: var(--overlay-opacity);
 }
 
 /* Keep content above the grid overlay, ma escludi header e top-line */
@@ -72,11 +86,37 @@ body.projects::before {
     + var(--column-gap)
   ) 100%;
   background-position: left top;
-  opacity: 1;
+  opacity: var(--overlay-opacity);
 }
 
 /* Keep content above the grid overlay on Projects, esclusi header e top-line */
 body.projects > :not(.top-header):not(.top-line) { z-index: 1; }
+
+/* Apply grid background ALSO to Single Project page */
+body.project-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--grid-bg);
+  background-repeat: repeat-x;
+  background-size: calc(
+    (100% - (var(--grid-columns) - 1) * var(--column-gap)) / var(--grid-columns)
+    + var(--column-gap)
+  ) 100%;
+  background-position: left top;
+  opacity: var(--overlay-opacity);
+}
+
+/* Keep content above the grid overlay on Single Project, esclusi header e top-line */
+body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
+
+/* (Typewriter CSS rimosso su richiesta) */
 
 /* ========== BODY HOME (INDEX) ========== */
 body.home {
@@ -130,7 +170,7 @@ body.home {
 
 /* Nav a destra (stato originale: item del header su 9–12, layout flex) */
 .top-nav {
-  grid-column: 10 / span 2; /* sposta la nav più a destra sulle ultime 3 colonne */
+  grid-column: 9 / span 4; /* nav a destra sulle ultime colonne reali (12-col grid) */
   display: flex;
   justify-content: flex-end;
   position: relative;
@@ -324,6 +364,9 @@ body.home {
 
 /* ========== RESPONSIVE INDEX ========== */
 @media (max-width: 1024px) {
+  /* stringi gli spazi della nav */
+  .top-nav a { margin-left: 24px; }
+
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
@@ -339,6 +382,11 @@ body.home {
 }
 
 @media (max-width: 768px) {
+  /* nascondi il ruolo per liberare spazio in header */
+  .role { display: none; }
+  /* riduci i margini dei link nav su mobile */
+  .top-nav a { margin-left: 18px; letter-spacing: 0.10em; }
+
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 18px;
@@ -353,6 +401,23 @@ body.home {
   .fp-info {
     left: calc(50% + 60px);
     bottom: 6px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* ulteriore riduzione per schermi molto stretti */
+  .top-nav a { margin-left: 12px; font-size: 10px; letter-spacing: 0.08em; }
+}
+
+/* Una card per riga su mobile stretto */
+@media (max-width: 600px) {
+  .projects-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: 24px;
+    margin-top: 48px;
+  }
+  .project-item {
+    grid-column: 1 / -1; /* una card per riga */
   }
 }
 
@@ -383,6 +448,11 @@ body.preloader-done #preloader {
 
 body.preloader-active {
   overflow: hidden;
+}
+
+/* Nascondi la linea sotto l'header solo durante il preloader attivo */
+body.preloader-active .top-line {
+  display: none !important;
 }
 
 /* ========== FLIP SCENE (INDEX / ABOUT) ========== */

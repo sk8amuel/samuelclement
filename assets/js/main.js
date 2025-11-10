@@ -111,6 +111,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   });
 })();
 
+// (Typewriter JS rimosso su richiesta)
+
 
 // ---------- DATI PROGETTI PER MODAL ----------
 
