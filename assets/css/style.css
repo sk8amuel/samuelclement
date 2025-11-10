@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;600;700&display=swap');
 /* ========== RESET BASE ========== */
 
 
@@ -356,6 +357,12 @@ body.home {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
+}
+
+/* Titoli globali: usa Cal Sans */
+.about-hero-word,
+.fp-title {
+  font-family: 'Cal Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 .fp-line {
