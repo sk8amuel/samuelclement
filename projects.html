@@ -352,6 +352,27 @@
             row.classList.add('is-open');
             detail.classList.add('is-open');
             detail.style.maxHeight = detail.scrollHeight + 'px';
+
+            // Mobile: aggiungi meta (categoria • anno) dentro il dettaglio
+            if (window.matchMedia('(max-width: 600px)').matches) {
+              const categoryCell = row.querySelector('.pi-cell:nth-child(5)');
+              const category = categoryCell ? categoryCell.textContent.trim() : '';
+
+              // crea/aggiorna contenitore meta sotto il testo
+              const detailText = detail.querySelector('.detail-text');
+              if (detailText) {
+                let meta = detailText.querySelector('.detail-meta');
+                const metaText = [category].filter(Boolean).join('');
+                if (meta) {
+                  meta.textContent = metaText;
+                } else if (metaText) {
+                  meta = document.createElement('div');
+                  meta.className = 'detail-meta';
+                  meta.textContent = metaText;
+                  detailText.appendChild(meta);
+                }
+              }
+            }
           }
         });
       });
