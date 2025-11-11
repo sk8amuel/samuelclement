@@ -310,3 +310,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 // (Transizioni pagina e fallback Safari rimossi per ripristinare stato precedente)
+
+// (Toggle tema chiaro rimosso su richiesta)
