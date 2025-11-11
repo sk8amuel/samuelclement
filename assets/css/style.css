@@ -606,6 +606,9 @@ body.is-about .page-flip {
   transform: rotateY(180deg);
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
   filter: saturate(1.02);
+  /* In stato ABOUT non rendiamo più il flip fixed: lasciamo scorrere il background */
+  position: static;
+  margin-top: 70px; /* allineato sotto l'header */
 }
 
 body.is-about .page-flip::before {
@@ -618,6 +621,31 @@ body.is-about .page-about {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Niente spazio sotto About quando è davanti */
+body.is-about .page-face { padding-bottom: 0; }
+/* In stato ABOUT rendiamo la faccia ABOUT statica per permettere sticky */
+body.is-about .page-about.page-face {
+  position: static;
+  inset: auto;
+}
+body.is-about .page-about .about-main {
+  /* Sticky sotto l’header: il main resta ancorato mentre lo sfondo scorre */
+  position: sticky;
+  top: 70px;                 /* altezza header + linea */
+  margin: 0 auto;            /* centrato nel container */
+  left: auto;
+  right: auto;
+  transform: none;
+  width: var(--container-width);
+  min-height: calc(100vh - 70px); /* riempie l’area visibile */
+  padding-bottom: 0;         /* nessuno spazio extra sotto */
+  overflow: visible;         /* non bloccare lo scorrimento esterno */
+  z-index: 3;                /* sopra al contenuto di sfondo */
+}
+
+/* Fallback Safari: sticky può non funzionare con ancestor trasformati */
+/* (Fallback Safari e about-sticky-blocked rimossi per ripristinare lo stato precedente) */
 
 /* INDEX passa dietro */
 body.is-about .page-index {
@@ -642,14 +670,10 @@ body.is-about .fixed-project-box {
 
 /* Contenuto ABOUT: fullscreen sotto l'header (sia ghost che front) */
 .page-about .about-main {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
+  position: relative;
   width: var(--container-width);
-  padding: 70px 0 70px; /* header + margini orizzontali allineati al container */
+  margin: 0 auto;
+  padding: 70px 0 70px; /* spazio sotto header */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -1041,13 +1065,4 @@ body.is-about .fixed-project-box {
   }
 }
 /* Overlay transizione globale riutilizzabile */
-.page-transition-overlay {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 320ms ease;
-  z-index: 9999;
-}
-.page-transition-overlay.active { opacity: 1; }
+/* (Overlay di transizione globale rimosso per ripristinare lo stato precedente) */
