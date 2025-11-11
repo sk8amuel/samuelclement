@@ -36,7 +36,7 @@
   --start-line-color: rgba(255, 255, 255, 0.12);
   --start-line-width: 1px;
   --start-line-gap: 3px; /* distanza tra le due linee */
-  /* Offset contenuti: appena a destra della seconda linea, leggermente più vicino */
+  /* Offset contenuti: leggermente più vicino alla seconda linea (versione precedente) */
   --start-line-offset: calc(var(--start-line-gap) + var(--start-line-width) - 0.5px);
 }
 
@@ -119,6 +119,8 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
 
 /* (Typewriter CSS rimosso su richiesta) */
 
+/* (Tema chiaro e stile bottone invert rimossi su richiesta) */
+
 /* ========== BODY HOME (INDEX) ========== */
 body.home {
   background: #000;
@@ -155,8 +157,8 @@ img {
   justify-items: start; /* i grid items appoggiano al bordo sinistro della colonna */
   z-index: 10000; /* header sopra overlay e qualsiasi elemento */
   background: rgba(0, 0, 0, 0.35); /* semi-trasparente per consentire il blur */
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   /* bordo inferiore morbido (sfuma solo entro l'header) */
   -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, rgba(0,0,0,0) 100%);
   mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, rgba(0,0,0,0) 100%);
@@ -190,6 +192,7 @@ img {
   grid-column: 11 / span 2; /* sposta la nav ancora più a destra (colonne 11–12) */
   display: flex;
   justify-content: flex-end;
+  justify-self: end; /* ancorata al bordo destro dell'area di griglia */
   align-items: end;
   gap: var(--column-gap); /* gap uniforme tra le parole */
   position: relative;
@@ -321,7 +324,7 @@ img {
 /* ========== BOTTOM LEFT FISSO ========== */
 .fixed-bottom-left {
   position: fixed;
-  left: 58px; /* spostato un po' più a destra rispetto a prima */
+  left: 58px; /* ripristino posizione precedente */
   bottom: 12px;
   font-size: 10px;
   color: #f5f5f5;
@@ -383,6 +386,7 @@ img {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  bottom: -10px; /* abbassato ulteriormente verso il bordo inferiore */
   font-size: 100px;
   font-weight: 400;
   line-height: 1.2;
@@ -453,11 +457,12 @@ img {
     grid-column: 8 / span 5; /* più spazio alla nav su tablet */
     padding-left: 0;
     padding-right: calc(env(safe-area-inset-right, 0px) + 16px); /* distanza sicura aumentata */
-    gap: clamp(10px, 2vw, 14px);
+    gap: clamp(12px, 2.4vw, 16px);
     min-width: 0; /* consente alla nav di comprimersi senza overflow */
     box-sizing: border-box;
+    justify-self: end; /* posiziona la nav al bordo destro del container */
   }
-  .top-nav a { margin-left: 0; letter-spacing: 0.07em; font-size: 9px; white-space: nowrap; }
+  .top-nav a { margin-left: 0; letter-spacing: 0.10em; font-size: 10px; white-space: nowrap; }
 
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -475,26 +480,27 @@ img {
   .top-nav {
     grid-column: 7 / span 6; /* sposta la nav un po' più a sinistra dando spazio ai link */
     padding-right: calc(env(safe-area-inset-right, 0px) + 12px);
-    gap: clamp(6px, 2.2vw, 10px);
+    gap: clamp(10px, 2.4vw, 14px);
     box-sizing: border-box;
     min-width: 0;
+    justify-self: end;
   }
   .top-header { column-gap: clamp(8px, 2.2vw, 12px); }
 }
 
 @media (max-width: 560px) {
   /* ulteriore riduzione per schermi molto stretti */
-  :root { --container-width: 96%; } /* leggero aumento della larghezza utile del container */
   .top-nav {
     grid-column: 7 / span 6; /* più spazio per i tre link su 393px */
     padding-left: 0;
     padding-right: calc(env(safe-area-inset-right, 0px) + 12px); /* distanza sicura aumentata */
-    gap: clamp(6px, 2vw, 10px); /* spazi più compatti */
+    gap: clamp(10px, 2.6vw, 16px); /* spazi leggermente maggiori per la leggibilità */
     flex-wrap: nowrap;
     min-width: 0; /* evita clipping del contenuto */
     box-sizing: border-box;
+    justify-self: end;
   }
-  .top-nav a { margin-left: 0; font-size: 6.5px; letter-spacing: 0.04em; white-space: nowrap; }
+  .top-nav a { margin-left: 0; font-size: 9px; letter-spacing: 0.08em; white-space: nowrap; }
   .top-header { column-gap: clamp(8px, 2vw, 12px); }
 }
 
@@ -607,7 +613,7 @@ body.is-about .page-flip {
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85);
   filter: saturate(1.02);
   /* In stato ABOUT non rendiamo più il flip fixed: lasciamo scorrere il background */
-  position: static;
+  
   margin-top: 70px; /* allineato sotto l'header */
 }
 
@@ -626,12 +632,12 @@ body.is-about .page-about {
 body.is-about .page-face { padding-bottom: 0; }
 /* In stato ABOUT rendiamo la faccia ABOUT statica per permettere sticky */
 body.is-about .page-about.page-face {
-  position: static;
+ 
   inset: auto;
 }
 body.is-about .page-about .about-main {
   /* Sticky sotto l’header: il main resta ancorato mentre lo sfondo scorre */
-  position: sticky;
+
   top: 70px;                 /* altezza header + linea */
   margin: 0 auto;            /* centrato nel container */
   left: auto;
