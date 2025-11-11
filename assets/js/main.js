@@ -43,6 +43,14 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       linesContainer.appendChild(l3);
     }
 
+    // Applica subito l'effetto fade-up anche al primo render e agli aggiornamenti
+    const created = Array.from(linesContainer.querySelectorAll('.fp-line'));
+    created.forEach((line, idx) => {
+      line.classList.add('ty-fade-up');
+      line.style.animationDelay = `${idx * 80}ms`;
+      line.dataset.tyDone = '1';
+    });
+
     projectItems.forEach(item => item.classList.remove('is-active'));
     el.classList.add('is-active');
     el.style.opacity = 1;
@@ -87,33 +95,190 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 
   document.body.classList.add('preloader-active');
 
-  let closed = false;
-  function hidePreloader() {
-    if (closed) return;
-    closed = true;
+  // Attende che il sito sia pronto: window load, font e immagini non-lazy
+  function waitForWindowLoad() {
+    return new Promise(resolve => {
+      if (document.readyState === 'complete') { resolve(); return; }
+      window.addEventListener('load', () => resolve(), { once: true });
+    });
+  }
 
+  function waitForFonts() {
+    if (document.fonts && document.fonts.ready) {
+      return document.fonts.ready.catch(() => {});
+    }
+    return Promise.resolve();
+  }
+
+  function waitForImages() {
+    const imgs = Array.from(document.images || [])
+      .filter(img => img.getAttribute('loading') !== 'lazy');
+    const pending = imgs.filter(img => !(img.complete && img.naturalWidth > 0));
+    if (pending.length === 0) return Promise.resolve();
+    return new Promise(resolve => {
+      let remaining = pending.length;
+      const done = () => { if (--remaining <= 0) resolve(); };
+      pending.forEach(img => {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+      });
+    });
+  }
+
+  const safetyTimeoutMs = 6000;
+  const safety = new Promise(resolve => setTimeout(resolve, safetyTimeoutMs));
+
+  Promise.race([
+    Promise.all([waitForWindowLoad(), waitForFonts(), waitForImages()]),
+    safety
+  ]).then(() => {
+    // Chiude il preloader solo quando tutto è pronto (o dopo il fallback)
     document.body.classList.remove('preloader-active');
     document.body.classList.add('preloader-done');
-
-  setTimeout(() => {
-      // Avvia subito l'animazione della griglia nel momento in cui il preloader finisce
+    setTimeout(() => {
       document.body.classList.add('grid-ready');
       if (preloader && preloader.parentNode) {
         preloader.parentNode.removeChild(preloader);
       }
       document.body.classList.remove('preloader-done');
-  }, 600);
-  }
-
-  const safety = setTimeout(hidePreloader, 2000);
-
-  window.addEventListener('load', () => {
-    clearTimeout(safety);
-    setTimeout(hidePreloader, 400);
+    }, 160);
   });
 })();
 
-// (Typewriter JS rimosso su richiesta)
+// ---------- TYPEWRITER (riattivato) ----------
+(function () {
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typewrite(el, speed = 40) {
+    if (!el || el.dataset.tyDone === '1') return;
+    const original = (el.textContent || '').trim();
+    if (!original) { el.dataset.tyDone = '1'; return; }
+
+    const textSpan = document.createElement('span');
+    textSpan.className = 'ty-text';
+    const caret = document.createElement('span');
+    caret.className = 'ty-caret';
+
+    // Sostituisci solo il contenuto testuale, preservando il nodo e l'interattività (es. <a>)
+    el.textContent = '';
+    el.appendChild(textSpan);
+    el.appendChild(caret);
+
+    // Mostra l'elemento solo quando parte l'animazione
+    el.style.opacity = '1';
+
+    let i = 0;
+    const len = original.length;
+    const timer = setInterval(() => {
+      textSpan.textContent += original[i];
+      i++;
+      if (i >= len) {
+        clearInterval(timer);
+        caret.remove();
+        el.dataset.tyDone = '1';
+      }
+    }, speed);
+  }
+
+  function initTypewriter() {
+    if (reduceMotion) return;
+
+    const selectors = [
+      // Header
+      '.top-left .brand',
+      '.top-left .role',
+      '.top-nav a',
+      '.fp-title',
+      '.fp-index',
+      '.project-number',
+      '.ph-cell',
+      '.pi-cell',
+      '.project-title',
+      '.project-content p',
+      '.project-info li',
+      '.about-grid .about-block p',
+      '.about-grid .about-label',
+      '.about-hero-word',
+      '.fixed-bottom-left a',
+      '.fixed-bottom-left span'
+    ];
+
+    const targets = Array.from(document.querySelectorAll(selectors.join(',')));
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 40));
+      return;
+    }
+
+    // Applica un effetto fade-up alle linee già presenti nella fixed project box
+    const fpInfo = document.querySelector('.fp-info');
+    if (fpInfo) {
+      const initialLines = fpInfo.querySelectorAll('.fp-line');
+      const baseDelay = 120; // ritardo iniziale leggero
+      const stagger = 140;   // ritardo tra le righe
+      initialLines.forEach((line, idx) => {
+        line.classList.remove('ty-fade-in');
+        line.classList.add('ty-fade-up');
+        line.style.animationDelay = `${baseDelay + idx * stagger}ms`;
+        line.dataset.tyDone = '1';
+      });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting) {
+          const speed = Number(target.dataset.tySpeed) || 40;
+          typewrite(target, speed);
+          io.unobserve(target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    targets.forEach(el => io.observe(el));
+  }
+
+  // Avvio solo quando i testi sono effettivamente visibili:
+  // - sulle altre pagine: dopo DOMContentLoaded
+  // - sulla home: dopo la fine del preloader (quando body riceve la classe 'grid-ready')
+  document.addEventListener('DOMContentLoaded', () => {
+    const isHome = document.body && document.body.classList.contains('home');
+    if (!isHome) { initTypewriter(); return; }
+    if (document.body.classList.contains('grid-ready')) { initTypewriter(); return; }
+    const mo = new MutationObserver(() => {
+      if (document.body.classList.contains('grid-ready')) {
+        initTypewriter();
+        mo.disconnect();
+      }
+    });
+    mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Gestione linee dinamiche nella fixed project box (Index):
+  // quando setProjectBox aggiorna .fp-info e aggiunge nuove .fp-line,
+  // applico subito l'animazione o almeno rendo visibili i nuovi nodi.
+  document.addEventListener('DOMContentLoaded', () => {
+    if (reduceMotion) return;
+    const linesWrap = document.querySelector('.fp-lines');
+    if (!linesWrap || !('MutationObserver' in window)) return;
+    const moLines = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1 && node.classList && node.classList.contains('fp-line')) {
+            node.classList.remove('ty-fade-in');
+            node.classList.add('ty-fade-up');
+            const all = Array.from(linesWrap.querySelectorAll('.fp-line'));
+            const idx = all.indexOf(node);
+            const baseDelay = 120;
+            const stagger = 140;
+            if (idx >= 0) node.style.animationDelay = `${baseDelay + idx * stagger}ms`;
+            node.dataset.tyDone = '1';
+          }
+        });
+      });
+    });
+    moLines.observe(linesWrap, { childList: true });
+  });
+})();
 
 
 // ---------- DATI PROGETTI PER MODAL ----------
