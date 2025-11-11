@@ -95,12 +95,14 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     document.body.classList.remove('preloader-active');
     document.body.classList.add('preloader-done');
 
-    setTimeout(() => {
+  setTimeout(() => {
+      // Avvia subito l'animazione della griglia nel momento in cui il preloader finisce
+      document.body.classList.add('grid-ready');
       if (preloader && preloader.parentNode) {
         preloader.parentNode.removeChild(preloader);
       }
       document.body.classList.remove('preloader-done');
-    }, 600);
+  }, 600);
   }
 
   const safety = setTimeout(hidePreloader, 2000);

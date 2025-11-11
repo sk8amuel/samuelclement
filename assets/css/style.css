@@ -40,6 +40,11 @@
   --start-line-offset: calc(var(--start-line-gap) + var(--start-line-width) - 0.5px);
 }
 
+/* Nascondi le scrollbar globali mantenendo lo scroll (cross‑browser) */
+html { overflow-y: auto; scrollbar-gutter: stable; }
+html, body { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
 /* Apply grid background ONLY to homepage */
 body.home {
   background-image: none; /* nessun background di fallback */
@@ -52,7 +57,8 @@ body.home::before {
   top: 0;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
   width: var(--container-width);
   pointer-events: none;
   z-index: 0;
@@ -64,6 +70,12 @@ body.home::before {
   ) 100%;
   background-position: left top;
   opacity: var(--overlay-opacity);
+  will-change: transform;
+}
+
+/* Avvia l'animazione solo quando il preloader è terminato */
+body.home.grid-ready::before {
+  animation: gridGrow 1200ms ease-out forwards;
 }
 
 /* Keep content above the grid overlay, ma escludi header e top-line */
@@ -76,7 +88,8 @@ body.projects::before {
   top: 0;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
   width: var(--container-width);
   pointer-events: none;
   z-index: 0;
@@ -88,6 +101,8 @@ body.projects::before {
   ) 100%;
   background-position: left top;
   opacity: var(--overlay-opacity);
+  will-change: transform;
+  animation: gridGrow 900ms ease-out forwards;
 }
 
 /* Keep content above the grid overlay on Projects, esclusi header e top-line */
@@ -100,7 +115,8 @@ body.project-page::before {
   top: 0;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
   width: var(--container-width);
   pointer-events: none;
   z-index: 0;
@@ -112,10 +128,32 @@ body.project-page::before {
   ) 100%;
   background-position: left top;
   opacity: var(--overlay-opacity);
+  will-change: transform;
+  animation: gridGrow 900ms ease-out forwards;
 }
 
 /* Keep content above the grid overlay on Single Project, esclusi header e top-line */
 body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
+
+/* Grid grow animation (dall'alto verso il basso) */
+@keyframes gridGrow {
+  0% {
+    transform: translateX(-50%) scaleY(0);
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+/* Accessibilità: disabilita movimento se l'utente preferisce ridurre animazioni */
+@media (prefers-reduced-motion: reduce) {
+  body.home::before,
+  body.projects::before,
+  body.project-page::before {
+    animation: none !important;
+    transform: translateX(-50%) scaleY(1) !important;
+  }
+}
 
 /* (Typewriter CSS rimosso su richiesta) */
 
@@ -296,6 +334,7 @@ img {
   color: #aaaaaa;
   letter-spacing: 0.14em;
   margin-bottom: 6px;
+  padding-left: var(--start-line-offset); /* allinea il numero alla start-line come in Projects */
   text-transform: uppercase;
   border-bottom: 1px solid transparent;
   transition: color 0.2s ease, border-color 0.2s ease;
@@ -362,6 +401,7 @@ img {
   position: fixed;
   left: 0;  /* full-width centrato allo schermo */
   right: 0;
+  transform: scale(var(--fp-scale));
   bottom: 0;
   height: 110px;
   z-index: 130;
@@ -371,7 +411,6 @@ img {
   transition: opacity 0.35s ease;
   /* scala solo la dimensione in responsive, senza cambiare la posizione */
   --fp-scale: clamp(0.62, 100vw / 1200, 1);
-  transform: scale(var(--fp-scale));
   transform-origin: center bottom;
   will-change: transform;
 }
