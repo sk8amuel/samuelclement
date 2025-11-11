@@ -127,6 +127,17 @@ body.home {
   min-height: 100vh;
 }
 
+/* Previeni scroll orizzontale dovuto a elementi fixed/3D */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Immagini globali responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ========== HEADER TOP ========== */
 .top-header {
   position: fixed;
@@ -176,11 +187,14 @@ body.home {
 
 /* Nav a destra (stato originale: item del header su 9–12, layout flex) */
 .top-nav {
-  grid-column: 9 / span 4; /* nav a destra sulle ultime colonne reali (12-col grid) */
+  grid-column: 11 / span 2; /* sposta la nav ancora più a destra (colonne 11–12) */
   display: flex;
   justify-content: flex-end;
+  align-items: end;
+  gap: var(--column-gap); /* gap uniforme tra le parole */
   position: relative;
-  padding-left: var(--start-line-offset);
+  padding-left: 0;
+  padding-right: var(--start-line-offset); /* aggancia i link alla linea destra */
 }
 
 /* Righe verticali di inizio blocco nell'header */
@@ -197,13 +211,16 @@ body.home {
 }
 
 .top-nav a {
-  margin-left: 32px;
-  font-size: 11px;
+  margin-left: 0;
+  padding-left: 0; /* evita offset interno, gestiamo solo il gap tra parole */
+  font-size: 10px;
   letter-spacing: 0.12em;
   text-decoration: none;
   color: #f5f5f5;
   text-transform: uppercase;
 }
+
+/* La nav usa flex: i link sono allineati a destra con gap uniforme */
 
 /* Link nav: nessun posizionamento per colonna, usa il layout flex */
 
@@ -317,6 +334,26 @@ body.home {
   font-size: 10px;
 }
 
+/* Mobile: mostra solo Privacy policy, e solo nella vista ABOUT */
+@media (max-width: 900px) {
+  /* Nascondi globalmente su mobile quando non sei in About */
+  body:not(.is-about) .fixed-bottom-left { display: none !important; }
+
+  /* In About: posiziona in basso a sinistra, testo piccolo */
+  body.is-about .fixed-bottom-left {
+    left: 12px;
+    bottom: 12px;
+    font-size: 10px;
+    z-index: 140; /* sopra elementi di sfondo */
+  }
+  /* Mostra solo il link Privacy, nascondi label autore */
+  body.is-about .fixed-bottom-left span { display: none; }
+  body.is-about .fixed-bottom-left a {
+    margin-left: 0;
+    text-decoration: underline;
+  }
+}
+
 /* ========== BOX PROGETTO FISSO (INDEX) ========== */
 .fixed-project-box {
   position: fixed;
@@ -329,6 +366,11 @@ body.home {
   mix-blend-mode: difference;
   opacity: 1;
   transition: opacity 0.35s ease;
+  /* scala solo la dimensione in responsive, senza cambiare la posizione */
+  --fp-scale: clamp(0.62, 100vw / 1200, 1);
+  transform: scale(var(--fp-scale));
+  transform-origin: center bottom;
+  will-change: transform;
 }
 
 .fp-index,
@@ -377,7 +419,7 @@ body.home {
 /* ========== RESPONSIVE INDEX ========== */
 @media (max-width: 1024px) {
   /* stringi gli spazi della nav */
-  .top-nav a { margin-left: 24px; }
+  .top-nav a { margin-left: 0; }
 
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -402,11 +444,20 @@ body.home {
     /* sfuma più velocemente su mobile per evitare tagli */
     -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
     mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
+    column-gap: clamp(10px, 2.5vw, 14px); /* gap dell'header più stretto su tablet */
   }
   /* nascondi il ruolo per liberare spazio in header */
   .role { display: none; }
   /* riduci i margini dei link nav su mobile */
-  .top-nav a { margin-left: 18px; letter-spacing: 0.10em; }
+  .top-nav {
+    grid-column: 8 / span 5; /* più spazio alla nav su tablet */
+    padding-left: 0;
+    padding-right: calc(env(safe-area-inset-right, 0px) + 16px); /* distanza sicura aumentata */
+    gap: clamp(10px, 2vw, 14px);
+    min-width: 0; /* consente alla nav di comprimersi senza overflow */
+    box-sizing: border-box;
+  }
+  .top-nav a { margin-left: 0; letter-spacing: 0.07em; font-size: 9px; white-space: nowrap; }
 
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -415,19 +466,36 @@ body.home {
   }
   .project-item { grid-column: span 6; } /* 2 card per riga */
 
-  .fp-index {
-    font-size: 60px;
-  }
+  /* riduzione solo tramite scala del contenitore; lascio i posizionamenti invariati */
+  .fixed-project-box { --fp-scale: clamp(0.72, 100vw / 1200, 1); }
+}
 
-  .fp-info {
-    left: calc(50% + 60px);
-    bottom: 6px;
+/* breakpoint intermedio per assicurare visibilità della nav tra 640–561px */
+@media (max-width: 640px) {
+  .top-nav {
+    grid-column: 7 / span 6; /* sposta la nav un po' più a sinistra dando spazio ai link */
+    padding-right: calc(env(safe-area-inset-right, 0px) + 12px);
+    gap: clamp(6px, 2.2vw, 10px);
+    box-sizing: border-box;
+    min-width: 0;
   }
+  .top-header { column-gap: clamp(8px, 2.2vw, 12px); }
 }
 
 @media (max-width: 560px) {
   /* ulteriore riduzione per schermi molto stretti */
-  .top-nav a { margin-left: 12px; font-size: 10px; letter-spacing: 0.08em; }
+  :root { --container-width: 96%; } /* leggero aumento della larghezza utile del container */
+  .top-nav {
+    grid-column: 7 / span 6; /* più spazio per i tre link su 393px */
+    padding-left: 0;
+    padding-right: calc(env(safe-area-inset-right, 0px) + 12px); /* distanza sicura aumentata */
+    gap: clamp(6px, 2vw, 10px); /* spazi più compatti */
+    flex-wrap: nowrap;
+    min-width: 0; /* evita clipping del contenuto */
+    box-sizing: border-box;
+  }
+  .top-nav a { margin-left: 0; font-size: 6.5px; letter-spacing: 0.04em; white-space: nowrap; }
+  .top-header { column-gap: clamp(8px, 2vw, 12px); }
 }
 
 /* Una card per riga su mobile stretto */
@@ -790,6 +858,20 @@ body.is-about .fixed-project-box {
     grid-column: 1 / -1;
     font-size: clamp(56px, 18vw, 120px);
   }
+}
+
+/* --- Ulteriore override: About a colonna singola su mobile --- */
+@media (max-width: 900px) {
+  /* Sezione top About: passa a una sola colonna */
+  .page-about .about-top { grid-template-columns: 1fr; }
+  body.is-about .about-top { grid-template-columns: 1fr; }
+
+  /* Foto: full width in colonna singola */
+  .page-about .about-photo { grid-column: 1 / -1; max-width: none; }
+  body.is-about .about-photo { grid-column: 1 / -1; max-width: none; }
+
+  /* Griglia About generica: una sola colonna */
+  .page-about .about-grid { grid-template-columns: 1fr; }
 }
 
 /* ========== PROJECT MODAL ========== */

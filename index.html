@@ -343,22 +343,36 @@
             /* Responsive: 2 colonne e hero full-width */
             @media (max-width: 900px) {
               .page-about .about-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr; /* una sola colonna */
                 gap: 24px;
                 margin-top: 0; /* evita compressioni eccessive su mobile */
+                column-gap: 0;
+                grid-auto-flow: row; /* riempimento in ordine di righe */
               }
+              /* Tutti i blocchi testuali occupano l'intera larghezza */
+              .page-about .about-grid .col-1,
+              .page-about .about-grid .col-2,
+              .page-about .about-grid .col-3,
+              .page-about .about-grid .col-4 {
+                grid-column: 1 / -1 !important;
+                padding-left: 0; /* nessun offset: partire da sinistra */
+              }
+              /* Hero e foto a tutta larghezza */
               .page-about .about-grid .about-hero-word {
                 grid-column: 1 / -1;
+                grid-row: 1; /* metti l'hero come primo blocco */
                 font-size: clamp(64px, 18vw, 180px);
               }
+              .page-about .about-grid .about-photo {
+                transform: none; /* su mobile non alzare la foto oltre il flusso */
+                grid-column: 1 / -1; /* a tutta larghezza in colonna singola */
+              }
+              /* Rimuovi sollevamenti sotto ABOUT su mobile */
               .page-about .about-grid .selected-work,
               .page-about .about-grid .focus,
               .page-about .about-grid .capabilities {
                 margin-top: 0; /* pulizia su mobile */
                 transform: none; /* non alzare su mobile */
-              }
-              .page-about .about-grid .about-photo {
-                transform: none; /* su mobile non alzare la foto oltre il flusso */
               }
             }
           </style>
