@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap');
 /* ========== RESET BASE ========== */
 
 
@@ -155,7 +156,101 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
   }
 }
 
-/* (Typewriter CSS rimosso su richiesta) */
+/* Typewriter caret and reduced motion */
+.ty-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: currentColor;
+  margin-left: 1px;
+  vertical-align: baseline;
+  animation: ty-caret-blink 1s steps(1, end) infinite;
+}
+
+@keyframes ty-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ty-caret { display: none; animation: none; }
+}
+
+/* Fade-in generico per testi che non usano typewriter */
+.ty-fade-in {
+  opacity: 1 !important;
+  animation: ty-fade 400ms ease-out forwards;
+}
+
+@keyframes ty-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ty-fade-in { animation: none; opacity: 1 !important; }
+}
+
+/* Fade-up più evidente per le linee dinamiche della box fissa */
+.ty-fade-up {
+  opacity: 0;
+  transform: translateY(6px);
+  will-change: opacity, transform;
+  animation: ty-fade-up 1200ms ease-out forwards;
+}
+
+@keyframes ty-fade-up {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ty-fade-up { animation: none; opacity: 1 !important; transform: none !important; }
+}
+
+/* Nascondi i testi target all'avvio per evitare flash prima dell'animazione */
+.top-left .brand,
+.top-left .role,
+.top-nav a,
+.fp-title,
+.fp-line,
+.fp-index,
+.project-number,
+.ph-cell,
+.pi-cell,
+.project-title,
+.project-content p,
+.project-info li,
+.about-grid .about-block p,
+.about-grid .about-label,
+.about-hero-word,
+.fixed-bottom-left a,
+.fixed-bottom-left span {
+  opacity: 0;
+}
+
+/* Accessibilità: se l'utente preferisce ridurre le animazioni, mostra subito i testi */
+@media (prefers-reduced-motion: reduce) {
+  .top-left .brand,
+  .top-left .role,
+  .top-nav a,
+  .fp-title,
+  .fp-line,
+  .fp-index,
+  .project-number,
+  .ph-cell,
+  .pi-cell,
+  .project-title,
+  .project-content p,
+  .project-info li,
+  .about-grid .about-block p,
+  .about-grid .about-label,
+  .about-hero-word,
+  .fixed-bottom-left a,
+  .fixed-bottom-left span {
+    opacity: 1 !important;
+  }
+}
 
 /* (Tema chiaro e stile bottone invert rimossi su richiesta) */
 
@@ -163,7 +258,7 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
 body.home {
   background: #000;
   color: #f5f5f5;
-  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   min-height: 100vh;
 }
 
@@ -363,14 +458,15 @@ img {
 /* ========== BOTTOM LEFT FISSO ========== */
 .fixed-bottom-left {
   position: fixed;
-  left: 58px; /* ripristino posizione precedente */
+  left: calc(50% - 0.5 * var(--container-width)); /* aggancio al bordo sinistro del container */
   bottom: 12px;
   font-size: 10px;
   color: #f5f5f5;
   z-index: 120;
+  pointer-events: auto; /* assicura clic sul link */
 }
 .fixed-bottom-left a {
-  margin-left: 6px;
+  margin-left: var(--start-line-offset); /* il testo parte subito a destra della start-line */
   color: #f5f5f5;
   text-decoration: underline;
   font-size: 10px;
@@ -383,15 +479,18 @@ img {
 
   /* In About: posiziona in basso a sinistra, testo piccolo */
   body.is-about .fixed-bottom-left {
-    left: 12px;
+    left: auto; /* disattiva ancoraggio a sinistra */
+    right: calc(50% - 0.5 * var(--container-width)); /* allinea al bordo destro del container */
     bottom: 12px;
     font-size: 10px;
     z-index: 140; /* sopra elementi di sfondo */
+    text-align: right; /* allinea il testo a destra */
   }
   /* Mostra solo il link Privacy, nascondi label autore */
   body.is-about .fixed-bottom-left span { display: none; }
   body.is-about .fixed-bottom-left a {
     margin-left: 0;
+    margin-right: var(--start-line-offset); /* piccolo margine interno a destra */
     text-decoration: underline;
   }
 }
@@ -399,7 +498,7 @@ img {
 /* ========== BOX PROGETTO FISSO (INDEX) ========== */
 .fixed-project-box {
   position: fixed;
-  left: 0;  /* full-width centrato allo schermo */
+  left: 0px;  /* full-width centrato allo schermo */
   right: 0;
   transform: scale(var(--fp-scale));
   bottom: 0;
@@ -452,7 +551,7 @@ img {
 /* Titoli globali: usa Cal Sans */
 .about-hero-word,
 .fp-title {
-  font-family: 'Cal Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 .fp-line {
@@ -820,7 +919,7 @@ body.is-about .fixed-project-box {
 }
 
 /* ========== RESPONSIVE ABOUT ========== */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .page-about .about-main {
     padding: 60px 0 50px;
   }
@@ -951,7 +1050,7 @@ body.is-about .fixed-project-box {
   align-items: center;
   justify-content: center;
   z-index: 999;
-  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s ease-out;
