@@ -32,7 +32,7 @@
     <nav class="top-nav">
       <a href="projects.html" class="nav-link" data-view="projects">PROJECTS</a>
       <a href="#" class="nav-link active" data-view="index">INDEX</a>
-      <a href="#" class="nav-link" data-view="about">ABOUT</a>
+      <a href="#about" class="nav-link" data-view="about">ABOUT</a>
 
     </nav>
   </header>
@@ -205,8 +205,13 @@
             </a>
 
           </section>
+
+          
+
+          
         </main>
       </section>
+      
 
       <!-- BACK: ABOUT -->
       <section class="page-face page-about">
@@ -301,7 +306,7 @@
             .page-about .about-grid .about-hero-word {
               position: static;
               grid-column: 1 / span 6; /* metà container, allineata alla griglia a 12 */
-              font-size: clamp(88px, 14vw, 240px);
+              font-size: clamp(64px, 31vw, 180px);
               letter-spacing: -0.02em;
               line-height: 0.85;
               color: var(--color-foreground);
@@ -323,13 +328,13 @@
             }
             /* La foto mantiene la classe col-4 per stare nella quarta colonna */
 
-            /* Alza blocchi sotto ABOUT per avvicinarli (lascia invariati) */
+            /* Abbassa i blocchi sotto ABOUT di almeno 160px */
             .page-about .about-grid .selected-work,
             .page-about .about-grid .focus,
             .page-about .about-grid .capabilities {
               margin-top: 0;
               position: relative;
-              transform: translateY(-200px);
+              transform: translateY(-30px);
             }
 
             /* Alza SOLO la foto un po’ di più */
@@ -340,6 +345,9 @@
               grid-column: 10 / span 3; /* mantenuta in quarta colonna mappata */
             }
 
+            
+
+          
             /* Responsive: 2 colonne e hero full-width */
             @media (max-width: 900px) {
               .page-about .about-grid {
@@ -361,7 +369,7 @@
               .page-about .about-grid .about-hero-word {
                 grid-column: 1 / -1;
                 grid-row: 1; /* metti l'hero come primo blocco */
-                font-size: clamp(64px, 18vw, 180px);
+                font-size: clamp(48px, 10vw, 88px);
               }
               .page-about .about-grid .about-photo {
                 transform: none; /* su mobile non alzare la foto oltre il flusso */
@@ -413,7 +421,7 @@
             </div>
             
             <!-- Row3 (ABOUT + foto sulla stessa riga) -->
-            <div class="about-hero-word">ABOUT</div>
+            <div class="about-hero-word">about</div>
             <div class="about-photo col-4">
               <img src="assets/img/samuel-clement.png" alt="Samuel Clement – Visual Designer">
             </div>
@@ -441,6 +449,8 @@
               <p>Motion &amp; Video</p>
             </div>
 
+            
+
           </section>
 
         </main>
@@ -451,8 +461,8 @@
 
   <!-- BOTTOM LEFT -->
   <div class="fixed-bottom-left">
-    <span>Samuel Clement Visual Designer</span>
-    <a href="privacy.html">Privacy policy</a>
+    <span id="privacyLink">© 2025</span>
+    <a href="#" id="privacyLinkDesktop">Privacy policy</a>
   </div>
 
   <!-- FIXED PROJECT BOX (solo lato INDEX) -->
@@ -469,6 +479,20 @@
   </div>
 
 
+
+  <!-- Privacy Modal -->
+  <div id="privacy-modal" class="privacy-modal" aria-hidden="true">
+    <div class="privacy-overlay" id="privacyOverlay"></div>
+    <div class="privacy-content" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+      <button class="privacy-close" id="privacyClose" aria-label="Close">×</button>
+      <h2 id="privacyTitle">Privacy Policy</h2>
+      <div class="privacy-body">
+        <p>This website does not use cookies of any kind.</p>
+        <p>No personal data is stored or tracked beyond what is strictly necessary for navigation.</p>
+        <p>For inquiries: hello@samuelclement.it</p>
+      </div>
+    </div>
+  </div>
 
   <!-- MAIN JS -->
   <script src="assets/js/main.js"></script>
@@ -498,6 +522,32 @@
         body.classList.remove('is-about');
         navIndex.classList.add('active');
         navAbout.classList.remove('active');
+        // rimuovi hash per tornare all'index
+        if (location.hash === '#about') {
+          history.replaceState(null, '', location.pathname);
+        }
+        // scroll fluido visibile verso l'alto
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // riafferma lo scroll al termine del flip per massima affidabilità
+        const flipEl = document.querySelector('.page-flip');
+        const performSmoothTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (flipEl) {
+          const onFlipEnd = (ev) => {
+            if (ev.propertyName === 'transform') {
+              flipEl.removeEventListener('transitionend', onFlipEnd);
+              performSmoothTop();
+            }
+          };
+          flipEl.addEventListener('transitionend', onFlipEnd);
+          // fallback nel caso non scatti transitionend (es. reduced-motion)
+          setTimeout(() => {
+            flipEl.removeEventListener('transitionend', onFlipEnd);
+            performSmoothTop();
+          }, 1100);
+        } else {
+          performSmoothTop();
+        }
       }
 
       function showAbout(e) {
@@ -505,10 +555,21 @@
         body.classList.add('is-about');
         navIndex.classList.remove('active');
         navAbout.classList.add('active');
+        // imposta hash per link diretto e scrolla all'inizio
+        if (location.hash !== '#about') {
+          location.hash = 'about';
+        }
+        // nessuno scroll forzato su ABOUT: mantieni la posizione corrente
       }
 
+      // bind
       navIndex.addEventListener('click', showIndex);
       navAbout.addEventListener('click', showAbout);
+
+      // stato iniziale da hash (ad es. arrivo da projects con index.html#about)
+      if (location.hash === '#about') {
+        showAbout();
+      }
     });
   </script>
 

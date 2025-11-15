@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Cal+Sans:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap');
 /* ========== RESET BASE ========== */
 
 
@@ -196,7 +195,7 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
   opacity: 0;
   transform: translateY(6px);
   will-change: opacity, transform;
-  animation: ty-fade-up 1200ms ease-out forwards;
+  animation: ty-fade-up 900ms ease-out forwards;
 }
 
 @keyframes ty-fade-up {
@@ -204,8 +203,21 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Ingresso semplice: fade solo di opacità (0 → 1) */
+@keyframes project-fade-opacity {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.project-fade-in {
+  opacity: 0;
+  will-change: opacity;
+  animation: project-fade-opacity 650ms ease-out forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ty-fade-up { animation: none; opacity: 1 !important; transform: none !important; }
+  .project-fade-in { animation: none; opacity: 1 !important; }
 }
 
 /* Nascondi i testi target all'avvio per evitare flash prima dell'animazione */
@@ -258,7 +270,7 @@ body.project-page > :not(.top-header):not(.top-line) { z-index: 1; }
 body.home {
   background: #000;
   color: #f5f5f5;
-  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   min-height: 100vh;
 }
 
@@ -281,6 +293,7 @@ img {
   right: 0;
   height: 40px;
   padding: 10px 0 0; /* padding verticale */
+  border-bottom: 2px solid rgb(255, 255, 255);
   width: var(--container-width);
   margin: 0 auto; /* centrato rispetto allo schermo */
   display: grid;
@@ -413,18 +426,21 @@ img {
   display: none;
 }
 
-.project-item {
+body.home .project-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-decoration: none;
   color: #f5f5f5;
-  opacity: 0.5;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 1; /* rimuovi fade */
+  transition: none;
+  transform: none;
   grid-column: span 3; /* 4 card per riga su 12 colonne */
+  overflow: hidden;
+  position: relative; /* per overlay canvas pixelate */
 }
 
-.project-number {
+body.home .project-number {
   font-size: 10px;
   color: #aaaaaa;
   letter-spacing: 0.14em;
@@ -435,22 +451,34 @@ img {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.project-item img {
+body.home .project-item img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
+  filter: none;
+  transition: none;
+  transform: none;
+  image-rendering: auto;
+  opacity: 1 !important; /* forza nessun fade sull'immagine */
 }
 
 /* Hover / attivo */
-.project-item:hover,
-.project-item.is-active {
-  opacity: 1;
-  transform: translateY(-2px);
+body.home .project-item img { transition: transform 0.25s ease; will-change: transform; }
+body.home .project-item:hover img { transform: rotate(3deg); }
+body.home .project-item.is-active { opacity: 1; transform: none; }
+
+body.home .project-item:hover img,
+body.home .project-item.is-active img {
+  filter: none; /* nessun effetto */
+  opacity: 1 !important; /* nessuna variazione di opacità in hover/attivo */
 }
 
-.project-item:hover .project-number,
-.project-item.is-active .project-number {
+/* Canvas overlay per pixelate */
+/* (rimosso) Overlay canvas pixelate */
+
+body.home .project-item:hover .project-number,
+body.home .project-item.is-active .project-number {
   color: #ffffff;
   border-bottom: 1px solid #ffffff;
 }
@@ -472,10 +500,11 @@ img {
   font-size: 10px;
 }
 
-/* Mobile: mostra solo Privacy policy, e solo nella vista ABOUT */
+/* Mobile: mostra solo © 2025 cliccabile */
 @media (max-width: 900px) {
   /* Nascondi globalmente su mobile quando non sei in About */
-  body:not(.is-about) .fixed-bottom-left { display: none !important; }
+  body:not(.is-about) .fixed-bottom-left { display: block !important; }
+  .fixed-bottom-left a { display: none !important; }
 
   /* In About: posiziona in basso a sinistra, testo piccolo */
   body.is-about .fixed-bottom-left {
@@ -486,13 +515,8 @@ img {
     z-index: 140; /* sopra elementi di sfondo */
     text-align: right; /* allinea il testo a destra */
   }
-  /* Mostra solo il link Privacy, nascondi label autore */
-  body.is-about .fixed-bottom-left span { display: none; }
-  body.is-about .fixed-bottom-left a {
-    margin-left: 0;
-    margin-right: var(--start-line-offset); /* piccolo margine interno a destra */
-    text-decoration: underline;
-  }
+  /* Mostra solo © 2025 */
+  body.is-about .fixed-bottom-left a { display: none !important; }
 }
 
 /* ========== BOX PROGETTO FISSO (INDEX) ========== */
@@ -551,7 +575,7 @@ img {
 /* Titoli globali: usa Cal Sans */
 .about-hero-word,
 .fp-title {
-  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 .fp-line {
@@ -566,7 +590,7 @@ img {
   .projects-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
-  .project-item { grid-column: span 4; } /* 3 card per riga */
+  body.home .project-item { grid-column: span 4; } /* 3 card per riga */
 
   .fp-index {
     font-size: 80px;
@@ -607,10 +631,14 @@ img {
     gap: 18px;
     margin-top: 60px;
   }
-  .project-item { grid-column: span 6; } /* 2 card per riga */
+  body.home .project-item { grid-column: span 6; } /* 2 card per riga */
 
   /* riduzione solo tramite scala del contenitore; lascio i posizionamenti invariati */
   .fixed-project-box { --fp-scale: clamp(0.72, 100vw / 1200, 1); }
+
+  /* Sposta leggermente a sinistra numero + descrizione per una percezione più centrata */
+  .fp-index { left: calc(50% - 18px); }
+  .fp-info { left: calc(50% + 64px); }
 }
 
 /* breakpoint intermedio per assicurare visibilità della nav tra 640–561px */
@@ -649,9 +677,10 @@ img {
     row-gap: 24px;
     margin-top: 48px;
   }
-  .project-item {
+  body.home .project-item {
     grid-column: 1 / -1; /* una card per riga */
   }
+  .about-photo img { width: 50%; }
 }
 
 /* ========== PRELOADER ========== */
@@ -1210,3 +1239,14 @@ body.is-about .fixed-project-box {
 }
 /* Overlay transizione globale riutilizzabile */
 /* (Overlay di transizione globale rimosso per ripristinare lo stato precedente) */
+/* visibilità fissa per il bottom-left */
+.fixed-bottom-left a,
+.fixed-bottom-left span {
+  opacity: 1 !important;
+}
+.privacy-modal { position: fixed; inset: 0; display: none; z-index: 20000; }
+.privacy-modal.is-visible { display: block; }
+.privacy-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+.privacy-content { position: absolute; left: 50%; transform: translateX(-50%); top: 12%; width: var(--container-width); background: #0a0a0a; color: #fff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 18px; }
+.privacy-close { position: absolute; right: 12px; top: 8px; background: transparent; border: none; color: #fff; font-size: 18px; cursor: pointer; }
+.privacy-body { font-size: 12px; line-height: 1.7; margin-top: 12px; }
