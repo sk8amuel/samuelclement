@@ -503,3 +503,29 @@ document.addEventListener('DOMContentLoaded', () => {
   closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  if (!body || !body.classList.contains('home')) return;
+  const isMobile = window.matchMedia('(max-width: 900px)').matches;
+  if (!isMobile) return;
+  const grid = document.querySelector('.projects-grid');
+  if (!grid) return;
+  const items = Array.from(grid.querySelectorAll('.project-item'));
+  if (!items.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        el.classList.add('reveal-rotate');
+        const img = el.querySelector('img');
+        if (img) {
+          img.addEventListener('animationend', () => {
+            el.classList.remove('reveal-rotate');
+          }, { once: true });
+        }
+        io.unobserve(el);
+      }
+    });
+  }, { threshold: 0.75 });
+  items.forEach(i => io.observe(i));
+});
