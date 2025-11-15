@@ -3,7 +3,7 @@
 body.projects {
   background: #000;
   color: #ffffff;
-  font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   min-height: 100vh;
 }
 
@@ -31,6 +31,8 @@ body.projects {
   color: #ffffff;
   padding: 6px 0 8px;
   margin-bottom: 72px; /* più spazio sotto tra header e progetti */
+  position: relative;
+  z-index: 1; /* sopra l'overlay di griglia */
 }
 
 .ph-cell {
@@ -43,6 +45,14 @@ body.projects {
   justify-content: flex-start;
 }
 
+/* Mappatura colonne (desktop) */
+.projects-header .ph-cell:nth-child(1) { grid-column: 1; }
+.projects-header .ph-cell:nth-child(2) { grid-column: 2; }
+.projects-header .ph-cell:nth-child(3) { grid-column: 3; }
+.projects-header .ph-cell:nth-child(4) { grid-column: 4; }
+.projects-header .ph-cell:nth-child(5) { grid-column: 5; }
+.projects-header .ph-cell:nth-child(6) { grid-column: 6; justify-self: end; }
+
 /* riga progetto */
 .project-item {
   display: grid;
@@ -52,8 +62,12 @@ body.projects {
   padding: 6px 0;
   font-size: 10px;
   cursor: pointer;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.25s ease;
+  position: relative;
+  z-index: 1; /* sopra l'overlay di griglia */
+  will-change: transform;
 }
+.project-item.is-open { padding: 4px 1px 4px 6px; }
 
 .project-item:hover {
   background-color: #0e0e0e;
@@ -72,24 +86,45 @@ body.projects {
 
 .pi-icon {
   justify-content: flex-start;
+  min-width: 16px; /* spazio coerente con colonna icona */
+  padding-left: 0 !important;
+  overflow: visible !important;
+}
+.project-item .pi-cell.pi-icon { opacity: 1 !important; }
+
+/* Mappatura colonne (desktop) per righe progetto */
+.project-item .pi-cell:nth-child(1) { grid-column: 1; }
+.project-item .pi-cell:nth-child(2) { grid-column: 2; font-variant-numeric: tabular-nums; }
+.project-item .pi-cell:nth-child(3) { grid-column: 3; }
+.project-item .pi-cell:nth-child(4) { grid-column: 4; }
+.project-item .pi-cell:nth-child(5) { grid-column: 5; }
+.project-item .pi-cell:nth-child(6) { grid-column: 6; justify-self: end; font-variant-numeric: tabular-nums; }
+
+/* Forza visibilità della cella icona sulle righe */
+.project-item .pi-cell.pi-icon { display: flex !important; }
+.project-item .pi-cell.pi-icon { position: relative; z-index: 2; }
+
+/* DEBUG: mostra un quadratino accanto all'icona per verificare la cella */
+.project-item .pi-cell.pi-icon::after {
+  content: none;
+  display: none;
+}
+
+/* DEBUG: evidenzia la cella icona con un fondo chiaro */
+.project-item .pi-cell.pi-icon {
+  background-color: transparent;
 }
 
 /* ---------- Icone cartelle ---------- */
 
-/* cartella chiusa di default */
-.folder-icon {
-  display: inline-block;
-  width: 13px;
-  height: 12px;
-  background: url("../img/closed-folder-icon.png") no-repeat center center;
-  background-size: contain;
-  transition: opacity 0.2s ease;
+/* Icona via pseudo-elemento, posizionata con dimensioni esplicite */
+.pi-cell.pi-icon::before {
+  content: none !important;
 }
 
-/* cartella aperta quando la riga ha .is-open */
-.project-item.is-open .folder-icon {
-  background-image: url("../img/open-folder-icon.png");
-  opacity: 0.9;
+/* stato aperto: leggero aumento di opacità */
+.project-item.is-open .pi-cell.pi-icon::before {
+  content: none !important;
 }
 
 /* ---------- Dettaglio progetto ---------- */
@@ -101,6 +136,25 @@ body.projects {
   transition: max-height 0.3s ease;
 }
 
+.project-detail.is-open {
+  background-color: #0a0a0a;
+  position: relative;
+  z-index: 2;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  padding: 6px 8px;
+}
+
+/* Contenitore complessivo della riga + dettaglio, con bordo animato */
+.project-block {
+  border: 1px solid rgba(255,255,255,0);
+  border-radius: 6px;
+  transition: none;
+  box-sizing: border-box;
+}
+.project-block.is-open {  
+  outline: 1px solid #3d3d3d; 
+}
 .project-detail-inner {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -111,17 +165,21 @@ body.projects {
 
 /* immagine */
 .detail-image-wrap {
-  display: block;
+  display: grid;
+  place-items: center;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  background: #111;
+  background: #000000;
   overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  margin-left: calc(var(--start-line-offset) + 8px);
 }
 
 .detail-image-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   display: block;
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
@@ -136,6 +194,22 @@ body.projects {
   font-size: 10px;
   line-height: 1.8;
   color: #ffffff;
+}
+
+.detail-title {
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.detail-subtitle {
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.85;
+  margin-bottom: 6px;
+  color: #cccccc;
 }
 
 /* ---------- Responsive ---------- */
@@ -169,7 +243,7 @@ body.projects {
   /* Header visibile anche su mobile: mappa su 3 colonne (icona, numero, contenuto) */
   .projects-header {
     display: grid;
-    grid-template-columns: 16px 3ch 1fr;
+    grid-template-columns: 16px 3ch 1fr 2.3ch;
     column-gap: var(--column-gap); /* stesso gap delle righe per perfetto allineamento */
     justify-items: start;
     font-size: 8px;
@@ -190,12 +264,12 @@ body.projects {
   /* CLIENT e CATEGORY nascosti su mobile */
   .projects-header .ph-cell:nth-child(4),
   .projects-header .ph-cell:nth-child(5) { display: none; }
-  /* YEAR a destra in colonna 3 */
-  .projects-header .ph-cell:nth-child(6) { grid-column: 3; justify-self: end; }
+  /* YEAR in colonna 4 allineato a destra, leggermente più a sinistra */
+  .projects-header .ph-cell:nth-child(6) { grid-column: 4; justify-self: end; padding-left: 0; margin-right: 0; transform: translateX(-8px); }
 
   /* Layout mobile: 3 colonne (icona + numero + contenuto) */
   .project-item {
-    grid-template-columns: 16px 3ch 1fr; /* icona, numero tabulare, contenuto a destra */
+    grid-template-columns: 16px 3ch 1fr 2.3ch; /* icona, numero, contenuto, year a destra */
     row-gap: 6px;
     align-items: start;
   }
@@ -221,12 +295,15 @@ body.projects {
   /* Categoria nascosta su mobile (mostrata nel dettaglio al click) */
   .project-item .pi-cell:nth-child(5) { display: none !important; }
 
-  /* Visualizza Anno (colonna 6) in fondo a destra */
+  /* Visualizza Anno in colonna 4 a destra, esattamente sotto YEAR */
   .project-item .pi-cell:nth-child(6) {
-    grid-column: 3 !important;
+    grid-column: 4 !important;
     justify-self: end;
-    align-self: end;
+    align-self: start;
+    margin-top: -6px;
     font-variant-numeric: tabular-nums;
+    padding-left: 0;
+    transform: translateX(-8px);
   }
 
   .project-detail-inner { }
@@ -246,44 +323,29 @@ body.projects {
 
 /* ========== Mappatura su 12 colonne ========== */
 /* Header: 1 icon, 2 code, 3-7 title, 8-9 area, 10-11 client, 12 arrow */
-.projects-header .ph-cell:nth-child(1) { grid-column: 1; }
+.projects-header .ph-cell:nth-child(1) { grid-column: 1; padding-left: 0; }
 .projects-header .ph-cell:nth-child(2) { grid-column: 2; }
 .projects-header .ph-cell:nth-child(3) { grid-column: 3 / span 5; }
 .projects-header .ph-cell:nth-child(4) { grid-column: 8 / span 2; }
 .projects-header .ph-cell:nth-child(5) { grid-column: 10 / span 2; }
-.projects-header .ph-cell:nth-child(6) { grid-column: 12; justify-content: flex-start; }
+.projects-header .ph-cell:nth-child(6) { grid-column: 12; justify-self: start; padding-left: var(--start-line-offset); }
 
 /* Row: stessa mappa delle colonne */
-.project-item .pi-cell:nth-child(1) { grid-column: 1; }
+.project-item .pi-cell:nth-child(1) { grid-column: 1; padding-left: 0; }
 .project-item .pi-cell:nth-child(2) { grid-column: 2; }
 .project-item .pi-cell:nth-child(3) { grid-column: 3 / span 5; }
 .project-item .pi-cell:nth-child(4) { grid-column: 8 / span 2; }
 .project-item .pi-cell:nth-child(5) { grid-column: 10 / span 2; }
-.project-item .pi-cell:nth-child(6) { grid-column: 12; justify-content: flex-start; }
+.project-item .pi-cell:nth-child(6) { grid-column: 12; justify-self: start; padding-left: var(--start-line-offset); }
 
 /* Dettaglio: immagine su 1-3, testo su 4-12 */
 .project-detail-inner .detail-image-wrap { grid-column: 1 / span 3; }
 .project-detail-inner .detail-text { grid-column: 4 / span 9; padding-left: var(--start-line-offset); }
 
-/* --- Shift a sinistra di 1 colonna (desktop) --- */
-@media (min-width: 601px) {
-  /* Nascondi la colonna icona su desktop per liberare la colonna 1 */
-  .projects-header .ph-cell.ph-icon { display: none; }
-  .project-item .pi-cell.pi-icon { display: none; }
-
-  /* Header: sposta 'No.' e 'Project' a sinistra di 1 colonna */
-  .projects-header .ph-cell:nth-child(2) { grid-column: 1; }
-  .projects-header .ph-cell:nth-child(3) { grid-column: 2 / span 5; }
-  .projects-header .ph-cell:nth-child(4) { grid-column: 7 / span 2; }
-  .projects-header .ph-cell:nth-child(5) { grid-column: 9 / span 2; }
-  .projects-header .ph-cell:nth-child(6) { grid-column: 12; }
-
-  /* Righe: stessa mappa spostata */
-  .project-item .pi-cell:nth-child(2) { grid-column: 1; }
-  .project-item .pi-cell:nth-child(3) { grid-column: 2 / span 5; }
-  .project-item .pi-cell:nth-child(4) { grid-column: 7 / span 2; }
-  .project-item .pi-cell:nth-child(5) { grid-column: 9 / span 2; }
-  .project-item .pi-cell:nth-child(6) { grid-column: 12; }
-}
+/* --- Layout desktop: mantieni la colonna icona visibile --- */
+/* Nessun override: il mapping di base già posiziona l'icona in colonna 1 */
 
 /* (override duplicato rimosso per coerenza) */
+.pi-cell.pi-icon img.folder-icon { width: 14px; height: 11px; display: inline-block; opacity: 1 !important; }
+  .projects-header .ph-cell:nth-child(6) { transform: translateX(-10px); }
+  .project-item .pi-cell:nth-child(6) { transform: translateX(-10px); }

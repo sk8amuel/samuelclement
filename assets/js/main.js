@@ -47,7 +47,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const created = Array.from(linesContainer.querySelectorAll('.fp-line'));
     created.forEach((line, idx) => {
       line.classList.add('ty-fade-up');
-      line.style.animationDelay = `${idx * 80}ms`;
+      line.style.animationDelay = `${80 + idx * 110}ms`;
       line.dataset.tyDone = '1';
     });
 
@@ -94,6 +94,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   if (!isHome || !preloader) return;
 
   document.body.classList.add('preloader-active');
+  const preloaderStart = Date.now();
+  const minimumMs = 400;
 
   // Attende che il sito sia pronto: window load, font e immagini non-lazy
   function waitForWindowLoad() {
@@ -132,16 +134,19 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     Promise.all([waitForWindowLoad(), waitForFonts(), waitForImages()]),
     safety
   ]).then(() => {
-    // Chiude il preloader solo quando tutto è pronto (o dopo il fallback)
-    document.body.classList.remove('preloader-active');
-    document.body.classList.add('preloader-done');
+    const elapsed = Date.now() - preloaderStart;
+    const delay = Math.max(0, minimumMs - elapsed);
     setTimeout(() => {
-      document.body.classList.add('grid-ready');
-      if (preloader && preloader.parentNode) {
-        preloader.parentNode.removeChild(preloader);
-      }
-      document.body.classList.remove('preloader-done');
-    }, 160);
+      document.body.classList.remove('preloader-active');
+      document.body.classList.add('preloader-done');
+      setTimeout(() => {
+        document.body.classList.add('grid-ready');
+        if (preloader && preloader.parentNode) {
+          preloader.parentNode.removeChild(preloader);
+        }
+        document.body.classList.remove('preloader-done');
+      }, 160);
+    }, delay);
   });
 })();
 
@@ -214,8 +219,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const fpInfo = document.querySelector('.fp-info');
     if (fpInfo) {
       const initialLines = fpInfo.querySelectorAll('.fp-line');
-      const baseDelay = 120; // ritardo iniziale leggero
-      const stagger = 140;   // ritardo tra le righe
+      const baseDelay = 80; // ritardo iniziale ancora più rapido
+      const stagger = 110;  // ritardo tra le righe più rapido
       initialLines.forEach((line, idx) => {
         line.classList.remove('ty-fade-in');
         line.classList.add('ty-fade-up');
@@ -268,8 +273,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
             node.classList.add('ty-fade-up');
             const all = Array.from(linesWrap.querySelectorAll('.fp-line'));
             const idx = all.indexOf(node);
-            const baseDelay = 120;
-            const stagger = 140;
+            const baseDelay = 80; // ritardo iniziale ancora più rapido
+            const stagger = 110;  // spaziatura tra linee più rapida
             if (idx >= 0) node.style.animationDelay = `${baseDelay + idx * stagger}ms`;
             node.dataset.tyDone = '1';
           }
@@ -279,6 +284,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     moLines.observe(linesWrap, { childList: true });
   });
 })();
+
+// (rimosso) Effetto pixel in overlay: eliminato completamente su richiesta
 
 
 // ---------- DATI PROGETTI PER MODAL ----------
@@ -413,6 +420,10 @@ const projectsData = {
 // ---------- MODAL LOGIC ----------
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Fade-in d'ingresso per le card progetto sulla home
+  const reduceMotionFade = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Disabilitato effetto opacità su caricamento delle card
+
   const modal = document.getElementById('project-modal');
   if (!modal) return;
 
@@ -479,3 +490,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // (Transizioni pagina e fallback Safari rimossi per ripristinare stato precedente)
 
 // (Toggle tema chiaro rimosso su richiesta)
+document.addEventListener('DOMContentLoaded', () => {
+  const links = Array.from(document.querySelectorAll('#privacyLink, #privacyLinkDesktop'));
+  const modal = document.getElementById('privacy-modal');
+  const overlay = document.getElementById('privacyOverlay');
+  const closeBtn = document.getElementById('privacyClose');
+  if (!links.length || !modal || !overlay || !closeBtn) return;
+  const open = (e) => { e.preventDefault(); modal.classList.add('is-visible'); document.body.style.overflow = 'hidden'; };
+  const close = () => { modal.classList.remove('is-visible'); document.body.style.overflow = ''; };
+  links.forEach(l => l.addEventListener('click', open));
+  overlay.addEventListener('click', close);
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+});
