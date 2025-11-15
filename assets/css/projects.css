@@ -243,8 +243,8 @@ body.projects {
   /* Header visibile anche su mobile: mappa su 3 colonne (icona, numero, contenuto) */
   .projects-header {
     display: grid;
-    grid-template-columns: 16px 3ch 1fr 2.3ch;
-    column-gap: var(--column-gap); /* stesso gap delle righe per perfetto allineamento */
+    grid-template-columns: 16px 3ch 1fr 1.7ch;
+    column-gap: calc(var(--column-gap) - 6px); /* avvicina YEAR a sinistra */
     justify-items: start;
     font-size: 8px;
     text-transform: uppercase;
@@ -253,8 +253,9 @@ body.projects {
     padding: 6px 0 8px;
     margin-bottom: 12px;
     align-items: end; /* allinea le etichette al fondo come le celle della lista */
+    position: relative;
   }
-  .projects-header .ph-cell { padding-left: var(--start-line-offset); }
+  .projects-header .ph-cell { padding-left: 0; }
   /* Icona visibile su colonna 1 */
   .projects-header .ph-cell:nth-child(1) { grid-column: 1; padding-left: 0; }
   /* NO. in colonna 2 */
@@ -264,14 +265,24 @@ body.projects {
   /* CLIENT e CATEGORY nascosti su mobile */
   .projects-header .ph-cell:nth-child(4),
   .projects-header .ph-cell:nth-child(5) { display: none; }
-  /* YEAR in colonna 4 allineato a destra, leggermente più a sinistra */
-  .projects-header .ph-cell:nth-child(6) { grid-column: 4; justify-self: end; padding-left: 0; margin-right: 0; transform: translateX(-8px); }
+  /* YEAR non agganciato: posiziona a destra del container */
+  .projects-header .ph-cell:nth-child(6) {
+    position: absolute;
+    right: calc(var(--start-line-offset) + 8px);
+    bottom: 6px; /* alza leggermente la label YEAR */
+    grid-column: auto !important;
+    justify-self: auto !important;
+    padding-left: 0 !important;
+    transform: none;
+  }
 
   /* Layout mobile: 3 colonne (icona + numero + contenuto) */
   .project-item {
-    grid-template-columns: 16px 3ch 1fr 2.3ch; /* icona, numero, contenuto, year a destra */
+    grid-template-columns: 16px 3ch 1fr 1.7ch; /* icona, numero, contenuto, year a destra */
+    column-gap: calc(var(--column-gap) - 6px);
     row-gap: 6px;
     align-items: start;
+    position: relative;
   }
   /* Rimuovi padding di partenza per allineamento pulito */
   .project-item .pi-cell { padding-left: 0; }
@@ -295,15 +306,16 @@ body.projects {
   /* Categoria nascosta su mobile (mostrata nel dettaglio al click) */
   .project-item .pi-cell:nth-child(5) { display: none !important; }
 
-  /* Visualizza Anno in colonna 4 a destra, esattamente sotto YEAR */
+  /* Anno non agganciato: posiziona a destra del container */
   .project-item .pi-cell:nth-child(6) {
+    position: static; /* torna a seguire la griglia */
     grid-column: 4 !important;
-    justify-self: end;
-    align-self: start;
-    margin-top: -6px;
+    justify-self: end !important;
+    align-self: center; /* allinea verticalmente con il titolo */
+    margin-top: 0;
     font-variant-numeric: tabular-nums;
-    padding-left: 0;
-    transform: translateX(-8px);
+    padding-left: 0 !important;
+    transform: translate(-8px, -2px); /* sposta leggermente a sinistra e riallinea baseline */
   }
 
   .project-detail-inner { }
@@ -347,5 +359,3 @@ body.projects {
 
 /* (override duplicato rimosso per coerenza) */
 .pi-cell.pi-icon img.folder-icon { width: 14px; height: 11px; display: inline-block; opacity: 1 !important; }
-  .projects-header .ph-cell:nth-child(6) { transform: translateX(-10px); }
-  .project-item .pi-cell:nth-child(6) { transform: translateX(-10px); }
