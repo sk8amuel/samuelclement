@@ -1,4 +1,4 @@
-/* ---------- PROJECTS PAGE STYLES ---------- */
+
 
 body.projects {
   background: #000;
@@ -7,7 +7,7 @@ body.projects {
   min-height: 100vh;
 }
 
-/* layout principale */
+
 .projects-main {
   padding-top: 80px;
   padding-bottom: 90px;
@@ -19,7 +19,7 @@ body.projects {
   width: 100%;
 }
 
-/* header colonne */
+
 .projects-header {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
