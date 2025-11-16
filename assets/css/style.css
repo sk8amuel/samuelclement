@@ -291,24 +291,48 @@ img {
   top: 0;
   left: 0;
   right: 0;
+
   height: 40px;
   padding: 10px 0 0; /* padding verticale */
-  border-bottom: 2px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
+
+  /* boxed layout come volevi */
   width: var(--container-width);
   margin: 0 auto; /* centrato rispetto allo schermo */
+
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--column-gap);
-  align-items: center; /* allineamento verticale uniforme */
-  justify-items: start; /* i grid items appoggiano al bordo sinistro della colonna */
-  z-index: 10000; /* header sopra overlay e qualsiasi elemento */
-  background: rgba(0, 0, 0, 0.35); /* semi-trasparente per consentire il blur */
+  align-items: center;       /* allineamento verticale uniforme */
+  justify-items: start;      /* i grid items appoggiano al bordo sinistro della colonna */
+
+  z-index: 10000;            /* header sopra overlay e qualsiasi elemento */
+
+  /* il background lo lasciamo trasparente,
+     il blur lo spostiamo sul ::before */
+  background: transparent;
+}
+
+/* SOLO blur full width */
+.top-header::before {
+  content: "";
+  position: absolute;
+
+  /* agganciato all'header ma largo quanto il viewport */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.35);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  /* bordo inferiore morbido (sfuma solo entro l'header) */
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, rgba(0,0,0,0) 100%);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 88%, rgba(0,0,0,0) 100%);
+
+  z-index: -1;          /* dietro al contenuto + border della .top-header */
+  pointer-events: none; /* non blocca i click */
 }
+
 
 .top-left {
   display: flex;
@@ -606,11 +630,9 @@ body.home .project-item.is-active .project-number {
   /* potenzia la leggibilità dell'header su mobile con blur più marcato */
   .top-header {
     background: rgba(0, 0, 0, 0.55);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid rgb(255, 255, 255);
     /* sfuma più velocemente su mobile per evitare tagli */
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%);
+   
     column-gap: clamp(10px, 2.5vw, 14px); /* gap dell'header più stretto su tablet */
   }
   /* nascondi il ruolo per liberare spazio in header */

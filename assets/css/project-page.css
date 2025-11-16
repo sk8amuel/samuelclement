@@ -1,4 +1,4 @@
-/* ---------- Single Project Page Styles ---------- */
+
 
 body.project-page {
   background: #000;
@@ -29,7 +29,7 @@ body.project-page {
 .back-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 24px; opacity: 0.85; }
 .back-link:hover { opacity: 1; }
 
-/* Info blocco progetto */
+
 .project-info { width: var(--container-width); margin: 12px auto 0; opacity: 0.9; }
 .project-info ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
 .project-info li { font-size: 12px; line-height: 1.6; }
