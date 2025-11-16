@@ -158,25 +158,55 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     if (!el || el.dataset.tyDone === '1') return;
     const original = (el.textContent || '').trim();
     if (!original) { el.dataset.tyDone = '1'; return; }
-
+    const step = Number(el.dataset.tyStep) || 1;
+    const split = el.dataset.tySplit;
+    if (split === 'sentence') {
+      const parts = original.split(/(?<=\.)\s+/);
+      el.textContent = '';
+      const lines = [];
+      parts.forEach((part) => {
+        const wrap = document.createElement('span');
+        wrap.className = 'ty-line';
+        const textSpan = document.createElement('span');
+        textSpan.className = 'ty-text';
+        const caret = document.createElement('span');
+        caret.className = 'ty-caret';
+        wrap.appendChild(textSpan);
+        wrap.appendChild(caret);
+        el.appendChild(wrap);
+        lines.push({ textSpan, caret, text: part });
+      });
+      el.style.opacity = '1';
+      let running = lines.length;
+      lines.forEach((ln) => {
+        let i = 0;
+        const len = ln.text.length;
+        const timer = setInterval(() => {
+          ln.textSpan.textContent += ln.text.slice(i, i + step);
+          i += step;
+          if (i >= len) {
+            clearInterval(timer);
+            ln.caret.remove();
+            running -= 1;
+            if (running === 0) el.dataset.tyDone = '1';
+          }
+        }, speed);
+      });
+      return;
+    }
     const textSpan = document.createElement('span');
     textSpan.className = 'ty-text';
     const caret = document.createElement('span');
     caret.className = 'ty-caret';
-
-    // Sostituisci solo il contenuto testuale, preservando il nodo e l'interattività (es. <a>)
     el.textContent = '';
     el.appendChild(textSpan);
     el.appendChild(caret);
-
-    // Mostra l'elemento solo quando parte l'animazione
     el.style.opacity = '1';
-
     let i = 0;
     const len = original.length;
     const timer = setInterval(() => {
-      textSpan.textContent += original[i];
-      i++;
+      textSpan.textContent += original.slice(i, i + step);
+      i += step;
       if (i >= len) {
         clearInterval(timer);
         caret.remove();
@@ -201,6 +231,10 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       '.project-title',
       '.project-content p',
       '.project-info li',
+      '.template-intro',
+      '.template-title',
+      '.template-desc .template-meta',
+      '.template-desc .emph',
       '.about-grid .about-block p',
       '.about-grid .about-label',
       '.about-hero-word',
@@ -208,7 +242,12 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       '.fixed-bottom-left span'
     ];
 
-    const targets = Array.from(document.querySelectorAll(selectors.join(',')));
+    const isProject = document.body && document.body.classList.contains('project-page');
+    let sels = selectors.slice();
+    if (isProject) {
+      sels = sels.filter(s => s !== '.project-title' && s !== '.project-content p' && s !== '.project-info li');
+    }
+    const targets = Array.from(document.querySelectorAll(sels.join(',')));
 
     if (!('IntersectionObserver' in window)) {
       targets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 40));
@@ -232,8 +271,16 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(({ target, isIntersecting }) => {
         if (isIntersecting) {
-          const speed = Number(target.dataset.tySpeed) || 40;
-          typewrite(target, speed);
+          const mode = (target.dataset.tyMode || '').toLowerCase();
+          if (mode === 'fade-up') {
+            const dur = Number(target.dataset.tySpeed) || 420;
+            target.style.animationDuration = `${dur}ms`;
+            target.classList.add('ty-fade-up');
+            target.dataset.tyDone = '1';
+          } else {
+            const speed = Number(target.dataset.tySpeed) || 40;
+            typewrite(target, speed);
+          }
           io.unobserve(target);
         }
       });
@@ -496,7 +543,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('privacyOverlay');
   const closeBtn = document.getElementById('privacyClose');
   if (!links.length || !modal || !overlay || !closeBtn) return;
-  const open = (e) => { e.preventDefault(); modal.classList.add('is-visible'); document.body.style.overflow = 'hidden'; };
+  const open = (e) => {
+    e.preventDefault();
+    modal.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    const title = document.getElementById('privacyTitle');
+    if (!title) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const text = (title.textContent || '').trim();
+    if (!text) return;
+    if (reduce) { title.textContent = text; return; }
+    title.innerHTML = '';
+    const textSpan = document.createElement('span');
+    textSpan.className = 'ty-text';
+    const caret = document.createElement('span');
+    caret.className = 'ty-caret';
+    title.appendChild(textSpan);
+    title.appendChild(caret);
+    let i = 0;
+    const len = text.length;
+    const timer = setInterval(() => {
+      textSpan.textContent += text[i];
+      i++;
+      if (i >= len) {
+        clearInterval(timer);
+        caret.remove();
+      }
+    }, 40);
+  };
   const close = () => { modal.classList.remove('is-visible'); document.body.style.overflow = ''; };
   links.forEach(l => l.addEventListener('click', open));
   overlay.addEventListener('click', close);

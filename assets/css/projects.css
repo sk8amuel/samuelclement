@@ -74,7 +74,7 @@ body.projects {
 }
 
 .project-item.is-open {
-  background-color: #181818;
+  background-color: #131212;
 }
 
 /* celle */
@@ -168,6 +168,7 @@ body.projects {
   display: grid;
   place-items: center;
   width: 100%;
+  max-width: 200px;
   background: #000000;
   overflow: hidden;
   aspect-ratio: 1 / 1;
@@ -209,7 +210,7 @@ body.projects {
   line-height: 1.4;
   opacity: 0.85;
   margin-bottom: 6px;
-  color: #cccccc;
+  color: #838484;
 }
 
 /* ---------- Responsive ---------- */
@@ -231,7 +232,7 @@ body.projects {
   }
 
   .detail-image-wrap {
-    max-width: 240px;
+    max-width: 200px;
   }
 }
 
