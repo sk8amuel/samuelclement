@@ -42,7 +42,7 @@
     <div class="projects-header">
       <div class="ph-cell ph-icon"></div>
       <div class="ph-cell">No.</div>
-      <div class="ph-cell">Project</div>
+      <div class="ph-cell">↓ Project</div>
       <div class="ph-cell">Client</div>
       <div class="ph-cell">Category</div>
       <div class="ph-cell">Year</div>
@@ -389,75 +389,62 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
   <!-- JS: toggle righe -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const rows = document.querySelectorAll('.project-item');
-      // imposta tutte le icone allo stato "chiuso" all’avvio
+      const rows = Array.from(document.querySelectorAll('.project-item'));
+
+      function openRow(row) {
+        const block = row.closest('.project-block');
+        const targetId = row.dataset.target;
+        if (!targetId) return;
+        const detail = document.getElementById(targetId);
+        if (!detail) return;
+        row.classList.add('is-open');
+        if (block) block.classList.add('is-open');
+        detail.classList.add('is-open');
+        detail.style.maxHeight = detail.scrollHeight + 'px';
+        const icon = row.querySelector('.folder-icon');
+        if (icon && icon.tagName.toLowerCase() === 'img') {
+          icon.src = 'assets/img/open-folder-icon.png';
+        }
+        if (window.matchMedia('(max-width: 600px)').matches) {
+          const detailText = detail.querySelector('.detail-text');
+          if (detailText) {
+            const meta = detailText.querySelector('.detail-meta');
+            if (meta) meta.remove();
+          }
+        }
+      }
+
+      function closeRow(row) {
+        const block = row.closest('.project-block');
+        const targetId = row.dataset.target;
+        if (!targetId) return;
+        const detail = document.getElementById(targetId);
+        if (!detail) return;
+        row.classList.remove('is-open');
+        if (block) block.classList.remove('is-open');
+        detail.classList.remove('is-open');
+        detail.style.maxHeight = 0;
+        const icon = row.querySelector('.folder-icon');
+        if (icon && icon.tagName.toLowerCase() === 'img') {
+          icon.src = 'assets/img/closed-folder-icon.png';
+        }
+      }
+
       rows.forEach(row => {
         const icon = row.querySelector('.folder-icon');
         if (icon && icon.tagName.toLowerCase() === 'img') {
           icon.src = 'assets/img/closed-folder-icon.png';
         }
-      });
-
-      rows.forEach(row => {
         row.addEventListener('click', () => {
-          const block = row.closest('.project-block');
-          const targetId = row.dataset.target;
-          if (!targetId) return;
-
-          const detail = document.getElementById(targetId);
-          if (!detail) return;
-
-          const isOpen = row.classList.contains('is-open');
-
-          // chiudi tutti
-          document.querySelectorAll('.project-block.is-open').forEach(b => b.classList.remove('is-open'));
-          document.querySelectorAll('.project-item.is-open').forEach(r => r.classList.remove('is-open'));
-          document.querySelectorAll('.project-detail').forEach(d => {
-            d.classList.remove('is-open');
-            d.style.maxHeight = 0;
-          });
-          // ripristina icone chiuse
-          document.querySelectorAll('.project-item .folder-icon').forEach(ic => {
-            if (ic && ic.tagName.toLowerCase() === 'img') {
-              ic.src = 'assets/img/closed-folder-icon.png';
-            }
-          });
-
-          // se non era aperto, apri questo
-          if (!isOpen) {
-            row.classList.add('is-open');
-            detail.classList.add('is-open');
-            detail.style.maxHeight = detail.scrollHeight + 'px';
-            if (block) block.classList.add('is-open');
-            // icona aperta per la riga attuale
-            const icon = row.querySelector('.folder-icon');
-            if (icon && icon.tagName.toLowerCase() === 'img') {
-              icon.src = 'assets/img/open-folder-icon.png';
-            }
-
-            // Mobile: aggiungi meta (categoria • anno) dentro il dettaglio
-            if (window.matchMedia('(max-width: 600px)').matches) {
-              const categoryCell = row.querySelector('.pi-cell:nth-child(5)');
-              const category = categoryCell ? categoryCell.textContent.trim() : '';
-
-              // crea/aggiorna contenitore meta sotto il testo
-              const detailText = detail.querySelector('.detail-text');
-              if (detailText) {
-                let meta = detailText.querySelector('.detail-meta');
-                const metaText = [category].filter(Boolean).join('');
-                if (meta) {
-                  meta.textContent = metaText;
-                } else if (metaText) {
-                  meta = document.createElement('div');
-                  meta.className = 'detail-meta';
-                  meta.textContent = metaText;
-                  detailText.appendChild(meta);
-                }
-              }
-            }
+          if (row.classList.contains('is-open')) {
+            closeRow(row);
+          } else {
+            openRow(row);
           }
         });
       });
+
+      // Auto-apertura disattivata: i progetti si aprono solo al click
 
       document.querySelectorAll('.project-detail').forEach(detail => {
         detail.addEventListener('click', () => {

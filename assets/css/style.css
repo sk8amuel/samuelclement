@@ -12,7 +12,7 @@
 /* ========== GLOBAL GRID BACKGROUND (12 columns, dashed double lines) ========== */
 :root {
   --grid-columns: 12;
-  --grid-line-opacity: 0.08; /* opacità unica delle linee griglia */
+  --grid-line-opacity: 0.05; /* opacità unica delle linee griglia */
   --overlay-opacity: 1; /* opacità dell'overlay su entrambe le pagine */
   /* Doppia linea sul bordo SINISTRO di ogni colonna, con gap fisso in px */
   --grid-bg: 
@@ -675,6 +675,8 @@ body.home .project-item.is-active .project-number {
     justify-self: end;
   }
   .top-header { column-gap: clamp(8px, 2.2vw, 12px); }
+  .top-left .brand .ty-text { font-size: 0.98em; display: inline-block; line-height: 1; transform: translateY(2px); }
+  .top-nav a .ty-text { display: inline-block; line-height: 1; transform: translateY(2px); }
 }
 
 @media (max-width: 560px) {
@@ -691,6 +693,8 @@ body.home .project-item.is-active .project-number {
   }
   .top-nav a { margin-left: 0; font-size: 9px; letter-spacing: 0.08em; white-space: nowrap; }
   .top-header { column-gap: clamp(8px, 2vw, 12px); }
+  .top-left .brand .ty-text { font-size: 0.95em; display: inline-block; line-height: 1; transform: translateY(2px); }
+  .top-nav a .ty-text { display: inline-block; line-height: 1; transform: translateY(2px); }
 }
 
 /* Una card per riga su mobile stretto */
@@ -1270,11 +1274,15 @@ body.is-about .fixed-project-box {
 .privacy-modal { position: fixed; inset: 0; display: none; z-index: 20000; }
 .privacy-modal.is-visible { display: block; }
 .privacy-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
-.privacy-content { position: absolute; left: 50%; transform: translateX(-50%); top: 12%; width: var(--container-width); background: #0a0a0a; color: #fff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 18px; }
+.privacy-content { position: absolute; left: 50%; transform: translateX(-50%); top: 12%; width: var(--container-width); background: #151415; color: #fff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 18px; }
 .privacy-close { position: absolute; right: 12px; top: 8px; background: transparent; border: none; color: #fff; font-size: 18px; cursor: pointer; }
 .privacy-body { font-size: 12px; line-height: 1.7; margin-top: 12px; }
 @keyframes rotateReveal {
   0% { transform: rotate(0deg); }
   30% { transform: rotate(3deg); }
   100% { transform: rotate(0deg); }
+}
+@media (max-width: 900px) {
+  .top-left .brand .ty-text { display: inline-block; line-height: 1; transform: translateY(2px); }
+  .top-nav a .ty-text { display: inline-block; line-height: 1; transform: translateY(2px); }
 }

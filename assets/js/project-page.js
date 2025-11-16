@@ -1,6 +1,5 @@
 // Dedicated JS for single project pages
 (function() {
-  // Mark current nav item (optional simple highlight)
   window.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.top-nav a');
     navLinks.forEach(l => {
@@ -16,5 +15,80 @@
         a.setAttribute('data-transition', '');
       }
     });
+
+    const isTemplateKnoted = document.querySelector('.template-knoted');
+    const fixedCol = document.querySelector('.template-left');
+    const left = document.querySelector('.template-left');
+    const leftPh = document.querySelector('.template-left-placeholder');
+    function fixLeft() {
+      if (!left || !leftPh) return;
+      const mobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+      if (mobile) {
+        left.style.position = '';
+        left.style.left = '';
+        left.style.top = '';
+        left.style.width = '';
+        left.style.height = '';
+        left.style.zIndex = '';
+        return;
+      }
+      const rect = leftPh.getBoundingClientRect();
+      left.style.position = 'fixed';
+      left.style.left = rect.left + 'px';
+      left.style.top = '96px';
+      left.style.width = rect.width + 'px';
+      left.style.height = 'calc(100vh - 120px)';
+      left.style.zIndex = '1';
+    }
+    let scheduled = false;
+    function scheduleFix() {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => { scheduled = false; fixLeft(); });
+    }
+    scheduleFix();
+    window.addEventListener('resize', scheduleFix, { passive: true });
+    window.addEventListener('scroll', scheduleFix, { passive: true });
+    window.addEventListener('load', scheduleFix);
+    window.addEventListener('orientationchange', scheduleFix);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleFix).catch(() => {});
+    }
+    const bottomNav = document.querySelector('.project-bottom-nav');
+    const hero = document.querySelector('.template-hero');
+    const lastBlock = document.querySelector('.template-hero .hero-media.hero-video:last-of-type') || Array.from(document.querySelectorAll('.template-hero .hero-media')).pop();
+    const sentinel = document.querySelector('.template-hero .bottom-sentinel');
+    function updateBottomNav() {
+      if (!bottomNav || !hero) return;
+      const rect = hero.getBoundingClientRect();
+      bottomNav.style.left = rect.left + 'px';
+      bottomNav.style.width = rect.width + 'px';
+      const margin = 24;
+      let show = false;
+      if (lastBlock) {
+        const lastRect = lastBlock.getBoundingClientRect();
+        if (lastRect.bottom <= window.innerHeight - margin) show = true;
+      }
+      const scrollEndThreshold = 48; // fallback su mobile
+      const scroller = document.scrollingElement || document.documentElement;
+      const atEnd = (window.innerHeight + window.scrollY) >= (scroller.scrollHeight - scrollEndThreshold);
+      if (show || atEnd) bottomNav.classList.add('is-visible'); else bottomNav.classList.remove('is-visible');
+    }
+    const run = () => requestAnimationFrame(updateBottomNav);
+    run();
+    window.addEventListener('scroll', run, { passive: true });
+    window.addEventListener('resize', run, { passive: true });
+    window.addEventListener('load', run);
+    window.addEventListener('pageshow', run);
+    window.addEventListener('touchmove', run, { passive: true });
+
+    if (bottomNav && sentinel && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) bottomNav.classList.add('is-visible');
+        });
+      }, { root: null, rootMargin: '0px 0px -24px 0px', threshold: 0 });
+      io.observe(sentinel);
+    }
   });
 })();
