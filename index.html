@@ -386,13 +386,15 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               /* Hero e foto a tutta larghezza */
               .page-about .about-grid .about-hero-word {
                 grid-column: 1 / -1;
-                grid-row: 1; /* metti l'hero come primo blocco */
-                font-size: clamp(48px, 10vw, 88px);
+                grid-row: 2;
+                font-size: clamp(64px, 27vw, 160px);
               }
+              .page-about .about-grid .intro { grid-row: 1; }
               .page-about .about-grid .about-photo {
                 transform: none; /* su mobile non alzare la foto oltre il flusso */
                 grid-column: 1 / -1; /* a tutta larghezza in colonna singola */
               }
+              .page-about .about-photo img { border-radius: 8px; }
               /* Rimuovi sollevamenti sotto ABOUT su mobile */
               .page-about .about-grid .selected-work,
               .page-about .about-grid .focus,
@@ -401,6 +403,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
                 transform: none; /* non alzare su mobile */
               }
             }
+            
           </style>
 
           <!-- ABOUT GRID (4 colonne in flusso) -->
@@ -505,9 +508,26 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
       <button class="privacy-close" id="privacyClose" aria-label="Close">×</button>
       <h2 id="privacyTitle">Privacy Policy</h2>
       <div class="privacy-body">
-        <p>This website does not use cookies of any kind.</p>
-        <p>No personal data is stored or tracked beyond what is strictly necessary for navigation.</p>
-        <p>For inquiries: hello@samuelclement.it</p>
+        <h3>Overview</h3>
+        <p>This website is a static portfolio. There are no account areas, forms, or interactive features beyond viewing content.</p>
+        <h3>Data Controller</h3>
+        <p>Samuel Clement — hello@samuelclement.it</p>
+        <h3>Personal Data</h3>
+        <p>No personal data is collected through this website. If you contact me by email, your message is processed solely to reply and is not shared with third parties.</p>
+        <h3>Cookies</h3>
+        <p>No cookies are used, including technical, analytics, or advertising cookies.</p>
+        <h3>Technical Logs</h3>
+        <p>Minimal technical logs (IP address, user‑agent, requested path) may be recorded at server level for security, troubleshooting, and performance. These logs are not used for profiling or marketing.</p>
+        <h3>Analytics & Tracking</h3>
+        <p>No analytics platforms, third‑party trackers, or advertising scripts are used.</p>
+        <h3>Legal Basis</h3>
+        <p>Site operation and security constitute legitimate interest. Consent is not required for strictly necessary technical logging.</p>
+        <h3>Retention</h3>
+        <p>Technical logs, where present, are retained briefly and then purged. Email correspondence is kept only as long as needed to reply.</p>
+        <h3>Your Rights</h3>
+        <p>You may request access, correction, or deletion of any information you have provided via email.</p>
+        <h3>Contact</h3>
+        <p>hello@samuelclement.it</p>
       </div>
     </div>
   </div>
