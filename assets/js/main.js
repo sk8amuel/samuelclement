@@ -554,10 +554,108 @@ document.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('privacyOverlay');
   const closeBtn = document.getElementById('privacyClose');
   if (!links.length || !modal || !overlay || !closeBtn) return;
+  function createASCIIShift(el, opts) {
+    if (!el) return;
+    let origTxt = (el.textContent || '').trim();
+    let origChars = origTxt.split('');
+    let isAnim = false;
+    let cursorPos = 0;
+    let waves = [];
+    let animId = null;
+    let isHover = false;
+    let origW = null;
+    const cfg = Object.assign({ dur: 600, chars: '.,·-─~+:;=*π""┐┌┘┴┬╗╔╝╚╬╠╣╩╦║░▒▓█▄▀▌▐■!?&#$@0123456789*', preserveSpaces: true, spread: 0.3 }, opts || {});
+    function updateCursorPos(e) {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const len = origTxt.length;
+      const pos = Math.round((x / rect.width) * len);
+      cursorPos = Math.max(0, Math.min(pos, len - 1));
+    }
+    function startWave() {
+      waves.push({ startPos: cursorPos, startTime: Date.now(), id: Math.random() });
+      if (!isAnim) start();
+    }
+    function cleanupWaves(t) {
+      waves = waves.filter(w => t - w.startTime < cfg.dur);
+    }
+    function calcWaveEffect(charIdx, t) {
+      let shouldAnim = false;
+      let resultChar = origChars[charIdx];
+      for (const w of waves) {
+        const age = t - w.startTime;
+        const prog = Math.min(age / cfg.dur, 1);
+        const dist = Math.abs(charIdx - w.startPos);
+        const maxDist = Math.max(w.startPos, origChars.length - w.startPos - 1);
+        const rad = (prog * (maxDist + 5)) / cfg.spread;
+        if (dist <= rad) {
+          shouldAnim = true;
+          const intens = Math.max(0, rad - dist);
+          if (intens <= 3 && intens > 0) {
+            const cidx = (dist * 3 + Math.floor(age / 40)) % cfg.chars.length;
+            resultChar = cfg.chars[cidx];
+          }
+        }
+      }
+      return { shouldAnim, char: resultChar };
+    }
+    function genScrambledTxt(t) {
+      return origChars.map((char, i) => {
+        if (cfg.preserveSpaces && char === ' ') return ' ';
+        const res = calcWaveEffect(i, t);
+        return res.shouldAnim ? res.char : char;
+      }).join('');
+    }
+    function stop() {
+      el.textContent = origTxt;
+      el.classList.remove('as');
+      if (origW !== null) { el.style.width = ''; origW = null; }
+      isAnim = false;
+    }
+    function start() {
+      if (isAnim) return;
+      if (origW === null) { origW = el.getBoundingClientRect().width; el.style.width = origW + 'px'; }
+      isAnim = true;
+      el.classList.add('as');
+      function animate() {
+        const t = Date.now();
+        cleanupWaves(t);
+        if (!waves.length) { stop(); return; }
+        el.textContent = genScrambledTxt(t);
+        animId = requestAnimationFrame(animate);
+      }
+      animId = requestAnimationFrame(animate);
+    }
+    function handleEnter(e) { isHover = true; updateCursorPos(e); startWave(); }
+    function handleMove(e) { if (!isHover) return; const prev = cursorPos; updateCursorPos(e); if (cursorPos !== prev) startWave(); }
+    function handleLeave() { isHover = false; }
+    function resetToOrig() {
+      waves = [];
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+      if (origW !== null) { el.style.width = ''; origW = null; }
+      stop();
+    }
+    function updateTxt(newTxt) {
+      origTxt = newTxt;
+      origChars = newTxt.split('');
+      if (!isAnim) el.textContent = newTxt;
+    }
+    function destroy() {
+      resetToOrig();
+      el.removeEventListener('mouseenter', handleEnter);
+      el.removeEventListener('mousemove', handleMove);
+      el.removeEventListener('mouseleave', handleLeave);
+    }
+    el.addEventListener('mouseenter', handleEnter);
+    el.addEventListener('mousemove', handleMove);
+    el.addEventListener('mouseleave', handleLeave);
+    return { updateTxt, resetToOrig, destroy };
+  }
   const open = (e) => {
     e.preventDefault();
     modal.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('privacy-open');
     const title = document.getElementById('privacyTitle');
     if (!title) return;
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -579,14 +677,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (i >= len) {
         clearInterval(timer);
         caret.remove();
+        createASCIIShift(textSpan, { dur: 1000, spread: 1 });
       }
     }, 40);
   };
-  const close = () => { modal.classList.remove('is-visible'); document.body.style.overflow = ''; };
+  const close = () => { modal.classList.remove('is-visible'); document.body.style.overflow = ''; document.body.classList.remove('privacy-open'); };
   links.forEach(l => l.addEventListener('click', open));
   overlay.addEventListener('click', close);
   closeBtn.addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) Array.from(document.querySelectorAll('.privacy-body p')).forEach(el => createASCIIShift(el, { dur: 1000, spread: 1 }));
 });
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
@@ -614,3 +715,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.75 });
   items.forEach(i => io.observe(i));
 });
+  document.addEventListener('DOMContentLoaded', () => {
+    const vids = Array.from(document.querySelectorAll('video'));
+    const playIfPossible = (v) => {
+      try {
+        const r = v.play();
+        if (r && typeof r.then === 'function') r.catch(() => {});
+      } catch (_) {}
+    };
+    vids.forEach(v => {
+      v.muted = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.preload = 'auto';
+      v.addEventListener('loadeddata', () => playIfPossible(v), { once: true });
+    });
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) { playIfPossible(target); io.unobserve(target); }
+        });
+      }, { threshold: 0.1 });
+      vids.forEach(v => io.observe(v));
+    } else {
+      vids.forEach(playIfPossible);
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) vids.forEach(v => { if (v.paused) playIfPossible(v); });
+    });
+    let touched = false;
+    const onTouch = () => {
+      if (touched) return;
+      touched = true;
+      vids.forEach(v => { if (v.paused) playIfPossible(v); });
+    };
+    document.addEventListener('touchstart', onTouch, { once: true });
+  });
+  // Sticky About Grid controlled by IntersectionObserver

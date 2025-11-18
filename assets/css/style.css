@@ -1084,6 +1084,7 @@ body.is-about .fixed-project-box {
   }
 }
 
+
 /* --- Ulteriore override: About a colonna singola su mobile --- */
 @media (max-width: 900px) {
   /* Sezione top About: passa a una sola colonna */
@@ -1105,7 +1106,7 @@ body.is-about .fixed-project-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 2147483600;
   font-family: 'Anonymous Pro', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   pointer-events: none;
   opacity: 0;
@@ -1118,6 +1119,7 @@ body.is-about .fixed-project-box {
   background: rgba(0, 0, 0, 0.72);
   backdrop-filter: blur(4px);
   opacity: 0;
+  z-index: 2147483601;
   transition: opacity 0.25s ease-out;
 }
 
@@ -1128,11 +1130,13 @@ body.is-about .fixed-project-box {
   height: 82vh;
   background: #020202;
   border: 1px solid #333;
-  padding: 16px 16px 18px;
+  border-radius: 12px;
+  padding: 16px 16px 64px;
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 2147483602;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   transform: translateY(10px);
   opacity: 0;
   transition: opacity 0.25s ease-out, transform 0.25s ease-out;
@@ -1156,18 +1160,24 @@ body.is-about .fixed-project-box {
 /* Close */
 .project-modal-close {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  bottom: 12px;
+  right: 12px;
   border: none;
-  background: transparent;
+  background: #000000;
   color: #f5f5f5;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  line-height: 1;
+  z-index: 1;
+  text-decoration: none;
 }
 
 .project-modal-close:hover {
-  opacity: 0.7;
+  background: #0a0a0a;
+  opacity: 1;
+  text-decoration: underline;
 }
 
 /* GRID INTERNO MODAL */
@@ -1245,7 +1255,7 @@ body.is-about .fixed-project-box {
   .project-modal-inner {
     width: 94vw;
     height: 86vh;
-    padding: 12px;
+    padding: 12px 12px 64px;
   }
 
   .project-modal-grid {
@@ -1271,12 +1281,14 @@ body.is-about .fixed-project-box {
 .fixed-bottom-left span {
   opacity: 1 !important;
 }
-.privacy-modal { position: fixed; inset: 0; display: none; z-index: 20000; }
+.privacy-modal { position: fixed; inset: 0; display: none; z-index: 2147483647; }
 .privacy-modal.is-visible { display: block; }
-.privacy-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
-.privacy-content { position: absolute; left: 50%; transform: translateX(-50%); top: 12%; width: var(--container-width); background: #000000; color: #fff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 18px; }
+.privacy-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 0; }
+.privacy-content { position: fixed; left: 50%; transform: translateX(-50%); top: 12%; width: var(--container-width); background: #000000; color: #fff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 18px; z-index: 1; }
 .privacy-close { position: absolute; right: 12px; top: 8px; background: transparent; border: none; color: #fff; font-size: 18px; cursor: pointer; }
 .privacy-body { font-size: 12px; line-height: 1.7; margin-top: 12px; }
+.privacy-body h3 { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #7c7c7c; margin: 12px 0 4px; }
+.privacy-body ul { font-size: 12px; color: #dcdcdc; margin: 6px 0 12px 16px; }
 @keyframes rotateReveal {
   0% { transform: rotate(0deg); }
   30% { transform: rotate(3deg); }

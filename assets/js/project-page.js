@@ -90,5 +90,31 @@
       }, { root: null, rootMargin: '0px 0px -24px 0px', threshold: 0 });
       io.observe(sentinel);
     }
+
+    const thesisLink = document.querySelector('.thesis-link');
+    const thesisModal = document.getElementById('thesis-modal');
+    const thesisOverlay = document.getElementById('thesisOverlay');
+    const thesisClose = document.getElementById('thesisClose');
+    function openThesis(e) {
+      e.preventDefault();
+      if (!thesisModal) return;
+      thesisModal.classList.add('is-visible');
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('thesis-open');
+    }
+    function closeThesis() {
+      if (!thesisModal) return;
+      thesisModal.classList.remove('is-visible');
+      document.body.style.overflow = '';
+      document.body.classList.remove('thesis-open');
+    }
+    if (thesisLink) thesisLink.addEventListener('click', openThesis);
+    if (thesisOverlay) thesisOverlay.addEventListener('click', closeThesis);
+    if (thesisClose) thesisClose.addEventListener('click', closeThesis);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeThesis(); });
+    if (thesisLink) {
+      const origTxt = (thesisLink.textContent || '').trim();
+      thesisLink.setAttribute('aria-label', origTxt);
+    }
   });
 })();

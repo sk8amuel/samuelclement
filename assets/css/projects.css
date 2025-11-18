@@ -132,18 +132,19 @@ body.projects {
 .project-detail {
   overflow: hidden;
   max-height: 0;
-  background-color: #050505;
+  background-color: #000000;
   transition: max-height 0.3s ease;
 }
 
 .project-detail.is-open {
-  background-color: #0a0a0a;
+  background-color: #000000;
   position: relative;
   z-index: 2;
   border-radius: 0 0 12px 12px;
   overflow: hidden;
   padding: 6px 8px;
 }
+body.privacy-open .project-detail.is-open { z-index: 0; }
 
 /* Contenitore complessivo della riga + dettaglio, con bordo animato */
 .project-block {
@@ -154,6 +155,7 @@ body.projects {
 }
 .project-block.is-open {  
   outline: 1px solid #3d3d3d; 
+  background-color: #000000;
 }
 .project-detail-inner {
   display: grid;
@@ -161,6 +163,7 @@ body.projects {
   column-gap: var(--column-gap);
   padding: 14px 0 18px 0;
   align-items: flex-start;
+  background: #000000;
 }
 
 /* immagine */
@@ -174,6 +177,8 @@ body.projects {
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   margin-left: calc(var(--start-line-offset) + 8px);
+  box-shadow: none;
+  border: 1px solid rgba(185, 185, 185, 0.35);
 }
 
 .detail-image-wrap img {
