@@ -159,6 +159,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const original = (el.textContent || '').trim();
     if (!original) { el.dataset.tyDone = '1'; return; }
     const step = Number(el.dataset.tyStep) || 1;
+    const start = Number(el.dataset.tyStart) || 0;
     const split = el.dataset.tySplit;
     if (split === 'sentence') {
       const parts = original.split(/(?<=\.)\s+/);
@@ -202,8 +203,16 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     el.appendChild(textSpan);
     el.appendChild(caret);
     el.style.opacity = '1';
-    let i = 0;
+    let i = start;
     const len = original.length;
+    if (start > 0) {
+      textSpan.textContent = original.slice(0, Math.min(start, len));
+      if (start >= len) {
+        caret.remove();
+        el.dataset.tyDone = '1';
+        return;
+      }
+    }
     const timer = setInterval(() => {
       textSpan.textContent += original.slice(i, i + step);
       i += step;
@@ -235,6 +244,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       '.template-title',
       '.template-desc .template-meta',
       '.template-desc .emph',
+      '.mobile-intro .mi-title',
+      '.mobile-intro .mi-name',
       '.about-grid .about-block p',
       '.about-grid .about-label',
       '.about-hero-word',
