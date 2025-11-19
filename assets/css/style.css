@@ -1330,5 +1330,41 @@ body.is-about .fixed-project-box {
 .copyelement:hover { color: #ffffff !important; text-decoration: underline; }
 .about-block.contact a:hover { color: #ffffff !important; }
 .about-block.contact a:hover .ty-text { color: #ffffff !important; }
+ .error-main { display: grid; place-items: center; padding: 60px 0; }
+ .error-card { width: var(--container-width); background: #000000; color: #ffffff; border: 1px solid #2b2b2b; border-radius: 12px; padding: 24px; }
+ .error-title { font-size: clamp(22px, 4.6vw, 36px); line-height: 1.2; margin: 0 0 8px; }
+ .error-sub { font-size: 12px; line-height: 1.8; color: #b9b9b9; margin: 0 0 16px; }
+ .error-actions .error-btn { display: inline-block; padding: 10px 14px; border: 1px solid #ffffff; border-radius: 10px; font-size: 11px; letter-spacing: 0.08em; color: #ffffff; text-decoration: none; }
+.error-actions .error-btn:hover { background: #ffffff; color: #000000; }
+ 
+ /* 404 background popups (scoped) */
+body.error-page { background: #000000; color: #b9b9b9; font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
+body.error-page #popup-container { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: auto; z-index: 0; }
+body.error-page .popup { position: absolute; border: 1px solid #2b2b2b; border-radius: 12px; box-shadow: 0 10px 24px rgba(0,0,0,0.20); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; text-align: left; cursor: default; z-index: 0; backdrop-filter: blur(5px); transition: transform 0.16s ease, opacity 0.16s ease; padding: 0 6px 10px; box-sizing: border-box; color: #dcdcdc; }
+body.error-page .popup:not(.popup-home) { background-color: #131313 !important; }
+body.error-page .popup:hover { transform: scale(1.02); }
+body.error-page .message { font-size: 11px; letter-spacing: 0.08em; font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; text-align: left; }
+body.error-page .popup-titlebar { align-self: stretch; height: 20px; background: #171717; border-bottom: 1px solid #2b2b2b; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between; padding: 2px 6px; box-sizing: border-box; }
+body.error-page .popup-title { font-size: 10px; letter-spacing: 0.06em; color: #b9b9b9; display: flex; align-items: center; gap: 6px; }
+body.error-page .popup-icon { display: inline-block; width: 12px; height: 12px; filter: grayscale(1); }
+body.error-page .popup-close { font-size: 12px; color: #ffffff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28); border-radius: 4px; width: 16px; height: 16px; line-height: 14px; text-align: center; cursor: default; }
+body.error-page .error-home { position: fixed; bottom: 10%; left: 50%; transform: translateX(-50%); z-index: 1; }
+body.error-page .popup-actions { display: flex; gap: 8px; margin-top: 0; align-items: center; justify-content: center; }
+body.error-page .popup-actions a { font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 10px; letter-spacing: 0.06em; }
+body.error-page .popup-actions .popup-btn { display: inline-block; padding: 5px 8px; border: none; border-radius: 10px; color: #ffffff; text-decoration: none; background-color: #0b3d91; }
+body.error-page .popup-actions .popup-btn:hover { background-color: #0b3d91; color: #ffffff; }
+body.error-page .popup-home { background-color: #ffffff !important; border: none !important; }
+body.error-page .popup-home:hover { background-color: #ffffff !important; }
+/* Hover SOLO sul bottone, non sulla finestra */
+body.error-page .popup-home .popup-actions .popup-btn { background-color: #0b3d91; color: #ffffff; }
+body.error-page .popup-home .popup-actions .popup-btn:hover { background-color: #0b3d91; }
+body.error-page .popup-home .message { color: #000000; text-align: left; }
+body.error-page .popup-home .popup-title { color: #000000; }
+body.error-page .popup-home .popup-close { color: #000000; background: rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.18); }
+body.error-page .popup-pop { animation: popup-pop 160ms cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes popup-pop {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
  .copy-tooltip { position: absolute; background: #ffffff; color: #000000; padding: 3px 9px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 9999; opacity: 1; top: -35px; left: 50%; transform: translateX(-50%); transition: opacity 0.3s ease; }
  .typewriter { font-family: 'Space Mono', monospace; font-size: 12px; white-space: nowrap; overflow: hidden; }
