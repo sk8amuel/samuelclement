@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
 
   <!-- Base CSS (stesso dell'index) -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -464,10 +465,13 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
       // Auto-apertura disattivata: i progetti si aprono solo al click
 
       document.querySelectorAll('.project-detail').forEach(detail => {
-        detail.addEventListener('click', () => {
+        detail.addEventListener('click', (e) => {
           const link = detail.querySelector('.detail-image-wrap');
-          const href = link && link.getAttribute('href');
-          if (href) window.location.href = href;
+          if (!link) return;
+          // Evita doppia navigazione: se il click è sull'anchor, lascia fare al browser
+          if (e.target && e.target.closest('.detail-image-wrap')) return;
+          // Click su area vuota del dettaglio: attiva il link
+          link.click();
         });
       });
     });

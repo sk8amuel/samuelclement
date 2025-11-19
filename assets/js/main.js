@@ -156,7 +156,9 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 
   function typewrite(el, speed = 40) {
     if (!el || el.dataset.tyDone === '1') return;
-    const original = (el.textContent || '').trim();
+    const anchor = el.querySelector('a');
+    const target = anchor || el;
+    const original = (target.textContent || '').trim();
     if (!original) { el.dataset.tyDone = '1'; return; }
     const step = Number(el.dataset.tyStep) || 1;
     const start = Number(el.dataset.tyStart) || 0;
@@ -199,9 +201,15 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     textSpan.className = 'ty-text';
     const caret = document.createElement('span');
     caret.className = 'ty-caret';
-    el.textContent = '';
-    el.appendChild(textSpan);
-    el.appendChild(caret);
+    if (anchor) {
+      anchor.textContent = '';
+      anchor.appendChild(textSpan);
+      anchor.appendChild(caret);
+    } else {
+      el.textContent = '';
+      el.appendChild(textSpan);
+      el.appendChild(caret);
+    }
     el.style.opacity = '1';
     let i = start;
     const len = original.length;
@@ -754,3 +762,84 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', onTouch, { once: true });
   });
   // Sticky About Grid controlled by IntersectionObserver
+ (function(){
+   function attach(el){
+     if (!el) return;
+     const a = el.closest('a');
+     const href = a && a.getAttribute('href');
+     const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+     if (!isCopyTarget) return;
+     if (el.dataset.copyInit === '1') return;
+     el.classList.add('copyelement');
+     el.dataset.copyInit = '1';
+     el.addEventListener('click', (e) => {
+       if (e) { e.preventDefault(); e.stopPropagation(); }
+       const text = (el.textContent || '').trim();
+       if (!text) return;
+       navigator.clipboard.writeText(text).then(() => {
+         const prev = el.querySelector('.copy-tooltip');
+         if (prev) prev.remove();
+         const tip = document.createElement('div');
+         tip.className = 'copy-tooltip';
+         el.appendChild(tip);
+         const tw = document.createElement('span');
+         tw.className = 'typewriter';
+         tip.appendChild(tw);
+         const s = 'Copied';
+         tw.textContent = '';
+         s.split('').forEach((ch, i) => {
+           setTimeout(() => {
+             const strong = 'Copied'.includes(ch) ? true : false;
+             if (strong) {
+               const b = document.createElement('strong');
+               b.textContent = ch;
+               tw.appendChild(b);
+             } else {
+               tw.textContent += ch;
+             }
+           }, i * 50);
+         });
+         const caret = document.createElement('span');
+         caret.className = 'ty-caret';
+         tip.appendChild(caret);
+         setTimeout(() => {
+           tip.style.opacity = '0';
+           setTimeout(() => tip.remove(), 300);
+         }, 2000);
+       });
+     });
+   }
+   function detach(el){
+     if (!el || el.dataset.copyInit !== '1') return;
+     const prev = el.querySelector('.copy-tooltip');
+     if (prev) prev.remove();
+     el.classList.remove('copyelement');
+     el.removeAttribute('data-copy-init');
+     const clone = el.cloneNode(true);
+     el.parentNode && el.parentNode.replaceChild(clone, el);
+   }
+   function init(){
+     const contact = document.querySelector('.about-block.contact');
+     if (!contact) return;
+     const all = contact.querySelectorAll('.ty-text');
+     all.forEach(el => {
+       const a = el.closest('a');
+       const href = a && a.getAttribute('href');
+       const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+       if (isCopyTarget) attach(el); else detach(el);
+     });
+     if ('MutationObserver' in window){
+       const mo = new MutationObserver(() => {
+         const nodes = contact.querySelectorAll('.ty-text');
+         nodes.forEach(el => {
+           const a = el.closest('a');
+           const href = a && a.getAttribute('href');
+           const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+           if (isCopyTarget) attach(el); else detach(el);
+         });
+       });
+       mo.observe(contact, { childList: true, subtree: true });
+     }
+   }
+   document.addEventListener('DOMContentLoaded', init);
+ })();
