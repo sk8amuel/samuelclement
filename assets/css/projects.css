@@ -324,7 +324,7 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
     transform: translate(-8px, -2px); /* sposta leggermente a sinistra e riallinea baseline */
   }
 
-  .project-detail-inner { }
+  
 
   /* Stack del dettaglio: immagine sopra, testo sotto a tutta larghezza */
   .project-detail-inner .detail-image-wrap { grid-column: 1 / -1; max-width: none; }
