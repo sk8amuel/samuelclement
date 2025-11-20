@@ -834,7 +834,7 @@ body.is-about .page-index::after {
 @media (max-width: 900px) { body.is-about .page-index::after { background: rgba(0, 0, 0, 0.12); } }
 @media (max-width: 900px) { body.is-about .page-flip::before { opacity: 0.30; } }
 body.is-about .page-about .about-main { position: relative; z-index: 3; }
-body.is-about .top-header { position: relative; z-index: 4; }
+body.is-about .top-header { position: fixed; z-index: 10000; }
 
 /* Niente spazio sotto About quando è davanti */
 body.is-about .page-face { padding-bottom: 0; }
@@ -846,13 +846,13 @@ body.is-about .page-about.page-face {
 body.is-about .page-about .about-main {
   /* Sticky sotto l’header: il main resta ancorato mentre lo sfondo scorre */
 
-  top: 70px;                 /* altezza header + linea */
+  top: 60px;
   margin: 0 auto;            /* centrato nel container */
   left: auto;
   right: auto;
   transform: none;
   width: var(--container-width);
-  min-height: calc(100vh - 70px); /* riempie l’area visibile */
+  min-height: calc(100vh - 160px);
   padding-bottom: 0;         /* nessuno spazio extra sotto */
   overflow: visible;         /* non bloccare lo scorrimento esterno */
   z-index: 3;                /* sopra al contenuto di sfondo */
