@@ -801,6 +801,7 @@ body.preloader-active .top-line {
   pointer-events: none;
 }
 
+
 /* Stato ABOUT attivo (flip) */
 body.is-about .page-flip {
   transform: rotateY(180deg);
@@ -821,6 +822,19 @@ body.is-about .page-about {
   opacity: 1;
   pointer-events: auto;
 }
+body.is-about .page-index { filter: blur(6px) brightness(0.80); }
+body.is-about .page-index::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+@media (max-width: 900px) { body.is-about .page-index { filter: blur(10px) brightness(0.82); } }
+@media (max-width: 900px) { body.is-about .page-index::after { background: rgba(0, 0, 0, 0.12); } }
+@media (max-width: 900px) { body.is-about .page-flip::before { opacity: 0.30; } }
+body.is-about .page-about .about-main { position: relative; z-index: 3; }
+body.is-about .top-header { position: relative; z-index: 4; }
 
 /* Niente spazio sotto About quando è davanti */
 body.is-about .page-face { padding-bottom: 0; }
@@ -850,7 +864,6 @@ body.is-about .page-about .about-main {
 /* INDEX passa dietro */
 body.is-about .page-index {
   z-index: 1;
-  opacity: 0.10;
   pointer-events: none;
 }
 
@@ -864,7 +877,7 @@ body.is-about .fixed-project-box {
 
 /* Faccia ABOUT: sfondo nero pieno */
 .page-face.page-about {
-  background: #00000030;
+  background: transparent;
   color: #f5f5f5;
 }
 
@@ -1299,9 +1312,11 @@ body.is-about .fixed-project-box {
   .top-nav a .ty-text { display: inline-block; line-height: 1; transform: translateY(2px); }
 }
 @media (max-width: 900px) {
+  .page-about .about-grid { font-size: 14px; }
   .page-about .about-block p,
-  .page-about .about-bottom-block p { font-size: 12px; line-height: 1.8; }
-  .page-about .about-label { font-size: 11px; }
+  .page-about .about-bottom-block p { font-size: inherit; line-height: 1.9; }
+  .page-about .about-label { font-size: 13px; }
+  .page-about .about-grid .ty-text { font-size: inherit; }
 }
 /* About section colors */
 .page-about .about-grid .about-label,
@@ -1368,3 +1383,4 @@ body.error-page .popup-pop { animation: popup-pop 160ms cubic-bezier(0.22, 1, 0.
 }
  .copy-tooltip { position: absolute; background: #ffffff; color: #000000; padding: 3px 9px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 9999; opacity: 1; top: -35px; left: 50%; transform: translateX(-50%); transition: opacity 0.3s ease; }
  .typewriter { font-family: 'Space Mono', monospace; font-size: 12px; white-space: nowrap; overflow: hidden; }
+/* (no blur overlay on Index) */
