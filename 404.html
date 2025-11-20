@@ -33,8 +33,16 @@
         const w = Math.floor(Math.random() * 80) + 180;
         const h = Math.floor(Math.random() * 20) + 50;
         const sw = window.innerWidth; const sh = window.innerHeight;
-        const x = Math.floor(Math.random() * Math.max(1, sw - w));
-        const y = Math.floor(Math.random() * Math.max(1, sh - h));
+        let x = Math.floor(Math.random() * Math.max(1, sw - w));
+        let y = Math.floor(Math.random() * Math.max(1, sh - h));
+        if (!forceHome && createdCount === 0) {
+          const minX = Math.max(0, Math.floor(sw * 0.3));
+          const maxX = Math.max(minX, Math.min(sw - w, Math.floor(sw * 0.7) - w));
+          const minY = Math.max(0, Math.floor(sh * 0.3));
+          const maxY = Math.max(minY, Math.min(sh - h, Math.floor(sh * 0.7) - h));
+          x = Math.floor(Math.random() * Math.max(1, (maxX - minX))) + minX;
+          y = Math.floor(Math.random() * Math.max(1, (maxY - minY))) + minY;
+        }
         const el = document.createElement('div');
         el.className = 'popup popup-pop';
         el.style.width = w + 'px';

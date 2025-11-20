@@ -79,7 +79,6 @@
    <link href="wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/css/main/plus-extra-adv/plus-temp-notice-q145a274662.css" id="theplus-plus-temp-notice-plus-extra-adv-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/wdesignkit/assets/css/review-form/review-plugin-form-q111bc5d37a.css" id="wdkit-review-form-plugin-css" media="all" rel="stylesheet"/>
    <link href="wp-content/themes/twentytwentyfive/style-q42618c5c33.css" id="twentytwentyfive-style-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/plugins/3d-flipbook-dflip-lite/assets/css/dflip.min-qeaddba57de.css" id="dflip-style-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/elementor/assets/css/frontend.min-q2b557ac2f5.css" id="elementor-frontend-css" media="all" rel="stylesheet"/>
    <link href="wp-content/uploads/elementor/css/post-19-q145a274662.css" id="elementor-post-19-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/sticky-header-effects-for-elementor/assets/css/she-header-style-q55ce878bbb.css" id="she-header-style-css" media="all" rel="stylesheet"/>
@@ -447,6 +446,7 @@
         }
 
         window.addEventListener('scroll', () => this.updatePreScrollCircle());
+        try { if (window.frameElement) { window.parent.addEventListener('scroll', () => this.updatePreScrollCircle()); } } catch (e) {}
         window.addEventListener('resize', () => this.handleResize());
         this.video.style.opacity = '1';
         this.wrapper.style.position = 'relative';
@@ -750,6 +750,16 @@
     }
 
     getScrollPercent() {
+        try {
+            if (window.frameElement && window.parent) {
+                const rect = window.frameElement.getBoundingClientRect();
+                const vh = window.parent.innerHeight;
+                const start = vh * 0.9;
+                const end = -vh * 1.1;
+                const p = (start - rect.top) / (start - end);
+                return Math.max(0, Math.min(p, 1));
+            }
+        } catch (e) {}
         const multiplier = this.isMobile ? 1.6 : 1.8;
         const extendedHeight = this.wrapper.offsetHeight * multiplier;
         const maxScroll = extendedHeight - window.innerHeight;
@@ -831,6 +841,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     new KnotedAnimation();
+    try {
+        if (window.frameElement) {
+            const s = document.createElement('style');
+            s.textContent = '.elementor{display:none !important}';
+            document.head.appendChild(s);
+        }
+    } catch (e) {}
 });
    </script>
    <div class="knoted-animation-wrapper">
@@ -1028,23 +1045,8 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
      </div>
     </div>
-   </div>
-   <div class="elementor-element elementor-element-96261e9 e-flex e-con-boxed e-con e-parent" data-element_type="container" data-id="96261e9">
-    <div class="e-con-inner">
-     <div class="elementor-element elementor-element-e5690da elementor-widget elementor-widget-shortcode" data-element_type="widget" data-id="e5690da" data-widget_type="shortcode.default">
-      <div class="elementor-widget-container">
-       <div class="elementor-shortcode">
-        <div _slug="297" class="_df_book df-lite" data-title="libro-tesi" id="df_297" thumbtype="" wpoptions="true">
-        </div>
-        <script class="df-shortcode-script" nowprocket="" type="application/javascript">
-         window.option_df_297 = {"outline":[],"backgroundColor":"transparent","autoEnableOutline":"false","autoEnableThumbnail":"false","overwritePDFOutline":"false","direction":"1","pageSize":"0","controlsPosition":"hide","soundEnable":"false","source":"https:\/\/www.samuelclement.it\/Knoted\/wp-content\/uploads\/2025\/06\/Knoted.pdf","wpOptions":"true"}; if(window.DFLIP && window.DFLIP.parseBooks){window.DFLIP.parseBooks();}
-        </script>
-       </div>
-      </div>
-     </div>
-    </div>
-   </div>
-   <div class="elementor-element elementor-element-a12059e e-flex e-con-boxed e-con e-parent" data-element_type="container" data-id="a12059e">
+  </div>
+  <div class="elementor-element elementor-element-a12059e e-flex e-con-boxed e-con e-parent" data-element_type="container" data-id="a12059e">
     <div class="e-con-inner">
      <div class="elementor-element elementor-element-2f2fcda e-con-full e-flex e-con e-child" data-element_type="container" data-id="2f2fcda">
       <div class="elementor-element elementor-element-c44d5c9 e-con-full e-flex e-con e-child" data-element_type="container" data-id="c44d5c9">
@@ -1351,8 +1353,6 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
   <script id="wdkit-review-form-plugin-js" src="wp-content/plugins/wdesignkit/assets/js/main/review-form/review-plugin-form-q111bc5d37a.js">
   </script>
-  <script id="dflip-script-js" src="wp-content/plugins/3d-flipbook-dflip-lite/assets/js/dflip.min-qeaddba57de.js">
-  </script>
   <script id="wpmssab-js" src="wp-content/uploads/wpmss/wpmssab.min-qa666ddcd0e.js">
   </script>
   <script id="SmoothScroll-js" src="wp-content/plugins/mousewheel-smooth-scroll/js/SmoothScroll.min-q13fd0385e3.js">
@@ -1367,9 +1367,6 @@ document.addEventListener('DOMContentLoaded', () => {
    var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Condividi su Facebook","shareOnTwitter":"Condividi su Twitter","pinIt":"Pinterest","download":"Download","downloadImage":"Scarica immagine","fullscreen":"Schermo intero","zoom":"Zoom","share":"Condividi","playVideo":"Riproduci video","previous":"Precedente","next":"Successivo","close":"Chiudi","a11yCarouselPrevSlideMessage":"Diapositiva precedente","a11yCarouselNextSlideMessage":"Prossima diapositiva","a11yCarouselFirstSlideMessage":"Questa \u00e9 la prima diapositiva","a11yCarouselLastSlideMessage":"Questa \u00e8 l'ultima diapositiva","a11yCarouselPaginationBulletMessage":"Vai alla diapositiva"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Mobile Portrait","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Mobile Landscape","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet verticale","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet orizzontale","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Laptop","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Widescreen","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},"hasCustomBreakpoints":false},"version":"3.29.2","is_static":false,"experimentalFeatures":{"e_font_icon_svg":true,"additional_custom_breakpoints":true,"container":true,"e_local_google_fonts":true,"nested-elements":true,"editor_v2":true,"e_element_cache":true,"home_screen":true,"launchpad-checklist":true,"cloud-library":true,"e_opt_in_v4_page":true},"urls":{"assets":"https:\/\/www.samuelclement.it\/Knoted\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/www.samuelclement.it\/Knoted\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/www.samuelclement.it\/Knoted\/wp-content\/uploads"},"nonces":{"floatingButtonsClickTracking":"ed8dad97d6"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description"},"post":{"id":2,"title":"Knoted%20%E2%80%93%20A%20new%20way%20to%20think.","excerpt":"","featuredImage":false}};
   </script>
   <script id="elementor-frontend-js" src="wp-content/plugins/elementor/assets/js/frontend.min-q2b557ac2f5.js">
-  </script>
-  <script data-cfasync="false">
-   var dFlipLocation = "https://www.samuelclement.it/Knoted/wp-content/plugins/3d-flipbook-dflip-lite/assets/"; var dFlipWPGlobal = {"text":{"toggleSound":"Turn on\/off Sound","toggleThumbnails":"Toggle Thumbnails","toggleOutline":"Toggle Outline\/Bookmark","previousPage":"Previous Page","nextPage":"Next Page","toggleFullscreen":"Toggle Fullscreen","zoomIn":"Zoom In","zoomOut":"Zoom Out","toggleHelp":"Toggle Help","singlePageMode":"Single Page Mode","doublePageMode":"Double Page Mode","downloadPDFFile":"Download PDF File","gotoFirstPage":"Goto First Page","gotoLastPage":"Goto Last Page","share":"Share","mailSubject":"I wanted you to see this FlipBook","mailBody":"Check out this site {{url}}","loading":"DearFlip: Loading "},"viewerType":"flipbook","moreControls":"download,pageMode,startPage,endPage,sound","hideControls":"","scrollWheel":"false","backgroundColor":"#777","backgroundImage":"","height":"auto","paddingLeft":"20","paddingRight":"20","controlsPosition":"bottom","duration":800,"soundEnable":"true","enableDownload":"true","showSearchControl":"false","showPrintControl":"false","enableAnnotation":false,"enableAnalytics":"false","webgl":"true","hard":"none","maxTextureSize":"1600","rangeChunkSize":"524288","zoomRatio":1.5,"stiffness":3,"pageMode":"0","singlePageMode":"0","pageSize":"0","autoPlay":"false","autoPlayDuration":5000,"autoPlayStart":"false","linkTarget":"2","sharePrefix":"flipbook-"};
   </script>
  </body>
 </html>
