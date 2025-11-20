@@ -30,12 +30,31 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
 
   <!-- Main CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    #construction-overlay{position:fixed;inset:0;background:#000;color:#fff;z-index:10000000;display:flex;align-items:center;justify-content:center;padding:32px;font-family:"Space Mono","PT Mono",monospace}
+    #construction-overlay .container{max-width:800px;text-align:center}
+    #construction-overlay h1{font-size:clamp(28px,6vw,64px);margin:0 0 12px}
+    #construction-overlay p{opacity:.85;margin:0 0 16px;font-size:clamp(16px,2.2vw,20px)}
+    #construction-overlay .contacts a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3)}
+    #construction-overlay .contacts a:hover{border-color:#fff}
+  </style>
 </head>
 <body class="home">
 
   <!-- PRELOADER -->
   <div id="preloader">
     <img src="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png" alt="Samuel Clement">
+  </div>
+  <div id="construction-overlay" role="dialog" aria-modal="true" aria-labelledby="co-title">
+    <div class="container">
+      <h1 id="co-title">Sito in costruzione</h1>
+      <p>Torna presto. Per contatti:</p>
+      <div class="contacts">
+        <p><a href="mailto:hello@samuelclement.it">hello@samuelclement.it</a></p>
+        <p><a href="tel:+393664107775">(+39) 366 410 7775</a></p>
+        <p><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a></p>
+      </div>
+    </div>
   </div>
 
   <!-- HEADER -->
@@ -243,7 +262,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               column-gap: var(--column-gap);
               row-gap: 8px;
               align-items: start;
-              margin-top: -20px; /* alza l’intera sezione */
+              margin-top: -32px; /* alza l’intera sezione */
               position: relative; /* per eventuali riferimenti */
             }
             /* 4 colonne mappate su 12 colonne: 3-3-3-3 */
@@ -326,7 +345,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             .page-about .about-grid .intro,
             .page-about .about-grid .design-approach,
             .page-about .about-grid .background,
-            .page-about .about-grid .education { border-top: 1px solid #c7c7c7; }
+            .page-about .about-grid .education { border-top: none; }
             .page-about .about-grid .contact,
             .page-about .about-grid .selected-work,
             .page-about .about-grid .focus,
@@ -349,6 +368,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               overflow-wrap: anywhere;
               word-break: break-word;
               align-self: end;
+              transform: translateY(-34px);
             }
 
             /* Foto in colonna 4 adattiva */
@@ -373,7 +393,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             .page-about .about-grid .about-photo {
               margin-top: 0;
               position: relative;
-              transform: translateY(0);
+              transform: translateY(-34px);
               align-self: end;
               grid-column: 10 / span 3; /* mantenuta in quarta colonna mappata */
             }
@@ -389,6 +409,12 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             .page-about .about-block a { color: #FFFFFF !important; }
             .page-about .about-grid p,
             .page-about .about-grid a { font-size: 13px; line-height: 1.5; }
+            .page-about .about-grid .background .role-title { font-size: 13px; line-height: 1.5; }
+            .page-about .about-grid .background .role-title::before { content: "→"; color: #dcdcdc; margin-right: 8px; }
+            .page-about .about-grid .background .role-desc { font-size: 13px; line-height: 1.5; }
+            .page-about .about-grid .capabilities .role-title { font-size: 13px; line-height: 1.5; }
+            .page-about .about-grid .capabilities .role-title::before { content: "→"; color: #dcdcdc; margin-right: 8px; }
+            .page-about .about-grid .capabilities .role-desc { font-size: 13px; line-height: 1.5; }
             .page-about .about-grid p:not(.about-label) span,
             .page-about .about-grid a span { color: #FFFFFF !important; }
             .page-about .about-label span { color: #aeaeae !important; }
@@ -409,6 +435,10 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               .page-about .about-grid .about-block { font-size: 12px; line-height: 1.6; }
               .page-about .about-grid .about-label { font-size: 10px; letter-spacing: 0.08em; }
               .page-about .about-grid p, .page-about .about-grid a { font-size: 26px; line-height: 1.2; }
+              .page-about .about-grid .background .role-title { font-size: 26px; line-height: 1.2; }
+              .page-about .about-grid .capabilities .role-title { font-size: 26px; line-height: 1.2; }
+              .page-about .about-grid .about-hero-word,
+              .page-about .about-grid .about-photo { transform: none; }
               .page-about .about-grid .selected-work::before { content: none; display: none; }
               .page-about .about-grid .intro::before { content: none; display: none; }
               /* Tutti i blocchi testuali occupano l'intera larghezza */
@@ -447,21 +477,23 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             <!-- Row1 -->
             <div class="about-block col-1 intro">
               <p class="about-label">(I'M SAMUEL)</p>
-              <p>A Visual Designer based in Dubino, Italy.</p>
-              <p>I’m 23. Skateboarding, self-tattooing, music and cinema shape how I see and design.</p>
+              <p>A Visual Designer based in the northern Lake Como area, Italy.</p>
+              <p>I’m 23, and my perspective comes from the worlds I move through: skateboarding, self-tattooing, music, and cinema.</p>
             </div>
             <div class="about-block col-2 design-approach">
               <p class="about-label">(DESIGN APPROACH)</p>
-              <p>I see design as a way to create identity and impact. I often mix analog and digital techniques to give the work a physical, almost tactile feel.</p>
-              <p>My approach is influenced by subcultures, DIY aesthetics, and raw expression. Design, for me, isn’t about clean perfection—it’s about building something that feels alive.</p>
-              <p>Every element has to earn its place. The goal is to create visuals that stick, disturb, or connect.</p>
+              <p>I’m a designer who works across both analog and digital.</p>
+              <p>I like to give brands a natural sense of movement, creating living projects where everything connects and works as a single identity.</p>
+              <p>I’m drawn to strong ideas without unnecessary complications.</p>
+              <p>I use research to push past aesthetics and build authentic design that truly speaks to people.</p>
             </div>
             <div class="about-block col-3 background">
-              <p class="about-label">(BACKGROUND)</p>
-              <p>2024–2025 – Internship @ VALTNET<br>Editorial plans, graphic assets, website design.</p>
-              <p>2024 – Graphic Designer @ LEGEA HUB (Lecco)<br>Website, Instagram content, sportswear design.</p>
-              <p>2024 – Internship @ OPHELIA DIGITAL<br>Creative direction support, content, production.</p>
-              <p>2022–2023 – Freelance Graphic Designer<br>Flyers and visual assets for club events.</p>
+              <p class="about-label">(CAPABILITIES)</p>
+              <p>Visual Identity &amp; Rebrand</p>
+              <p>Art Direction</p>
+              <p>Editorial &amp; Printed Matter</p>
+              <p>Web &amp; Digital Interfaces</p>
+              <p>Motion &amp; Video</p>
             </div>
             <div class="about-block col-4 education">
               <p class="about-label">(EDUCATION)</p>
@@ -498,12 +530,15 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
 
             <!-- Row5 -->
             <div class="about-block col-4 capabilities">
-              <p class="about-label">(CAPABILITIES)</p>
-              <p>Visual Identity &amp; Rebrand</p>
-              <p>Art Direction</p>
-              <p>Editorial &amp; Printed Matter</p>
-              <p>Web &amp; Digital Interfaces</p>
-              <p>Motion &amp; Video</p>
+              <p class="about-label">(BACKGROUND)</p>
+              <p class="role-title">2024–2025 – Internship @ VALTNET</p>
+              <p class="role-desc">Worked on editorial plans for brands, graphic assets, and website design. Handled both creative direction and execution across digital platforms.</p>
+              <p class="role-title">2024 – Graphic Designer @ LEGEA HUB (Lecco)</p>
+              <p class="role-desc">Managed the company website and Instagram content. Designed sportswear from concept to production.</p>
+              <p class="role-title">Internship @ OPHELIA DIGITAL<br>2024</p>
+              <p class="role-desc">Worked on creative direction, client collaboration, and production design.</p>
+              <p class="role-title">2022–2023 – Freelance Graphic Designer</p>
+              <p class="role-desc">Created flyers and social content for club events.</p>
             </div>
 
             
