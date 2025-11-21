@@ -77,17 +77,15 @@
    <link href="wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/css/main/plus-extra-adv/plus-extra-adv.min-q145a274662.css" id="theplus-plus-extra-adv-plus-extra-adv-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/css/main/tabs-tours/plus-tabs-tours-q145a274662.css" id="theplus-plus-tabs-tours-tabs-tours-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/css/main/plus-extra-adv/plus-temp-notice-q145a274662.css" id="theplus-plus-temp-notice-plus-extra-adv-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/plugins/wdesignkit/assets/css/review-form/review-plugin-form-q111bc5d37a.css" id="wdkit-review-form-plugin-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/themes/twentytwentyfive/style-q42618c5c33.css" id="twentytwentyfive-style-css" media="all" rel="stylesheet"/>
+   
+   
    <link href="wp-content/plugins/elementor/assets/css/frontend.min-q2b557ac2f5.css" id="elementor-frontend-css" media="all" rel="stylesheet"/>
    <link href="wp-content/uploads/elementor/css/post-19-q145a274662.css" id="elementor-post-19-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/sticky-header-effects-for-elementor/assets/css/she-header-style-q55ce878bbb.css" id="she-header-style-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/elementor/assets/css/widget-heading.min-q2b557ac2f5.css" id="widget-heading-css" media="all" rel="stylesheet"/>
    <link href="wp-content/plugins/elementor/assets/css/widget-video.min-q2b557ac2f5.css" id="widget-video-css" media="all" rel="stylesheet"/>
    <link href="wp-content/uploads/elementor/css/post-2-q145a274662.css" id="elementor-post-2-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/uploads/elementor/google-fonts/css/roboto-q825d876b24.css" id="elementor-gf-local-roboto-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/uploads/elementor/google-fonts/css/robotoslab-qd793f19f59.css" id="elementor-gf-local-robotoslab-css" media="all" rel="stylesheet"/>
-   <link href="wp-content/uploads/elementor/google-fonts/css/inter-q9afb3848b5.css" id="elementor-gf-local-inter-css" media="all" rel="stylesheet"/>
+   
    <script id="jquery-core-js" src="wp-includes/js/jquery/jquery.min-q00eb8052ee.js">
    </script>
    <script id="jquery-migrate-js" src="wp-includes/js/jquery/jquery-migrate.min-q9a6dceef7c.js">
@@ -261,18 +259,20 @@
   });
    </script>
    <style class="wpcode-css-snippet">
-    @font-face {
+@font-face {
     font-family: 'Suisse Intl';
-    src: url('/wp-content/themes/your-theme/fonts/SuisseIntl-SemiBold.woff2') format('woff2');
+    src: local('Suisse Intl SemiBold'), local('SuisseIntl-SemiBold');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'Suisse Intl';
-    src: url('/wp-content/themes/your-theme/fonts/SuisseIntl-Book.woff2') format('woff2');
+    src: local('Suisse Intl Book'), local('SuisseIntl-Book');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 .knoted-animation-wrapper {
@@ -694,7 +694,7 @@
             let x, y, opacity = 1;
 
             if (scrollPercent < 0.05) {
-                const currentPos = this.imagePositions.get(index);
+                const currentPos = this.imagePositions.get(index) || { x: centerX, y: centerY };
                 const randomX = Math.random() * window.innerWidth;
                 const randomY = Math.random() * window.innerHeight;
 
@@ -702,7 +702,7 @@
                     this.randomStartPositions.set(index, { x: randomX, y: randomY, isRandom: true });
                 }
 
-                const targetPos = this.randomStartPositions.get(index);
+                const targetPos = this.randomStartPositions.get(index) || { x: randomX, y: randomY, isRandom: true };
                 const progress = scrollPercent / 0.05;
 
                 x = currentPos.x + (targetPos.x - currentPos.x) * this.easeOutCubic(progress);
@@ -710,7 +710,7 @@
                 opacity = Math.min(scrollPercent / 0.05, 1) * 0.6;
             } else if (scrollPercent < 0.3) {
                 const progress = (scrollPercent - 0.05) / 0.25;
-                const startPos = this.randomStartPositions.get(index);
+                const startPos = this.randomStartPositions.get(index) || { x: centerX, y: centerY };
                 const targetX = centerX + Math.cos(baseAngle) * radius - (parseInt(img.style.width) || 100) / 2;
                 const targetY = centerY + Math.sin(baseAngle) * radius - (parseInt(img.style.height) || 100) / 2;
                 x = startPos.x + (targetX - startPos.x) * progress;
@@ -727,7 +727,7 @@
                 const disperseEnd = 1;
                 const disperseProgress = Math.max(0, (scrollPercent - disperseStart) / (disperseEnd - disperseStart));
 
-                const dispersion = this.randomDispersions.get(index);
+                const dispersion = this.randomDispersions.get(index) || { x: 0, y: 0 };
                 const rotationSpeed = this.isMobile ? 1.2 : 1.5;
                 const angle = baseAngle + rotationSpeed * Math.PI;
                 x = centerX + Math.cos(angle) * radius + dispersion.x * disperseProgress - (parseInt(img.style.width) || 100) / 2;
@@ -875,14 +875,15 @@ document.addEventListener('DOMContentLoaded', () => {
      </p>
     </div>
     <div class="video-container">
-     <video id="logo-video" muted="" playsinline="">
+     <video id="logo-video" autoplay muted loop playsinline preload="auto">
       <source src="https://www.samuelclement.it/Knoted/wp-content/uploads/2025/06/White.mp4" type="video/mp4"/>
-     </video>
+      <source src="/assets/img/projects/Knoted/Knoted-Splash-Logo.mp4" type="video/mp4"/>
+      </video>
     </div>
    </div>
    <style class="wp-fonts-local">
-    @font-face{font-family:Manrope;font-style:normal;font-weight:200 800;font-display:fallback;src:url('https://www.samuelclement.it/Knoted/wp-content/themes/twentytwentyfive/assets/fonts/manrope/Manrope-VariableFont_wght.woff2') format('woff2');}
-@font-face{font-family:"Fira Code";font-style:normal;font-weight:300 700;font-display:fallback;src:url('https://www.samuelclement.it/Knoted/wp-content/themes/twentytwentyfive/assets/fonts/fira-code/FiraCode-VariableFont_wght.woff2') format('woff2');}
+    @font-face{font-family:Manrope;font-style:normal;font-weight:200 800;font-display:swap;src:local('Manrope');}
+@font-face{font-family:"Fira Code";font-style:normal;font-weight:300 700;font-display:swap;src:local('Fira Code');}
    </style>
    <link href="wp-content/uploads/2025/06/cropped-DEFAsset-8-32x32.png" rel="icon" sizes="32x32"/>
    <link href="wp-content/uploads/2025/06/cropped-DEFAsset-8-192x192.png" rel="icon" sizes="192x192"/>
@@ -1348,11 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
   </script>
   <script id="theplus-plus-accordion-js" src="wp-content/plugins/the-plus-addons-for-elementor-page-builder/assets/js/main/accordion/plus-accordion.min-q145a274662.js">
   </script>
-  <script id="wdkit-review-form-plugin-js-extra">
-   var wdkitPluginReview = {"ajax_url":"https:\/\/www.samuelclement.it\/Knoted\/wp-admin\/admin-ajax.php","nonce":"2c4c7d8eb6"};
-  </script>
-  <script id="wdkit-review-form-plugin-js" src="wp-content/plugins/wdesignkit/assets/js/main/review-form/review-plugin-form-q111bc5d37a.js">
-  </script>
+  
   <script id="wpmssab-js" src="wp-content/uploads/wpmss/wpmssab.min-qa666ddcd0e.js">
   </script>
   <script id="SmoothScroll-js" src="wp-content/plugins/mousewheel-smooth-scroll/js/SmoothScroll.min-q13fd0385e3.js">
