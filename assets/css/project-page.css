@@ -53,6 +53,7 @@ body.project-page {
 .hero-media { width: 100%; height: 48vh; background: #000000; border-radius: 22px; border: none; box-shadow: none; overflow: hidden; margin-bottom: 12px; position: relative; z-index: 3; }
 .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 .hero-media video { width: 100%; height: auto; object-fit: contain; object-position: center; display: block; background: #000; }
+.hero-media iframe { width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; background: #000; }
 .hero-media.hero-video { height: auto; }
 /* Video finale più alto e non croppato */
  
@@ -77,6 +78,13 @@ body.project-page {
 .template-intro .emph { color: #ffffff; font-weight: normal; }
 .template-desc .emph { color: #b9b9b9; font-weight: normal; }
 .template-title-small { font-size: 10px; line-height: 1.6; padding-left: var(--start-line-offset); }
+.details-block { padding-left: var(--start-line-offset); margin-bottom: 12px; }
+.detail-row { display: grid; grid-template-columns: 140px 1fr; align-items: baseline; gap: 12px; padding: 8px 0; border-top: 1px solid #2b2b2b; }
+.detail-label { color: #b9b9b9; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.detail-value { color: #ffffff; font-size: 12px; line-height: 1.6; justify-self: start; text-align: left; }
+.detail-links { text-align: left; }
+.detail-links a { color: #b9b9b9; text-decoration: none; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.detail-links a:hover { color: #ffffff; text-decoration: underline; }
 
 @media (max-width: 900px) {
   .template-left { grid-column: 1 / -1; grid-row: 1; position: static; height: auto; margin-top: 0; }
