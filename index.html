@@ -455,8 +455,40 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               }
             }
             
+          .page-about .back-to-home-btn {
+            position: relative;
+            margin: 224px auto 0;
+            width: fit-content;
+            z-index: 2;
+          }
+          .page-about .back-to-home-btn a {
+            display: inline-block;
+            padding: 10px 16px;
+            border: 1px solid #ffffff;
+            border-radius: 10px;
+            background: transparent;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+          }
+          .page-about .back-to-home-btn a:hover { text-decoration: underline; }
+          @media (max-width: 900px) {
+            .page-about .back-to-home-btn { margin-top: 120px; }
+            .page-about .about-main { padding-bottom: 180px; }
+            .page-about .about-mobile-note { display: inline-block !important; text-align: center; margin: 600px auto 0; color: #ffffff; font-size: 12px; letter-spacing: 0.04em; text-decoration: none; padding: 8px 12px; }
+            .page-about .about-mobile-note.second { margin: 1200px auto 0; }
+          }
+
+          .page-about .about-mobile-note { display: none; }
+
+          .page-about .about-main { padding-bottom: 72px; }
+
           </style>
 
+          <div id="aboutTop"></div>
           <!-- ABOUT GRID (4 colonne in flusso) -->
           <section class="about-grid">
             <!-- Row1 -->
@@ -529,6 +561,13 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             
 
           </section>
+
+          <div class="back-to-home-btn">
+            <a href="index.html" id="backToHome" aria-label="Back to home" data-transition>BACK TO HOME</a>
+          </div>
+
+          <a href="#" class="about-mobile-note" id="aboutMobileNote">Nothing to see here…</a>
+          <a href="#" class="about-mobile-note second" id="aboutMobileNote2">I told you :)</a>
 
         </main>
       </section>
@@ -658,9 +697,28 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             
           }
 
+
       // bind
       navIndex.addEventListener('click', showIndex);
       navAbout.addEventListener('click', showAbout);
+
+      const backHome = document.getElementById('backToHome');
+      if (backHome) backHome.addEventListener('click', showIndex);
+
+      const mql = window.matchMedia('(max-width: 900px)');
+
+      const aboutNotes = document.querySelectorAll('.about-mobile-note');
+      if (aboutNotes.length) {
+        const toTop = (e) => {
+          e.preventDefault();
+          if (mql && mql.matches) {
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+            try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.documentElement.scrollTop = 0; }
+            try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.body.scrollTop = 0; }
+          }
+        };
+        aboutNotes.forEach(n => n.addEventListener('click', toTop));
+      }
 
           // stato iniziale da hash (ad es. arrivo da projects con index.html#about)
           if (location.hash === '#about') {

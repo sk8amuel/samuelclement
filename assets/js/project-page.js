@@ -91,7 +91,7 @@
       io.observe(sentinel);
     }
 
-    const thesisLink = document.querySelector('.thesis-link');
+    const thesisLink = document.querySelector('.detail-links .thesis-link[aria-label="view the thesis"]');
     const thesisModal = document.getElementById('thesis-modal');
     const thesisOverlay = document.getElementById('thesisOverlay');
     const thesisClose = document.getElementById('thesisClose');

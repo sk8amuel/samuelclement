@@ -39,6 +39,8 @@
   /* Offset contenuti: leggermente più vicino alla seconda linea (versione precedente) */
   --start-line-offset: calc(var(--start-line-gap) + var(--start-line-width) - 0.5px);
 }
+/* Opacità linee più bassa sulla pagina Projects */
+body.projects { --grid-line-opacity: 0.03; }
 
 /* Nascondi le scrollbar globali mantenendo lo scroll (cross‑browser) */
 html { overflow-y: auto; scrollbar-gutter: stable; }
@@ -821,6 +823,7 @@ body.is-about .page-about {
   z-index: 2;
   opacity: 1;
   pointer-events: auto;
+ 
 }
 body.is-about .page-index { filter: blur(6px) brightness(0.80); }
 body.is-about .page-index::after {
