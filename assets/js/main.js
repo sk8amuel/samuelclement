@@ -841,5 +841,5 @@ document.addEventListener('DOMContentLoaded', () => {
        mo.observe(contact, { childList: true, subtree: true });
      }
    }
-   document.addEventListener('DOMContentLoaded', init);
- })();
+  document.addEventListener('DOMContentLoaded', init);
+})();

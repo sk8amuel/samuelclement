@@ -39,6 +39,8 @@
   /* Offset contenuti: leggermente più vicino alla seconda linea (versione precedente) */
   --start-line-offset: calc(var(--start-line-gap) + var(--start-line-width) - 0.5px);
 }
+::selection { background: #ffffff; color: #000000; }
+::-moz-selection { background: #ffffff; color: #000000; }
 /* Opacità linee più bassa sulla pagina Projects */
 body.projects { --grid-line-opacity: 0.03; }
 
