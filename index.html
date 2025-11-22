@@ -353,7 +353,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               overflow-wrap: anywhere;
               word-break: break-word;
               align-self: end;
-              transform: translateY(-34px);
+              transform: translateY(-90px);
             }
 
             /* Foto in colonna 4 adattiva */
@@ -371,14 +371,14 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             .page-about .about-grid .capabilities {
               margin-top: 0;
               position: relative;
-              transform: translateY(40px);
+              transform: translateY(-24px);
             }
 
             /* Alza SOLO la foto un po’ di più */
             .page-about .about-grid .about-photo {
               margin-top: 0;
               position: relative;
-              transform: translateY(-34px);
+              transform: translateY(-72px);
               align-self: end;
               grid-column: 10 / span 3; /* mantenuta in quarta colonna mappata */
             }
@@ -603,26 +603,22 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
       <button class="privacy-close" id="privacyClose" aria-label="Close">×</button>
       <h2 id="privacyTitle">Privacy Policy</h2>
       <div class="privacy-body">
-        <h3>Overview</h3>
-        <p>This website is a static portfolio. There are no account areas, forms, or interactive features beyond viewing content.</p>
+        <h3>Privacy & Cookie Policy</h3>
+        <p>In accordance with Article 13 of EU Regulation 2016/679 ("GDPR"), I inform you that any personal data provided through this website is processed with appropriate technical and organizational measures to ensure security, confidentiality, and protection of your rights.</p>
+        <h3>1. Data Collected</h3>
+        <p>This website may collect basic technical information through automatic tools (such as server logs or anonymous statistics).</p>
+        <p>If you choose to contact me via email or contact form, the personal data you provide will be used solely to respond to your request. Your data will not be shared with third parties unless required by law.</p>
+        <h3>2. Cookies</h3>
+        <p>Cookies are small files stored on your device to ensure the website works correctly and to improve your browsing experience. You can delete or block cookies at any time through your browser settings.</p>
+        <p>This website does not use profiling cookies.</p>
+        <h3>3. Google Analytics (IP anonymized)</h3>
+        <p>8amuel.com uses Google Analytics, a web analytics service provided by Google LLC, configured with IP anonymization.</p>
+        <p>The data collected is aggregated and does not allow identification of individual users. It includes information such as visited pages, visit duration, and browser type.</p>
+        <p>Because IP addresses are anonymized, no specific consent is required.</p>
+        <p>You can disable cookies at any time through your browser settings. For more details, please refer to Google’s official Analytics policies.</p>
         <h3>Data Controller</h3>
-        <p>Samuel Clement — hello@samuelclement.it</p>
-        <h3>Personal Data</h3>
-        <p>No personal data is collected through this website. If you contact me by email, your message is processed solely to reply and is not shared with third parties.</p>
-        <h3>Cookies</h3>
-        <p>No cookies are used, including technical, analytics, or advertising cookies.</p>
-        <h3>Technical Logs</h3>
-        <p>Minimal technical logs (IP address, user‑agent, requested path) may be recorded at server level for security, troubleshooting, and performance. These logs are not used for profiling or marketing.</p>
-        <h3>Analytics & Tracking</h3>
-        <p>No analytics platforms, third‑party trackers, or advertising scripts are used.</p>
-        <h3>Legal Basis</h3>
-        <p>Site operation and security constitute legitimate interest. Consent is not required for strictly necessary technical logging.</p>
-        <h3>Retention</h3>
-        <p>Technical logs, where present, are retained briefly and then purged. Email correspondence is kept only as long as needed to reply.</p>
-        <h3>Your Rights</h3>
-        <p>You may request access, correction, or deletion of any information you have provided via email.</p>
-        <h3>Contact</h3>
-        <p>hello@samuelclement.it</p>
+        <p>Samuel Clement – Owner of 8amuel.com</p>
+        <p>For any inquiries regarding the processing of personal data, you can contact me through the email provided on the website.</p>
       </div>
     </div>
   </div>
@@ -650,6 +646,27 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
 
           if (!navIndex || !navAbout) return;
 
+          function smoothTop(duration = 650){
+            const scroller = document.scrollingElement || document.documentElement || document.body;
+            const start = scroller.scrollTop || window.pageYOffset || 0;
+            if (start <= 0) return;
+            const startTime = performance.now();
+            const ease = (t) => 1 - Math.pow(1 - t, 3);
+            if (!('requestAnimationFrame' in window)) { scroller.scrollTop = 0; return; }
+            if (window.__scrollTopRAF) cancelAnimationFrame(window.__scrollTopRAF);
+            const step = (now) => {
+              const t = Math.min(1, (now - startTime) / duration);
+              const current = Math.round(start * (1 - ease(t)));
+              scroller.scrollTop = current;
+              if (t < 1) {
+                window.__scrollTopRAF = requestAnimationFrame(step);
+              } else {
+                scroller.scrollTop = 0;
+              }
+            };
+            window.__scrollTopRAF = requestAnimationFrame(step);
+          }
+
       function showIndex(e) {
         if (e) e.preventDefault();
         body.classList.remove('is-about');
@@ -659,7 +676,6 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
         if (location.hash === '#about') {
           history.replaceState(null, '', location.pathname);
         }
-        // scroll fluido visibile verso l'alto
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         // riafferma lo scroll al termine del flip per massima affidabilità
@@ -694,7 +710,9 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             }
             // nessuno scroll forzato su ABOUT: mantieni la posizione corrente
 
-            
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+            try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.documentElement.scrollTop = 0; }
+            try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.body.scrollTop = 0; }
           }
 
 
