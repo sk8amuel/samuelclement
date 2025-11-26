@@ -165,9 +165,10 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
 .project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
 @media (max-width: 600px) { .project-detail .detail-gallery { --dg-row-h: 220px; } }
 .project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
-#rowPreview { position: fixed; left: 0; top: 0; transform: translate(8px, 8px); width: 220px; max-width: 28vw; pointer-events: none; z-index: 99999; opacity: 0; transition: opacity 140ms ease, transform 140ms ease; }
+#rowPreview { position: fixed; left: 0; top: 0; transform: translate(8px, 8px); width: 260px; max-width: 32vw; pointer-events: none; z-index: 99999; opacity: 0; transition: opacity 140ms ease, transform 140ms ease; }
 #rowPreview.visible { opacity: 1; }
 #rowPreview img { display: block; width: 100%; height: auto; background: #000; }
+#rowPreview video { display: block; width: 100%; height: auto; background: #000; }
 
 /* Contenitore complessivo della riga + dettaglio, con bordo animato */
 .project-block {
@@ -194,7 +195,7 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 130px;
+  max-width: 160px;
   background: #000000;
   overflow: hidden;
   aspect-ratio: 1 / 1;
@@ -213,7 +214,22 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
+.detail-image-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  background: #000000;
+}
+
 .detail-image-wrap:hover img {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.detail-image-wrap:hover video {
   transform: scale(1.03);
   opacity: 0.9;
 }
