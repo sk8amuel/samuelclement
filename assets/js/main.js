@@ -1027,41 +1027,26 @@ document.addEventListener('DOMContentLoaded', () => {
     var index = Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ var h=a.getAttribute('href')||''; return /(^|\/)index\.html$/.test(h); }) || Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ return ((a.textContent||'').trim().toUpperCase()==='INDEX'); }) || document.querySelector('.top-left .brand');
     return { about: about, index: index };
   }
-  function ensureOverlay(){
-    var o = document.getElementById('swipeOverlay') || document.getElementById('transitionOverlay');
-    if (!o){
-      o = document.createElement('div');
-      o.id = 'swipeOverlay';
-      o.style.position = 'fixed';
-      o.style.inset = '0';
-      o.style.background = '#000';
-      o.style.opacity = '0';
-      o.style.pointerEvents = 'none';
-      o.style.transition = 'opacity 300ms ease';
-      o.style.zIndex = '9999';
-      document.body.appendChild(o);
-    }
-    return o;
-  }
   function navigate(target){
-    var o = ensureOverlay();
-    if (o){
-      o.style.opacity = '1';
-      setTimeout(function(){ if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; } }, 300);
-    } else {
-      if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
-    }
+    if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
   }
   function init(){
     if (!isCoarse()) return;
     var startX=0, startY=0, dx=0, dy=0, tracking=false, active=false;
     var threshold=50;
-    var overlay=null;
+    var currentPress=null;
+    function setPress(el){
+      if (currentPress && currentPress!==el) currentPress.classList.remove('nav-press');
+      if (el){ el.classList.add('nav-press'); currentPress = el; }
+    }
+    function clearPress(){
+      if (currentPress){ currentPress.classList.remove('nav-press'); currentPress=null; }
+    }
     function onStart(e){
       if (e.touches && e.touches.length>1) return;
       var t = e.touches? e.touches[0] : e;
       startX = t.clientX; startY = t.clientY; dx=0; dy=0; tracking=true; active=false;
-      overlay = ensureOverlay();
+      clearPress();
     }
     function onMove(e){
       if (!tracking) return;
@@ -1069,25 +1054,29 @@ document.addEventListener('DOMContentLoaded', () => {
       dx = t.clientX - startX; dy = t.clientY - startY;
       if (!active){
         if (Math.abs(dx)>12 && Math.abs(dx)>Math.abs(dy)) { active=true; }
-        else if (Math.abs(dy)>12) { tracking=false; active=false; return; }
+        else if (Math.abs(dy)>12) { tracking=false; active=false; clearPress(); return; }
       }
-      if (active && overlay){
-        var p = Math.min(1, Math.abs(dx)/threshold);
-        overlay.style.opacity = String(p*0.3);
+      if (active){
+        var links = getLinks();
+        var target = dx<0 ? (links.about||null) : (links.index||null);
+        setPress(target);
       }
     }
     function onEnd(){
       if (!tracking) return;
       tracking=false;
-      if (overlay) overlay.style.opacity = '0';
-      if (!active) return;
+      if (!active){ clearPress(); return; }
       if (Math.abs(dx)>=threshold && Math.abs(dx)>Math.abs(dy)){
         var links = getLinks();
-        if (dx<0) navigate(links.about||null); else navigate(links.index||null);
+        var target = dx<0 ? (links.about||null) : (links.index||null);
+        setPress(target);
+        setTimeout(function(){ navigate(target); clearPress(); }, 300);
+      } else {
+        clearPress();
       }
     }
     document.addEventListener('touchstart', onStart, { passive: true });
-    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchmove', onMove, { passive: true });
     document.addEventListener('touchend', onEnd, { passive: true });
     document.addEventListener('touchcancel', onEnd, { passive: true });
   }
