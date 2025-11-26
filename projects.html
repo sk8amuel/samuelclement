@@ -147,7 +147,7 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         <a href="projects/Knoted.html"
            class="detail-image-wrap"
            data-project="knoted" data-transition>
-          <img src="assets/img/projects/Knoted-project.gif" alt="Knoted">
+          <video src="assets/img/projects/Knoted-project.webm" autoplay muted loop playsinline preload="metadata"></video>
         </a>
         <div class="detail-text">
           <h3 class="detail-title">Knoted</h3>
@@ -173,7 +173,7 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         <a href="projects/after-book.html"
            class="detail-image-wrap"
            data-project="afterbook" data-transition>
-          <img src="assets/img/projects/after-book-project.gif" alt="After Book">
+          <video src="assets/img/projects/after-book-project.webm" autoplay muted loop playsinline preload="metadata"></video>
         </a>
         <div class="detail-text">
           <h3 class="detail-title">After Book</h3>
@@ -226,7 +226,7 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         <a href="projects/boundless-blades.html"
            class="detail-image-wrap"
            data-project="boundless" data-transition>
-          <img src="assets/img/projects/boundless-blades-project.gif" alt="Boundless Blades">
+          <video src="assets/img/projects/boundless-blades-project.webm" autoplay muted loop playsinline preload="metadata"></video>
         </a>
         <div class="detail-text">
           <h3 class="detail-title">Boundless Blades</h3>
@@ -278,7 +278,7 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         <a href="projects/luminal.html"
            class="detail-image-wrap"
            data-project="luminal" data-transition>
-          <img src="assets/img/projects/Luminal-project.gif" alt="Luminal">
+          <video src="assets/img/projects/Luminal-project.webm" autoplay muted loop playsinline preload="metadata"></video>
         </a>
         <div class="detail-text">
           <h3 class="detail-title">Luminal</h3>
@@ -682,12 +682,12 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
             atm: 'assets/img/projects/At-the-Mountains-of-Madness-project.png',
             ilgermoglio: 'assets/img/projects/ilgermoglio-project.png',
             jabberwocky: 'assets/img/projects/Jabberwocky-project.webp',
-            knoted: 'assets/img/projects/Knoted-project.gif',
-            afterbook: 'assets/img/projects/after-book-project.gif',
+            knoted: 'assets/img/projects/Knoted-project.webm',
+            afterbook: 'assets/img/projects/after-book-project.webm',
             '365posters': 'assets/img/projects/365-posters-project.jpg',
-            boundless: 'assets/img/projects/boundless-blades-project.gif',
+            boundless: 'assets/img/projects/boundless-blades-project.webm',
             cumpa: 'assets/img/projects/Cumpa-project.jpg',
-            luminal: 'assets/img/projects/Luminal-project.gif',
+            luminal: 'assets/img/projects/Luminal-project.webm',
             speaklouder: 'assets/img/projects/speak-louder-project.png',
             futureai: 'assets/img/projects/the-future-of-ai.gif',
             pastiglie: 'assets/img/projects/pastiglie-leone-project.png'
@@ -697,10 +697,21 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
             pv = document.createElement('div');
             pv.id = 'rowPreview';
             const img = document.createElement('img');
+            const video = document.createElement('video');
+            video.muted = true;
+            video.loop = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.setAttribute('playsinline', '');
+            video.preload = 'metadata';
+            img.style.display = 'none';
+            video.style.display = 'none';
             pv.appendChild(img);
+            pv.appendChild(video);
             document.body.appendChild(pv);
           }
           const imgEl = pv.querySelector('img');
+          const vidEl = pv.querySelector('video');
           let raf = null;
           let lastX = 0, lastY = 0;
           let showTimer = null;
@@ -720,7 +731,17 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
             const key = row.dataset.project || '';
             const src = previewMap[key];
             if (!src) return;
-            imgEl.src = src;
+            if (/\.(webm|mp4)(\?.*)?$/i.test(src)) {
+              imgEl.style.display = 'none';
+              vidEl.src = src;
+              vidEl.style.display = 'block';
+              try { const r = vidEl.play(); if (r && typeof r.then === 'function') r.catch(() => {}); } catch(_){}
+            } else {
+              vidEl.pause();
+              vidEl.style.display = 'none';
+              imgEl.src = src;
+              imgEl.style.display = 'block';
+            }
             pv.classList.add('visible');
           });
           row.addEventListener('mousemove', (e) => {
@@ -728,10 +749,12 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
           }, { passive: true });
           row.addEventListener('mouseleave', () => {
             clearTimeout(showTimer);
+            try { vidEl.pause(); } catch(_){}
             pv.classList.remove('visible');
           });
           row.addEventListener('click', () => {
             clearTimeout(showTimer);
+            try { vidEl.pause(); } catch(_){}
             pv.classList.remove('visible');
           });
         }

@@ -548,7 +548,7 @@ const projectsData = {
       "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
     ],
     videos: [
-      "assets/img/projects/Knoted/Knoted-Splash-Logo.mp4",
+      "assets/img/projects/Knoted/Knoted-Splash-Logo.webm",
       "assets/img/projects/Knoted/Animazione-cards-Knoted.webm",
       "assets/img/projects/Knoted/Animazione-sito-Knoted.webm",
       "https://www.youtube-nocookie.com/embed/WQWhOHWkcBY?controls=1&modestbranding=1&rel=0&playsinline=1"
@@ -884,11 +884,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.isIntersecting) {
         const el = entry.target;
         el.classList.add('reveal-rotate');
-        const img = el.querySelector('img');
-        if (img) {
-          img.addEventListener('animationend', () => {
+        const media = el.querySelector('img, video');
+        if (media) {
+          media.addEventListener('animationend', () => {
             el.classList.remove('reveal-rotate');
           }, { once: true });
+        } else {
+          setTimeout(() => el.classList.remove('reveal-rotate'), 700);
         }
         io.unobserve(el);
       }
@@ -910,7 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
       v.playsInline = true;
       v.setAttribute('playsinline', '');
       v.setAttribute('webkit-playsinline', '');
-      v.preload = 'auto';
+      v.preload = 'metadata';
       v.addEventListener('loadeddata', () => playIfPossible(v), { once: true });
     });
     if ('IntersectionObserver' in window) {

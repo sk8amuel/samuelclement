@@ -91,12 +91,12 @@ body.project-page {
 .template-left .detail-value,
 .template-left .detail-links a {
   position: relative;
-  z-index: 2147483599;
+  z-index: 1;
 }
 
 
 @media (max-width: 1400px) {
-  .template-left { grid-column: 1 / -1; grid-row: 1; position: relative; z-index: 2147483599; height: auto; margin-top: 0; }
+  .template-left { grid-column: 1 / -1; grid-row: 1; position: relative; z-index: 1; height: auto; margin-top: 0; }
   .template-hero { grid-column: 1 / -1; grid-row: 2; }
   .template-left { display: flex; flex-direction: column; }
   .template-code { order: 0; }
