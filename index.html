@@ -247,7 +247,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               column-gap: var(--column-gap);
               row-gap: 8px;
               align-items: start;
-              margin-top: -32px; /* alza l’intera sezione */
+              margin-top: -48px; /* alza l’intera sezione */
               position: relative; /* per eventuali riferimenti */
             }
             /* 4 colonne mappate su 12 colonne: 3-3-3-3 */
@@ -340,7 +340,7 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             /* ABOUT come blocco nel flusso, span 2 colonne (1–2) */
             .page-about .about-grid .about-hero-word {
               position: static;
-              grid-column: 1 / span 6; /* metà container, allineata alla griglia a 12 */
+              grid-column: 1 / span 6;
               font-size: clamp(64px, 31vw, 180px);
               letter-spacing: -0.02em;
               line-height: 0.85;
@@ -350,8 +350,9 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               display: block;
               max-width: 100%;
               white-space: normal;
-              overflow-wrap: anywhere;
-              word-break: break-word;
+              overflow-wrap: normal;
+              word-break: normal;
+              hyphens: none;
               align-self: end;
               transform: translateY(-90px);
             }
@@ -394,6 +395,13 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             .page-about .about-block a { color: #FFFFFF !important; }
             .page-about .about-grid p,
             .page-about .about-grid a { font-size: 13px; line-height: 1.5; }
+            .page-about .about-grid p,
+            .page-about .about-grid a {
+              word-break: normal;
+              overflow-wrap: normal;
+              hyphens: none;
+            }
+            .page-about .about-grid .about-block p:not(.about-label) { line-height: 1.35; }
             .page-about .about-grid .background .role-title { font-size: 13px; line-height: 1.5; }
             .page-about .about-grid .background .role-title::before { content: "→"; color: #dcdcdc; margin-right: 8px; }
             .page-about .about-grid .background .role-desc { font-size: 13px; line-height: 1.5; }
@@ -420,6 +428,12 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               .page-about .about-grid .about-block { font-size: 12px; line-height: 1.6; }
               .page-about .about-grid .about-label { font-size: 10px; letter-spacing: 0.08em; }
               .page-about .about-grid p, .page-about .about-grid a { font-size: 26px; line-height: 1.2; }
+              .page-about .about-grid p,
+              .page-about .about-grid a {
+                word-break: normal;
+                overflow-wrap: normal;
+                hyphens: none;
+              }
               .page-about .about-grid .background .role-title { font-size: 26px; line-height: 1.2; }
               .page-about .about-grid .capabilities .role-title { font-size: 26px; line-height: 1.2; }
               .page-about .about-grid .about-hero-word,
@@ -494,23 +508,15 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             <!-- Row1 -->
             <div class="about-block col-1 intro">
               <p class="about-label">(I'M SAMUEL)</p>
-              <p>A Visual Designer based in the northern Lake Como area, Italy.</p>
-              <p>I’m 23, and my perspective comes from the worlds I move through: skateboarding, self-tattooing, music, and cinema.</p>
+              <p>A Visual Designer based near Lake Como, Italy.<br>I’m 23, and my perspective comes from the worlds I move through: skateboarding, self-tattooing, music, and cinema.</p>
             </div>
             <div class="about-block col-2 design-approach">
               <p class="about-label">(DESIGN APPROACH)</p>
-              <p>I’m a designer who works across both analog and digital.</p>
-              <p>I like to give brands a natural sense of movement, creating living projects where everything connects and works as a single identity.</p>
-              <p>I’m drawn to strong ideas without unnecessary complications.</p>
-              <p>I use research to push past aesthetics and build authentic design that truly speaks to people.</p>
+              <p>I’m a designer who works across both analog and digital.<br>I like to give brands a natural sense of movement, creating living projects where everything connects and works as a single identity.<br>I’m drawn to strong ideas without unnecessary complications.<br>I use research to push past aesthetics and build authentic design that truly speaks to people.</p>
             </div>
             <div class="about-block col-3 background">
               <p class="about-label">(CAPABILITIES)</p>
-              <p>Visual Identity &amp; Rebrand</p>
-              <p>Art Direction</p>
-              <p>Editorial &amp; Printed Matter</p>
-              <p>Web &amp; Digital Interfaces</p>
-              <p>Motion &amp; Video</p>
+              <p>Visual Identity &amp; Rebrand<br>Art Direction<br>Editorial &amp; Printed Matter<br>Web &amp; Digital Interfaces<br>Motion &amp; Video</p>
             </div>
             <div class="about-block col-4 education">
               <p class="about-label">(EDUCATION)</p>
@@ -535,27 +541,17 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
             <!-- Row4 (SUBITO sotto ABOUT) -->
             <div class="about-block col-1 selected-work">
               <p class="about-label">(SELECTED WORK)</p>
-              <p>2019—2025</p>
-              <p>Identity, editorial, motion and digital for culture, independent brands and experimental research.</p>
+              <p>2019–2025<br>Identity, editorial, motion, and digital for culture, independent brands, and experimental research.</p>
             </div>
             <div class="about-block col-2 focus">
               <p class="about-label">(FOCUS)</p>
-              <p>Systemic visual identities over one-off logos.</p>
-              <p>Grids, rhythm and typography as structure.</p>
-              <p>Strong black/white foundations, flexible applications.</p>
+              <p>Systemic visual identities over one-off logos.<br>Grids, rhythm, and typography as structure.<br>Strong black/white foundations, flexible applications.</p>
             </div>
 
             <!-- Row5 -->
             <div class="about-block col-4 capabilities">
               <p class="about-label">(BACKGROUND)</p>
-              <p class="role-title">2024–2025 – Internship @ VALTNET</p>
-              <p class="role-desc">Worked on editorial plans for brands, graphic assets, and website design. Handled both creative direction and execution across digital platforms.</p>
-              <p class="role-title">2024 – Graphic Designer @ LEGEA HUB (Lecco)</p>
-              <p class="role-desc">Managed the company website and Instagram content. Designed sportswear from concept to production.</p>
-              <p class="role-title">Internship @ OPHELIA DIGITAL<br>2024</p>
-              <p class="role-desc">Worked on creative direction, client collaboration, and production design.</p>
-              <p class="role-title">2022–2023 – Freelance Graphic Designer</p>
-              <p class="role-desc">Created flyers and social content for club events.</p>
+              <p>→ 2024–2025 – Internship @ VALTNET<br>Worked on editorial plans for brands, graphic assets, and website design. Handled both creative direction and execution across digital platforms.<br>→ 2024 – Graphic Designer @ LEGEA HUB (Lecco)Managed the company website and Instagram content. Designed sportswear from concept to production.<br>→ 2024 – Internship @ OPHELIA DIGITALWorked on creative direction, client collaboration, and production design.<br>→ 2022–2023 – Freelance Graphic DesignerCreated flyers and social content for club events.</p>
             </div>
 
             

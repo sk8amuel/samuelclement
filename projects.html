@@ -190,9 +190,9 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
       <div class="pi-cell pi-icon"><img class="folder-icon" src="assets/img/closed-folder-icon.png" alt="" /></div>
       <div class="pi-cell">006</div>
       <div class="pi-cell">365 Posters</div>
-      <div class="pi-cell">Collaborative</div>
-      <div class="pi-cell">Identity / Motion</div>
-      <div class="pi-cell">2024</div>
+      <div class="pi-cell">Personal Project</div>
+      <div class="pi-cell">Graphic Design &amp; Illustration</div>
+      <div class="pi-cell">2022</div>
     </div>
     <div class="project-detail" id="proj-006">
       <div class="project-detail-inner">
@@ -203,8 +203,9 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         </a>
         <div class="detail-text">
           <h3 class="detail-title">365 Posters</h3>
-          <div class="detail-subtitle">Identity / Motion — 2024</div>
-          <p>Visual exploration of poster design through daily experimentation — typography, rhythm and iteration.</p>
+          <div class="detail-subtitle">Graphic Design &amp; Illustration — 2022</div>
+          <p class="detail-desc-short">A curated selection from a 365-day poster challenge, highlighting the most impactful visual explorations.</p>
+          <p class="detail-desc-long">This project is a year-long creative challenge where I designed one poster every single day for 365 days. Each piece explores different visual styles, techniques, and ideas—ranging from typography experiments to abstract compositions and bold graphic statements. The goal was to push my creative limits, stay consistent, and grow as a designer through daily practice. What you're seeing here is a curated selection of the best posters from the entire series—my personal highlights that represent the most impactful, original, or refined results from the project.</p>
         </div>
       </div>
     </div>
@@ -320,8 +321,8 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
       <div class="pi-cell pi-icon"><img class="folder-icon" src="assets/img/closed-folder-icon.png" alt="" /></div>
       <div class="pi-cell">011</div>
       <div class="pi-cell">The Future of AI</div>
-      <div class="pi-cell">Collaborative</div>
-      <div class="pi-cell">Identity / Motion</div>
+      <div class="pi-cell">School project</div>
+      <div class="pi-cell">Motion Graphic</div>
       <div class="pi-cell">2024</div>
     </div>
     <div class="project-detail" id="proj-011">
@@ -333,8 +334,8 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         </a>
         <div class="detail-text">
           <h3 class="detail-title">The Future of AI</h3>
-          <div class="detail-subtitle">Identity / Motion — 2024</div>
-          <p>Speculative visual identity visualizing human–machine symbiosis through glitch, code and geometry.</p>
+          <div class="detail-subtitle">Motion Graphic — 2024</div>
+          <p>Animated short exploring AI’s human impact with textured, fast-paced motion.</p>
         </div>
       </div>
     </div>
@@ -415,6 +416,200 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         if (!targetId) return;
         const detail = document.getElementById(targetId);
         if (!detail) return;
+        const key = row.dataset.project || '';
+        const inner = detail.querySelector('.project-detail-inner');
+        if (inner) {
+          const link = inner.querySelector('.detail-image-wrap');
+          if (link) link.style.display = 'none';
+          const text = inner.querySelector('.detail-text');
+          if (text) text.remove();
+          const oldInd = inner.querySelector('.dg-indicators');
+          if (oldInd) oldInd.remove();
+          let gallery = inner.querySelector('.detail-gallery');
+          if (!gallery) {
+            gallery = document.createElement('div');
+            gallery.className = 'detail-gallery';
+            inner.appendChild(gallery);
+          }
+          gallery.innerHTML = '';
+          const track = document.createElement('div');
+          track.className = 'dg-track';
+          const data = (typeof projectsData !== 'undefined') ? projectsData[key] : null;
+          const imgs = (data && Array.isArray(data.images)) ? data.images : [];
+          const caps = (data && Array.isArray(data.captions)) ? data.captions : null;
+          let count = 0;
+          imgs.forEach((src, i) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'dg-item';
+            const img = document.createElement('img');
+            img.dataset.src = src;
+            img.loading = 'lazy';
+            img.alt = (data && data.title) ? data.title : '';
+            wrap.appendChild(img);
+            if (caps && caps[i]) {
+              const cap = document.createElement('div');
+              cap.className = 'dg-caption';
+              cap.textContent = caps[i];
+              wrap.appendChild(cap);
+            }
+            track.appendChild(wrap);
+            count++;
+          });
+          const videos = [];
+          if (data) {
+            if (Array.isArray(data.videos)) videos.push(...data.videos);
+            if (data.video) videos.push(data.video);
+          }
+          const seen = new Set();
+          videos.forEach(v => {
+            const vv = String(v || '');
+            if (!vv || seen.has(vv)) return; seen.add(vv);
+            const wrap = document.createElement('div');
+            wrap.className = 'dg-item';
+            if (/\.(mp4|webm)(\?.*)?$/i.test(vv)) {
+              const video = document.createElement('video');
+              video.controls = true;
+              video.preload = 'none';
+              video.playsInline = true;
+              video.muted = true;
+              video.setAttribute('data-lazy', '1');
+              const srcEl = document.createElement('source');
+              srcEl.dataset.src = vv;
+              srcEl.type = vv.toLowerCase().endsWith('.mp4') ? 'video/mp4' : 'video/webm';
+              video.appendChild(srcEl);
+              video.addEventListener('error', () => {
+                try {
+                  const yt = Array.isArray((data && data.videos) || []) ? (data.videos.find(x => typeof x === 'string' && x.startsWith('http')) || null) : null;
+                  if (yt) {
+                    const iframe = document.createElement('iframe');
+                    iframe.loading = 'lazy';
+                    iframe.src = yt;
+                    iframe.title = (data && data.title) ? data.title : '';
+                    iframe.frameBorder = '0';
+                    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+                    iframe.allowFullscreen = true;
+                    wrap.innerHTML = '';
+                    wrap.appendChild(iframe);
+                  } else {
+                    const img = document.createElement('img');
+                    img.src = (Array.isArray((data && data.images) || []) && data.images.length) ? data.images[0] : '';
+                    img.loading = 'lazy';
+                    img.alt = (data && data.title) ? data.title : '';
+                    wrap.innerHTML = '';
+                    wrap.appendChild(img);
+                  }
+                } catch (_) {}
+              });
+              wrap.appendChild(video);
+            } else {
+              const iframe = document.createElement('iframe');
+              iframe.loading = 'lazy';
+              iframe.dataset.src = vv;
+              iframe.title = (data && data.title) ? data.title : '';
+              iframe.frameBorder = '0';
+              iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+              iframe.allowFullscreen = true;
+              wrap.appendChild(iframe);
+            }
+            track.appendChild(wrap);
+            count++;
+          });
+          gallery.appendChild(track);
+          gallery.style.setProperty('--dg-count', String(count > 0 ? count : 1));
+          const lazyImgs = Array.from(gallery.querySelectorAll('img[data-src]'));
+          const lazyIframes = Array.from(gallery.querySelectorAll('iframe[data-src]'));
+          const lazyVideos = Array.from(gallery.querySelectorAll('video[data-lazy="1"]'));
+          const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target;
+              if (el.tagName === 'IMG') {
+                el.src = el.dataset.src || '';
+                el.removeAttribute('data-src');
+              } else if (el.tagName === 'IFRAME') {
+                el.src = el.dataset.src || '';
+                el.removeAttribute('data-src');
+              } else if (el.tagName === 'VIDEO') {
+                const s = el.querySelector('source[data-src]');
+                if (s) { s.src = s.dataset.src || ''; s.removeAttribute('data-src'); el.load(); }
+                el.removeAttribute('data-lazy');
+              }
+              io.unobserve(el);
+            });
+          }, { root: null, rootMargin: '100px', threshold: 0.01 });
+          lazyImgs.forEach(el => io.observe(el));
+          lazyIframes.forEach(el => io.observe(el));
+          lazyVideos.forEach(el => io.observe(el));
+          let shift = 0;
+          let maxShift = Math.max(0, track.scrollWidth - gallery.clientWidth);
+          function recalc() {
+            maxShift = Math.max(0, track.scrollWidth - gallery.clientWidth);
+            if (shift > maxShift) shift = maxShift;
+            track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+          }
+          recalc();
+          const mediaEls = Array.from(track.querySelectorAll('img, iframe, video'));
+          mediaEls.forEach(el => {
+            if (el.tagName === 'VIDEO') {
+              el.addEventListener('loadedmetadata', recalc, { once: true });
+            } else {
+              el.addEventListener('load', recalc, { once: true });
+            }
+          });
+          const ro = new ResizeObserver(() => recalc());
+          ro.observe(track);
+          detail._dgRO = ro;
+          function onWheel(e) {
+            const dy = (typeof e.deltaY === 'number') ? e.deltaY : 0;
+            if (!dy) return;
+            const step = (e.deltaMode === 1 ? 40 : 1);
+            if (maxShift <= 0) return;
+            e.preventDefault();
+            if (typeof e.stopPropagation === 'function') e.stopPropagation();
+            if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            shift = Math.min(Math.max(shift + dy * step, 0), maxShift);
+            track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+          }
+          const wheelOpts = { passive: false, capture: true };
+          gallery.addEventListener('wheel', onWheel, wheelOpts);
+          detail.addEventListener('wheel', onWheel, wheelOpts);
+          track.addEventListener('wheel', onWheel, wheelOpts);
+          detail._dgWheel = onWheel;
+          detail._dgWheelTargets = [gallery, detail, track];
+          detail._dgRecalc = recalc;
+          window.addEventListener('resize', recalc);
+
+          // Touch: swipe orizzontale su mobile
+          let tsX = 0, tsY = 0, lastTX = 0;
+          function onTouchStart(e) {
+            const t = (e.touches && e.touches[0]) || null;
+            if (!t) return;
+            tsX = lastTX = t.clientX;
+            tsY = t.clientY;
+          }
+          function onTouchMove(e) {
+            const t = (e.touches && e.touches[0]) || null;
+            if (!t) return;
+            const dxAbs = Math.abs(t.clientX - tsX);
+            const dyAbs = Math.abs(t.clientY - tsY);
+            const horizontal = dxAbs > dyAbs;
+            if (horizontal && maxShift > 0) {
+              e.preventDefault();
+              const dx = t.clientX - lastTX;
+              lastTX = t.clientX;
+              shift = Math.min(Math.max(shift - dx, 0), maxShift);
+              track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+            }
+          }
+          function onTouchEnd() {}
+          const touchOpts = { passive: false, capture: true };
+          gallery.addEventListener('touchstart', onTouchStart, touchOpts);
+          gallery.addEventListener('touchmove', onTouchMove, touchOpts);
+          gallery.addEventListener('touchend', onTouchEnd, touchOpts);
+          gallery.addEventListener('touchcancel', onTouchEnd, touchOpts);
+          detail._dgTouch = { onTouchStart, onTouchMove, onTouchEnd };
+          detail._dgTouchTargets = [gallery];
+        }
         row.classList.add('is-open');
         if (block) block.classList.add('is-open');
         detail.classList.add('is-open');
@@ -438,6 +633,25 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
         if (!targetId) return;
         const detail = document.getElementById(targetId);
         if (!detail) return;
+        if (detail._dgRecalc) { window.removeEventListener('resize', detail._dgRecalc); detail._dgRecalc = null; }
+        if (detail._dgWheel && detail._dgWheelTargets) {
+          try { detail._dgWheelTargets.forEach(t => t.removeEventListener('wheel', detail._dgWheel, true)); } catch {}
+          detail._dgWheel = null;
+          detail._dgWheelTargets = null;
+        }
+        if (detail._dgTouch && detail._dgTouchTargets) {
+          try {
+            detail._dgTouchTargets.forEach(t => {
+              t.removeEventListener('touchstart', detail._dgTouch.onTouchStart, true);
+              t.removeEventListener('touchmove', detail._dgTouch.onTouchMove, true);
+              t.removeEventListener('touchend', detail._dgTouch.onTouchEnd, true);
+              t.removeEventListener('touchcancel', detail._dgTouch.onTouchEnd, true);
+            });
+          } catch {}
+          detail._dgTouch = null;
+          detail._dgTouchTargets = null;
+        }
+        if (detail._dgRO) { try { detail._dgRO.disconnect(); } catch {} detail._dgRO = null; }
         row.classList.remove('is-open');
         if (block) block.classList.remove('is-open');
         detail.classList.remove('is-open');
@@ -457,22 +671,96 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
           if (row.classList.contains('is-open')) {
             closeRow(row);
           } else {
+            const openRows = Array.from(document.querySelectorAll('.project-item.is-open'));
+            openRows.forEach(r => closeRow(r));
             openRow(row);
           }
         });
+        const isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+        if (!isMobile) {
+          const previewMap = {
+            atm: 'assets/img/projects/At-the-Mountains-of-Madness-project.png',
+            ilgermoglio: 'assets/img/projects/ilgermoglio-project.png',
+            jabberwocky: 'assets/img/projects/Jabberwocky-project.webp',
+            knoted: 'assets/img/projects/Knoted-project.gif',
+            afterbook: 'assets/img/projects/after-book-project.gif',
+            '365posters': 'assets/img/projects/365-posters-project.jpg',
+            boundless: 'assets/img/projects/boundless-blades-project.gif',
+            cumpa: 'assets/img/projects/Cumpa-project.jpg',
+            luminal: 'assets/img/projects/Luminal-project.gif',
+            speaklouder: 'assets/img/projects/speak-louder-project.png',
+            futureai: 'assets/img/projects/the-future-of-ai.gif',
+            pastiglie: 'assets/img/projects/pastiglie-leone-project.png'
+          };
+          let pv = document.getElementById('rowPreview');
+          if (!pv) {
+            pv = document.createElement('div');
+            pv.id = 'rowPreview';
+            const img = document.createElement('img');
+            pv.appendChild(img);
+            document.body.appendChild(pv);
+          }
+          const imgEl = pv.querySelector('img');
+          let raf = null;
+          let lastX = 0, lastY = 0;
+          let showTimer = null;
+          function schedulePos(x, y) {
+            lastX = x; lastY = y;
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+              raf = null;
+              const dx = Math.max(12, Math.min(window.innerWidth - 12, lastX));
+              const dy = Math.max(12, Math.min(window.innerHeight - 12, lastY));
+              pv.style.left = dx + 'px';
+              pv.style.top = dy + 'px';
+            });
+          }
+          row.addEventListener('mouseenter', (e) => {
+            if (row.classList.contains('is-open')) { pv.classList.remove('visible'); return; }
+            const key = row.dataset.project || '';
+            const src = previewMap[key];
+            if (!src) return;
+            imgEl.src = src;
+            pv.classList.add('visible');
+          });
+          row.addEventListener('mousemove', (e) => {
+            schedulePos(e.clientX, e.clientY);
+          }, { passive: true });
+          row.addEventListener('mouseleave', () => {
+            clearTimeout(showTimer);
+            pv.classList.remove('visible');
+          });
+          row.addEventListener('click', () => {
+            clearTimeout(showTimer);
+            pv.classList.remove('visible');
+          });
+        }
       });
 
       // Auto-apertura disattivata: i progetti si aprono solo al click
 
-      document.querySelectorAll('.project-detail').forEach(detail => {
-        detail.addEventListener('click', (e) => {
-          const link = detail.querySelector('.detail-image-wrap');
+      document.querySelectorAll('.project-detail-inner').forEach(inner => {
+        inner.addEventListener('click', (e) => {
+          const t = e.target;
+          if (t && (t.closest('a') || t.closest('button') || t.closest('video') || t.closest('iframe'))) return;
+          const link = inner.querySelector('.detail-image-wrap');
           if (!link) return;
-          // Evita doppia navigazione: se il click è sull'anchor, lascia fare al browser
-          if (e.target && e.target.closest('.detail-image-wrap')) return;
-          // Click su area vuota del dettaglio: attiva il link
-          link.click();
-        });
+          const href = link.getAttribute('href');
+          if (!href) return;
+          window.open(href, '_blank', 'noopener');
+        }, true);
+        const gallery = inner.querySelector('.detail-gallery');
+        if (gallery) {
+          gallery.addEventListener('click', (e) => {
+            const t = e.target;
+            if (t && (t.closest('video') || t.closest('iframe'))) return;
+            const link = inner.querySelector('.detail-image-wrap');
+            if (!link) return;
+            const href = link.getAttribute('href');
+            if (!href) return;
+            window.open(href, '_blank', 'noopener');
+          });
+        }
       });
     });
   </script>
