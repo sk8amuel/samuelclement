@@ -22,7 +22,7 @@
     const leftPh = document.querySelector('.template-left-placeholder');
     function fixLeft() {
       if (!left || !leftPh) return;
-      const mobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+      const mobile = window.matchMedia && window.matchMedia('(max-width: 1400px)').matches;
       if (mobile) {
         left.style.position = '';
         left.style.left = '';
@@ -38,7 +38,7 @@
       left.style.top = '96px';
       left.style.width = rect.width + 'px';
       left.style.height = 'calc(100vh - 120px)';
-      left.style.zIndex = '1';
+      left.style.zIndex = '2147483599';
     }
     let scheduled = false;
     function scheduleFix() {
@@ -116,5 +116,26 @@
       const origTxt = (thesisLink.textContent || '').trim();
       thesisLink.setAttribute('aria-label', origTxt);
     }
+
+  const jabRow = document.querySelector('.template-jabberwocky .hero-row');
+  function applyPairAspect(img) {
+    if (!img) return;
+    const w = img.naturalWidth;
+    const h = img.naturalHeight;
+    if (!w || !h) return;
+    const ratio = w + ' / ' + h;
+    jabRow?.querySelectorAll('.hero-media').forEach(el => { el.style.aspectRatio = ratio; });
+  }
+  if (jabRow) {
+    const firstImg = jabRow.querySelector('.hero-media img');
+    if (firstImg) {
+      if (firstImg.complete) applyPairAspect(firstImg);
+      else firstImg.addEventListener('load', () => applyPairAspect(firstImg), { once: true });
+    }
+  }
+
+    
+
+  
   });
 })();

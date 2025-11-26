@@ -151,9 +151,23 @@ body.projects {
   z-index: 2;
   border-radius: 0 0 12px 12px;
   overflow: hidden;
-  padding: 6px 8px;
+  padding: 0;
 }
 body.privacy-open .project-detail.is-open { z-index: 0; }
+
+/* Galleria orizzontale dentro il dettaglio progetto */
+.project-detail .detail-gallery { display: flex; gap: 8px; align-items: center; overflow: hidden; padding: 6px 0; margin-left: 0; margin-right: 0; cursor: pointer; }
+.project-detail-inner .detail-gallery { grid-column: 1 / -1; }
+.project-detail .detail-gallery .dg-track { display: flex; gap: 8px; align-items: center; will-change: transform; }
+.project-detail .detail-gallery .dg-item { background: #000; border-radius: 0; overflow: hidden; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+.project-detail .detail-gallery .dg-item img { display: block; height: var(--dg-row-h, 260px); width: auto; max-width: 100%; object-fit: contain; background: #000; }
+.project-detail .detail-gallery .dg-item iframe { display: block; height: var(--dg-row-h, 260px); width: auto; aspect-ratio: 16 / 9; background: #000; border: none; }
+.project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
+@media (max-width: 600px) { .project-detail .detail-gallery { --dg-row-h: 220px; } }
+.project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
+#rowPreview { position: fixed; left: 0; top: 0; transform: translate(8px, 8px); width: 220px; max-width: 28vw; pointer-events: none; z-index: 99999; opacity: 0; transition: opacity 140ms ease, transform 140ms ease; }
+#rowPreview.visible { opacity: 1; }
+#rowPreview img { display: block; width: 100%; height: auto; background: #000; }
 
 /* Contenitore complessivo della riga + dettaglio, con bordo animato */
 .project-block {
@@ -180,7 +194,7 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
   display: grid;
   place-items: center;
   width: 100%;
-  max-width: 200px;
+  max-width: 130px;
   background: #000000;
   overflow: hidden;
   aspect-ratio: 1 / 1;
@@ -225,6 +239,14 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
   opacity: 0.85;
   margin-bottom: 6px;
   color: #838484;
+}
+
+.detail-desc-short { display: block; }
+.detail-desc-long { display: none; }
+
+@media (min-width: 901px) {
+  .detail-desc-short { display: none; }
+  .detail-desc-long { display: block; }
 }
 
 /* ---------- Responsive ---------- */
@@ -367,10 +389,15 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
 
 /* Dettaglio: immagine su 1-3, testo su 4-12 */
 .project-detail-inner .detail-image-wrap { grid-column: 1 / span 3; }
-.project-detail-inner .detail-text { grid-column: 4 / span 9; padding-left: var(--start-line-offset); }
+.project-detail-inner .detail-text { grid-column: 4 / span 9; padding-left: calc(var(--start-line-offset) - 20px); }
 
 /* --- Layout desktop: mantieni la colonna icona visibile --- */
 /* Nessun override: il mapping di base già posiziona l'icona in colonna 1 */
 
 /* (override duplicato rimosso per coerenza) */
 .pi-cell.pi-icon img.folder-icon { width: 14px; height: 11px; display: inline-block; opacity: 1 !important; }
+
+@media (max-width: 900px) {
+  .project-detail .detail-gallery { display: flex; overflow: hidden; gap: 8px; padding: 6px 0; }
+  .project-detail .detail-gallery .dg-item { flex: 0 0 auto; }
+}

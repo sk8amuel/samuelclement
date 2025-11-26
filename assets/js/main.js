@@ -232,6 +232,69 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     }, speed);
   }
 
+  function typewriteInPlace(el, speed = 40) {
+    if (!el || el.dataset.tyDone === '1' || el.dataset.tyRun === '1') return;
+    el.dataset.tyRun = '1';
+    const anchor = el.querySelector('a');
+    const target = anchor || el;
+    const originalHTML = (target.innerHTML || '').trim();
+    const original = originalHTML
+      .replace(/<br\s*\/?>(?!\n)/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+    if (!original) { el.dataset.tyDone = '1'; return; }
+    const step = Number(el.dataset.tyStep) || 1;
+    const start = Number(el.dataset.tyStart) || 0;
+    const preRect = target.getBoundingClientRect();
+    const cs = window.getComputedStyle(target);
+    const textSpan = document.createElement('span');
+    textSpan.className = 'ty-text';
+    if (anchor) {
+      anchor.textContent = '';
+      anchor.appendChild(textSpan);
+    } else {
+      el.textContent = '';
+      el.appendChild(textSpan);
+    }
+    textSpan.style.display = 'inline-block';
+    textSpan.style.boxSizing = 'border-box';
+    textSpan.style.width = preRect.width + 'px';
+    textSpan.style.height = preRect.height + 'px';
+    textSpan.style.whiteSpace = 'pre-line';
+    if (anchor && /^tel:/i.test(anchor.getAttribute('href') || '')) {
+      textSpan.style.whiteSpace = 'nowrap';
+    }
+    textSpan.style.textAlign = cs.textAlign || 'left';
+    el.style.opacity = '1';
+    let i = start;
+    const len = original.length;
+    if (start > 0) {
+      textSpan.textContent = original.slice(0, Math.min(start, len));
+      if (start >= len) { el.dataset.tyDone = '1'; return; }
+    }
+    const initRect = textSpan.getBoundingClientRect();
+    console.groupCollapsed('[error] net::ERR_ABORTED https://cdn.jsdelivr.net/gh/googlefonts/googlesans-code@v6.000/fonts/variable/GoogleSansCode%5Bwght%5D.ttf');
+    console.info('Text space', { x: initRect.left, y: initRect.top, width: initRect.width, height: initRect.height });
+    console.info('Animation start', { x: initRect.left, y: initRect.top });
+    console.groupEnd();
+    const timer = setInterval(() => {
+      textSpan.textContent += original.slice(i, Math.min(i + step, len));
+      i += step;
+      if (i >= len) {
+        clearInterval(timer);
+        const finalRect = textSpan.getBoundingClientRect();
+        const parentRect = (anchor || el).getBoundingClientRect();
+        const fits = finalRect.left >= parentRect.left && finalRect.top >= parentRect.top && finalRect.right <= parentRect.right && finalRect.bottom <= parentRect.bottom;
+        console.groupCollapsed('[error] net::ERR_ABORTED https://cdn.jsdelivr.net/gh/googlefonts/googlesans-code@v6.000/fonts/variable/GoogleSansCode%5Bwght%5D.ttf');
+        console.info('Animation end', { x: finalRect.left, y: finalRect.top });
+        console.info('Text generation inside area', { fits });
+        console.groupEnd();
+        textSpan.innerHTML = originalHTML;
+        el.dataset.tyDone = '1';
+      }
+    }, speed);
+  }
+
   function initTypewriter() {
     if (reduceMotion) return;
 
@@ -256,7 +319,6 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       '.mobile-intro .mi-name',
       '.about-grid .about-block p',
       '.about-grid .about-label',
-      '.about-hero-word',
       '.fixed-bottom-left a',
       '.fixed-bottom-left span'
     ];
@@ -267,9 +329,32 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       sels = sels.filter(s => s !== '.project-title' && s !== '.project-content p' && s !== '.project-info li');
     }
     const targets = Array.from(document.querySelectorAll(sels.join(',')));
+    const aboutTargets = targets.filter(el => !!el.closest('.page-about'));
+    const otherTargets = targets.filter(el => !el.closest('.page-about'));
 
     if (!('IntersectionObserver' in window)) {
-      targets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 40));
+      if (aboutTargets.length) {
+        const g1Sel = ['.about-block.col-1.intro', '.about-block.col-2.design-approach', '.about-block.col-3.background', '.about-block.col-4.education'];
+        const g2Sel = ['.about-block.col-1.contact'];
+        const g4Sel = ['.about-block.col-1.selected-work', '.about-block.col-2.focus', '.about-block.col-4.capabilities'];
+        const getTargetsFor = (sels) => {
+          const set = new Set();
+          sels.forEach(s => Array.from(document.querySelectorAll(s)).forEach(c => {
+            aboutTargets.forEach(t => { if (c.contains(t)) set.add(t); });
+          }));
+          return Array.from(set);
+        };
+        const g1 = getTargetsFor(g1Sel);
+        const g2 = getTargetsFor(g2Sel);
+        const g4 = getTargetsFor(g4Sel);
+        const groupGap = 140;
+        const speedFast = 20;
+        const runGroup = (arr) => arr.forEach(el => typewriteInPlace(el, Number(el.dataset.tySpeed) || speedFast));
+        setTimeout(() => runGroup(g1), 0);
+        setTimeout(() => runGroup(g2), groupGap);
+        setTimeout(() => runGroup(g4), groupGap * 3);
+      }
+      otherTargets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 40));
       return;
     }
 
@@ -304,8 +389,62 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
         }
       });
     }, { threshold: 0.2 });
+    otherTargets.forEach(el => io.observe(el));
 
-    targets.forEach(el => io.observe(el));
+    if (aboutTargets.length) {
+      const g1Sel = ['.about-block.col-1.intro', '.about-block.col-2.design-approach', '.about-block.col-3.background', '.about-block.col-4.education'];
+      const g2Sel = ['.about-block.col-1.contact'];
+      const g3Sel = [];
+      const g4Sel = ['.about-block.col-1.selected-work', '.about-block.col-2.focus', '.about-block.col-4.capabilities'];
+      const getTargetsFor = (sels) => {
+        const set = new Set();
+        sels.forEach(s => Array.from(document.querySelectorAll(s)).forEach(c => {
+          aboutTargets.forEach(t => { if (c.contains(t) || t.matches(s)) set.add(t); });
+        }));
+        return Array.from(set);
+      };
+      const g1Text = getTargetsFor(g1Sel);
+      const g2Text = getTargetsFor(g2Sel);
+      const g3Text = [];
+      const g3ImgEl = null;
+      const g4Text = getTargetsFor(g4Sel);
+
+      let g1Started = false, g2Started = false, g3Started = false, g4Started = false;
+      const speedFast = 20;
+      const runGroup = (arr) => arr.forEach(el => typewriteInPlace(el, Number(el.dataset.tySpeed) || speedFast));
+      const container = document.querySelector('.page-about .about-grid') || document.querySelector('.page-about');
+      if (container && 'IntersectionObserver' in window) {
+        const aboutIo = new IntersectionObserver((entries) => {
+          entries.forEach(({ isIntersecting }) => {
+            if (!isIntersecting) return;
+            const groupGap = 140;
+            setTimeout(() => { runGroup(g1Text); g1Started = true; }, 0);
+            setTimeout(() => { runGroup(g2Text); g2Started = true; }, groupGap);
+            setTimeout(() => { runGroup(g4Text); g4Started = true; }, groupGap * 3);
+            aboutIo.disconnect();
+          });
+        }, { threshold: 0.08 });
+        aboutIo.observe(container);
+      } else {
+        const groupGap = 140;
+        setTimeout(() => { runGroup(g1Text); g1Started = true; }, 0);
+        setTimeout(() => { runGroup(g2Text); g2Started = true; }, groupGap);
+        setTimeout(() => { runGroup(g4Text); g4Started = true; }, groupGap * 3);
+      }
+
+      if ('IntersectionObserver' in window) {
+        const aboutElemIo = new IntersectionObserver((entries) => {
+          entries.forEach(({ target, isIntersecting }) => {
+            if (!isIntersecting) return;
+            if (target.dataset.tyDone === '1' || target.dataset.tyRun === '1') { aboutElemIo.unobserve(target); return; }
+            const spd = Number(target.dataset.tySpeed) || speedFast;
+            typewriteInPlace(target, spd);
+            aboutElemIo.unobserve(target);
+          });
+        }, { threshold: 0.12 });
+        g1Text.concat(g2Text, g4Text).forEach(el => aboutElemIo.observe(el));
+      }
+    }
   }
 
   // Avvio solo quando i testi sono effettivamente visibili:
@@ -365,7 +504,10 @@ const projectsData = {
       exploring vertical tension and monotone atmospheres.
     `,
     images: [
-      "assets/img/projects/At-the-Mountains-of-Madness-project.png"
+      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-1.jpg",
+      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-2.jpeg",
+      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-4.jpeg",
+      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-6.jpeg"
     ]
   },
   ilgermoglio: {
@@ -386,7 +528,11 @@ const projectsData = {
       grain, and glitch transitions.
     `,
     images: [
-      "assets/img/projects/Jabberwocky-project.webp"
+      "assets/img/projects/Jabberwocky/Jabberwocky-1.jpg",
+      "assets/img/projects/Jabberwocky/Jabberwocky-2.jpg",
+      "assets/img/projects/Jabberwocky/Jabberwocky-3.jpeg",
+      "assets/img/projects/Jabberwocky/Jabberwocky-4.jpeg",
+      "assets/img/projects/Jabberwocky/Jabberwocky-extract-1.jpeg"
     ]
   },
   knoted: {
@@ -397,7 +543,15 @@ const projectsData = {
       tight grid and kinetic behaviour across media.
     `,
     images: [
-      "assets/img/projects/Knoted-project.gif"
+      "assets/img/projects/Knoted-project.gif",
+      "assets/img/projects/Knoted/Icon-mockup-Knoted.png",
+      "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
+    ],
+    videos: [
+      "assets/img/projects/Knoted/Knoted-Splash-Logo.mp4",
+      "assets/img/projects/Knoted/Animazione-cards-Knoted.webm",
+      "assets/img/projects/Knoted/Animazione-sito-Knoted.webm",
+      "https://www.youtube-nocookie.com/embed/WQWhOHWkcBY?controls=1&modestbranding=1&rel=0&playsinline=1"
     ]
   },
   afterbook: {
@@ -417,7 +571,21 @@ const projectsData = {
       Daily poster exploration focused on rhythm, contrast and iterative structures.
     `,
     images: [
-      "assets/img/projects/365-posters-project.jpg"
+      "assets/img/projects/365/Poster-1.jpeg",
+      "assets/img/projects/365/Poster-2.jpg",
+      "assets/img/projects/365/Poster-3.jpg",
+      "assets/img/projects/365/Poster-4.jpg",
+      "assets/img/projects/365/Poster-5.jpg",
+      "assets/img/projects/365/Poster-6.jpg",
+      "assets/img/projects/365/Poster-7.jpg",
+      "assets/img/projects/365/Poster-8.jpg",
+      "assets/img/projects/365/Poster-9.jpg",
+      "assets/img/projects/365/Poster-10.jpg",
+      "assets/img/projects/365/Poster-11.jpg",
+      "assets/img/projects/365/Poster-12.jpg",
+      "assets/img/projects/365/Poster-13.jpg",
+      "assets/img/projects/365/Poster-14.jpg",
+      "assets/img/projects/365/Poster-15.jpg"
     ]
   },
   boundless: {
@@ -462,12 +630,17 @@ const projectsData = {
   },
   futureai: {
     title: "The Future of AI",
-    meta: "Collaborative · 2024 · Identity / Motion",
+    meta: "School project · 2024 · Motion Graphic",
     body: `
-      Speculative system visualizing human–machine symbiosis through code fragments, grids and noise.
+      Animated short exploring AI’s human impact with textured, fast-paced motion.
+      Frame-by-frame simulation style, dynamic shadows and a playful yet reflective tone.
     `,
     images: [
-      "assets/img/projects/the-future-of-ai.gif"
+      "assets/img/projects/the-future-of-ai.gif",
+      "assets/img/projects/The future of Ai/ThefutureofAi-Storyboard.jpg"
+    ],
+    videos: [
+      "https://www.youtube-nocookie.com/embed/cx0mgJdX250?controls=1&modestbranding=1&rel=0&playsinline=1"
     ]
   },
   pastiglie: {
@@ -762,8 +935,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', onTouch, { once: true });
   });
   // Sticky About Grid controlled by IntersectionObserver
- (function(){
-   function attach(el){
+(function(){
+  function attach(el){
      if (!el) return;
      const a = el.closest('a');
      const href = a && a.getAttribute('href');
@@ -840,6 +1013,83 @@ document.addEventListener('DOMContentLoaded', () => {
        });
        mo.observe(contact, { childList: true, subtree: true });
      }
-   }
+  }
+  document.addEventListener('DOMContentLoaded', init);
+})();
+
+// Swipe navigation for mobile
+(function(){
+  function isCoarse(){
+    try { return window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches; } catch(_) { return false; }
+  }
+  function getLinks(){
+    var about = document.querySelector('.top-nav a[href*="#about"]') || Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ return ((a.textContent||'').trim().toUpperCase()==='ABOUT'); });
+    var index = Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ var h=a.getAttribute('href')||''; return /(^|\/)index\.html$/.test(h); }) || Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ return ((a.textContent||'').trim().toUpperCase()==='INDEX'); }) || document.querySelector('.top-left .brand');
+    return { about: about, index: index };
+  }
+  function ensureOverlay(){
+    var o = document.getElementById('swipeOverlay') || document.getElementById('transitionOverlay');
+    if (!o){
+      o = document.createElement('div');
+      o.id = 'swipeOverlay';
+      o.style.position = 'fixed';
+      o.style.inset = '0';
+      o.style.background = '#000';
+      o.style.opacity = '0';
+      o.style.pointerEvents = 'none';
+      o.style.transition = 'opacity 300ms ease';
+      o.style.zIndex = '9999';
+      document.body.appendChild(o);
+    }
+    return o;
+  }
+  function navigate(target){
+    var o = ensureOverlay();
+    if (o){
+      o.style.opacity = '1';
+      setTimeout(function(){ if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; } }, 300);
+    } else {
+      if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
+    }
+  }
+  function init(){
+    if (!isCoarse()) return;
+    var startX=0, startY=0, dx=0, dy=0, tracking=false, active=false;
+    var threshold=50;
+    var overlay=null;
+    function onStart(e){
+      if (e.touches && e.touches.length>1) return;
+      var t = e.touches? e.touches[0] : e;
+      startX = t.clientX; startY = t.clientY; dx=0; dy=0; tracking=true; active=false;
+      overlay = ensureOverlay();
+    }
+    function onMove(e){
+      if (!tracking) return;
+      var t = e.touches? e.touches[0] : e;
+      dx = t.clientX - startX; dy = t.clientY - startY;
+      if (!active){
+        if (Math.abs(dx)>12 && Math.abs(dx)>Math.abs(dy)) { active=true; }
+        else if (Math.abs(dy)>12) { tracking=false; active=false; return; }
+      }
+      if (active && overlay){
+        var p = Math.min(1, Math.abs(dx)/threshold);
+        overlay.style.opacity = String(p*0.3);
+      }
+    }
+    function onEnd(){
+      if (!tracking) return;
+      tracking=false;
+      if (overlay) overlay.style.opacity = '0';
+      if (!active) return;
+      if (Math.abs(dx)>=threshold && Math.abs(dx)>Math.abs(dy)){
+        var links = getLinks();
+        if (dx<0) navigate(links.about||null); else navigate(links.index||null);
+      }
+    }
+    document.addEventListener('touchstart', onStart, { passive: true });
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd, { passive: true });
+    document.addEventListener('touchcancel', onEnd, { passive: true });
+  }
   document.addEventListener('DOMContentLoaded', init);
 })();
