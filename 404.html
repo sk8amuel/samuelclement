@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,13 @@
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="assets/css/error.css">
-  <link rel="icon" type="image/png" href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
 </head>
+
 <body class="error-page">
   <main class="error-main">
     <div id="popup-container" aria-hidden="true"></div>
@@ -18,9 +22,9 @@
 
   <script src="assets/js/main.js"></script>
   <script>
-    (function(){
-      const tips = [ 'Page Not Found' ];
-      const bgColors = [ 'rgb(16,16,16)', 'rgb(22,22,22)', 'rgb(28,28,28)' ];
+    (function () {
+      const tips = ['Page Not Found'];
+      const bgColors = ['rgb(16,16,16)', 'rgb(22,22,22)', 'rgb(28,28,28)'];
       let zTop = 1000;
       const redZ = 5000; // finestra rossa sempre davanti
       let buttonsLeft = 1; // solo una finestra con bottone
@@ -29,7 +33,7 @@
       const isMobile = window.matchMedia('(max-width: 900px)').matches;
       const DESKTOP_COUNT = 47;
       const MOBILE_COUNT = 16;
-      function createPopup(forceHome){
+      function createPopup(forceHome) {
         const w = Math.floor(Math.random() * 80) + 180;
         const h = Math.floor(Math.random() * 20) + 50;
         const sw = window.innerWidth; const sh = window.innerHeight;
@@ -51,10 +55,10 @@
         el.style.top = y + 'px';
         const showBtn = !!forceHome;
         if (showBtn) {
-          el.innerHTML = 
+          el.innerHTML =
             '<div class="popup-titlebar">' +
-              '<div class="popup-title">8amuel.com</div>' +
-              '<div class="popup-close">×</div>' +
+            '<div class="popup-title">8amuel.com</div>' +
+            '<div class="popup-close">×</div>' +
             '</div>' +
             '<div class="message">You were lost, but I found you :)</div>' +
             '<div class="popup-actions"><a class="popup-btn" href="index.html" data-transition>Back to Home</a></div>';
@@ -62,12 +66,12 @@
           el.style.width = (w + 24) + 'px';
           el.style.minHeight = (h + 10) + 'px';
         } else {
-          el.innerHTML = 
+          el.innerHTML =
             '<div class="popup-titlebar">' +
-              '<div class="popup-title">ERROR 404</div>' +
-              '<div class="popup-close">×</div>' +
+            '<div class="popup-title">ERROR 404</div>' +
+            '<div class="popup-close">×</div>' +
             '</div>' +
-            '<div class="message"><span class="popup-icon">⚠️</span> '+ tips[0] +'</div>';
+            '<div class="message"><span class="popup-icon">⚠️</span> ' + tips[0] + '</div>';
           el.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
         }
         if (showBtn) { el.classList.add('popup-home'); el.style.zIndex = redZ; if (!forceHome && buttonsLeft > 0) buttonsLeft--; }
@@ -75,14 +79,14 @@
         const wrap = document.getElementById('popup-container');
         if (wrap) { wrap.appendChild(el); createdCount++; }
         // Draggable
-        (function makeDraggable(box){
+        (function makeDraggable(box) {
           let dragging = false; let startX = 0; let startY = 0; let left = x; let top = y;
-          function bounds(nx, ny){
+          function bounds(nx, ny) {
             const sw = window.innerWidth; const sh = window.innerHeight;
             const maxX = Math.max(0, sw - box.offsetWidth); const maxY = Math.max(0, sh - box.offsetHeight);
             return { x: Math.min(Math.max(0, nx), maxX), y: Math.min(Math.max(0, ny), maxY) };
           }
-          function onDown(ev){
+          function onDown(ev) {
             dragging = true;
             const isRed = box.classList.contains('popup-home');
             const isExc = box.dataset.topException === '1';
@@ -97,7 +101,7 @@
             document.addEventListener('touchmove', onMove, { passive: false });
             document.addEventListener('touchend', onUp);
           }
-          function onMove(ev){
+          function onMove(ev) {
             if (!dragging) return;
             ev.preventDefault();
             const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX);
@@ -106,7 +110,8 @@
             const b = bounds(left + dx, top + dy);
             box.style.left = b.x + 'px'; box.style.top = b.y + 'px';
           }
-          function onUp(){ dragging = false; 
+          function onUp() {
+            dragging = false;
             document.removeEventListener('mousemove', onMove);
             document.removeEventListener('mouseup', onUp);
             document.removeEventListener('touchmove', onMove);
@@ -115,30 +120,31 @@
           const bar = box.querySelector('.popup-titlebar');
           const close = box.querySelector('.popup-close');
           if (close) {
-            close.addEventListener('mousedown', (ev)=>{ ev.stopPropagation(); });
-            close.addEventListener('click', (ev)=>{ ev.stopPropagation(); const isHome = box.classList.contains('popup-home'); box.remove(); if (isHome) setTimeout(()=>{ createPopup(true); }, 1500); });
-            close.addEventListener('touchstart', (ev)=>{ ev.stopPropagation(); const isHome = box.classList.contains('popup-home'); box.remove(); if (isHome) setTimeout(()=>{ createPopup(true); }, 1500); }, { passive: true });
+            close.addEventListener('mousedown', (ev) => { ev.stopPropagation(); });
+            close.addEventListener('click', (ev) => { ev.stopPropagation(); const isHome = box.classList.contains('popup-home'); box.remove(); if (isHome) setTimeout(() => { createPopup(true); }, 1500); });
+            close.addEventListener('touchstart', (ev) => { ev.stopPropagation(); const isHome = box.classList.contains('popup-home'); box.remove(); if (isHome) setTimeout(() => { createPopup(true); }, 1500); }, { passive: true });
           }
           if (bar) {
             bar.addEventListener('mousedown', onDown);
             bar.addEventListener('touchstart', onDown, { passive: true });
           }
         })(el);
-        
+
         return el;
       }
-      function createMultiple(count){
-        for(let i=0;i<count;i++) setTimeout(()=>createPopup(false), i*40);
+      function createMultiple(count) {
+        for (let i = 0; i < count; i++) setTimeout(() => createPopup(false), i * 40);
       }
-      document.addEventListener('DOMContentLoaded', ()=>{ 
+      document.addEventListener('DOMContentLoaded', () => {
         createPopup(false);
-        setTimeout(()=>{ 
-          const otherCount = isMobile ? MOBILE_COUNT : DESKTOP_COUNT; 
-          createMultiple(otherCount); 
-          setTimeout(()=>{ createPopup(true); }, otherCount*40 + 60); 
-        }, 1500); 
+        setTimeout(() => {
+          const otherCount = isMobile ? MOBILE_COUNT : DESKTOP_COUNT;
+          createMultiple(otherCount);
+          setTimeout(() => { createPopup(true); }, otherCount * 40 + 60);
+        }, 1500);
       });
     })();
   </script>
 </body>
+
 </html>
