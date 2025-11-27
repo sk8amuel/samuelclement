@@ -543,11 +543,11 @@ const projectsData = {
       tight grid and kinetic behaviour across media.
     `,
     images: [
-      "assets/img/projects/Knoted-project.gif",
       "assets/img/projects/Knoted/Icon-mockup-Knoted.png",
       "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
     ],
     videos: [
+      "assets/img/projects/Knoted-project.webm",
       "assets/img/projects/Knoted/Knoted-Splash-Logo.webm",
       "assets/img/projects/Knoted/Animazione-cards-Knoted.webm",
       "assets/img/projects/Knoted/Animazione-sito-Knoted.webm",

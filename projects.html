@@ -468,15 +468,20 @@ This isn’t just a retelling: every page is charged with detailed artwork that 
             wrap.className = 'dg-item';
             if (/\.(mp4|webm)(\?.*)?$/i.test(vv)) {
               const video = document.createElement('video');
-              video.controls = true;
-              video.preload = 'none';
-              video.playsInline = true;
+              video.controls = false;
+              video.autoplay = true;
+              video.loop = true;
               video.muted = true;
+              video.playsInline = true;
+              video.setAttribute('playsinline', '');
+              video.setAttribute('webkit-playsinline', '');
+              video.preload = 'metadata';
               video.setAttribute('data-lazy', '1');
               const srcEl = document.createElement('source');
               srcEl.dataset.src = vv;
               srcEl.type = vv.toLowerCase().endsWith('.mp4') ? 'video/mp4' : 'video/webm';
               video.appendChild(srcEl);
+              video.addEventListener('loadeddata', () => { try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => {}); } catch(_){} }, { once: true });
               video.addEventListener('error', () => {
                 try {
                   const yt = Array.isArray((data && data.videos) || []) ? (data.videos.find(x => typeof x === 'string' && x.startsWith('http')) || null) : null;
