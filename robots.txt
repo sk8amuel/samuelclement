@@ -1,0 +1,12 @@
+# Robots.txt for samuelclement.it
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.samuelclement.it/sitemap.xml
+
+# Block indexing of specific directories if needed
+# Disallow: /assets/
+# Disallow: /projects/Knoted/wp-content/
+# Disallow: /projects/Knoted/wp-includes/
