@@ -70,9 +70,11 @@ body.projects {
 }
 .project-item.is-open { padding: 4px 1px 4px 6px; }
 
-.project-item:hover {
-  background-color: #2b2b2b;
-}
+.project-block:not(.is-open):hover .project-item { background-color: #ffffff; }
+.project-block:not(.is-open):hover .project-item,
+.project-block:not(.is-open):hover .project-item .ty-text,
+.project-block:not(.is-open):hover .project-item .pi-cell { color: #000000; }
+.project-block:not(.is-open):hover .project-item .pi-cell.pi-icon img.folder-icon { filter: invert(1); }
 
 .project-item.is-open {
   background-color: #131212;
@@ -161,7 +163,9 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
 .project-detail .detail-gallery .dg-track { display: flex; gap: 8px; align-items: center; will-change: transform; }
 .project-detail .detail-gallery .dg-item { background: #000; border-radius: 0; overflow: hidden; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
 .project-detail .detail-gallery .dg-item img { display: block; height: var(--dg-row-h, 260px); width: auto; max-width: 100%; object-fit: contain; background: #000; }
+.project-detail .detail-gallery .dg-item video { display: block; height: var(--dg-row-h, 260px); width: auto; max-width: 100%; object-fit: contain; background: #000; }
 .project-detail .detail-gallery .dg-item iframe { display: block; height: var(--dg-row-h, 260px); width: auto; aspect-ratio: 16 / 9; background: #000; border: none; }
+.project-block.is-open .project-detail .detail-gallery iframe { display: none !important; }
 .project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
 @media (max-width: 600px) { .project-detail .detail-gallery { --dg-row-h: 220px; } }
 .project-detail .detail-gallery .dg-caption { font-size: 10px; line-height: 1.4; color: #aaa; margin-top: 4px; }
@@ -411,7 +415,7 @@ body.privacy-open .project-detail.is-open { z-index: 0; }
 /* Nessun override: il mapping di base già posiziona l'icona in colonna 1 */
 
 /* (override duplicato rimosso per coerenza) */
-.pi-cell.pi-icon img.folder-icon { width: 14px; height: 11px; display: inline-block; opacity: 1 !important; }
+.pi-cell.pi-icon img.folder-icon { width: 14px; height: 11px; display: inline-block; opacity: 1 !important; transform: translateX(4px); }
 
 @media (max-width: 900px) {
   .project-detail .detail-gallery { display: flex; overflow: hidden; gap: 8px; padding: 6px 0; }
