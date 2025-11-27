@@ -1033,6 +1033,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
   }
   function init(){
+    var body = document.body;
+    if (!body || !body.classList.contains('home')) return;
+    var isMobile = (function(){ try { return window.matchMedia('(max-width: 900px)').matches; } catch(_) { return false; } })();
+    if (!isMobile) return;
     if (!isCoarse()) return;
     var startX=0, startY=0, dx=0, dy=0, tracking=false, active=false;
     var threshold=50;
