@@ -256,11 +256,19 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       el.textContent = '';
       el.appendChild(textSpan);
     }
-    textSpan.style.display = 'inline-block';
+    const isSmallViewport = (function(){ try { return window.matchMedia('(max-width: 900px)').matches; } catch(_) { return false; } })();
     textSpan.style.boxSizing = 'border-box';
-    textSpan.style.width = preRect.width + 'px';
-    textSpan.style.height = preRect.height + 'px';
-    textSpan.style.whiteSpace = 'pre-line';
+    if (isSmallViewport) {
+      textSpan.style.display = 'block';
+      textSpan.style.width = '100%';
+      textSpan.style.height = 'auto';
+      textSpan.style.whiteSpace = 'pre-line';
+    } else {
+      textSpan.style.display = 'inline-block';
+      textSpan.style.width = preRect.width + 'px';
+      textSpan.style.height = preRect.height + 'px';
+      textSpan.style.whiteSpace = 'pre-line';
+    }
     if (anchor && /^tel:/i.test(anchor.getAttribute('href') || '')) {
       textSpan.style.whiteSpace = 'nowrap';
     }
@@ -543,7 +551,6 @@ const projectsData = {
       tight grid and kinetic behaviour across media.
     `,
     images: [
-      "assets/img/projects/Knoted/Icon-mockup-Knoted.png",
       "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
     ],
     videos: [
