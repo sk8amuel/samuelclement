@@ -8,33 +8,21 @@
   <meta name="description"
     content="Visual & motion designer: editorial, branding, animation, and experimental projects.">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.samuelclement.it/projects.html">
-  <meta property="og:title" content="Projects — Samuel Clement">
-  <meta property="og:description"
-    content="Visual & motion designer: editorial, branding, animation, and experimental projects.">
-  <meta property="og:image" content="https://www.samuelclement.it/assets/img/og-image.jpg">
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://www.samuelclement.it/projects.html">
-  <meta property="twitter:title" content="Projects — Samuel Clement">
-  <meta property="twitter:description"
-    content="Visual & motion designer: editorial, branding, animation, and experimental projects.">
-  <meta property="twitter:image" content="https://www.samuelclement.it/assets/img/og-image.jpg">
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="apple-touch-icon" sizes="167x167"
+    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="apple-touch-icon" sizes="152x152"
+    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="apple-touch-icon" sizes="120x120"
+    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
 
   <!-- Base CSS (stesso dell'index) -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -168,7 +156,8 @@
         <div class="project-detail" id="proj-004">
           <div class="project-detail-inner">
             <a href="projects/Knoted.html" class="detail-image-wrap" data-project="knoted" data-transition>
-              <img src="assets/img/projects/Knoted/Logo-Mockup-knoted.png" alt="Knoted" loading="lazy" />
+              <img src="assets/img/projects/Knoted/Logo-Mockup-knoted.png" alt="Knoted" loading="lazy" width="1000"
+                height="1200">
             </a>
             <div class="detail-text">
               <h3 class="detail-title">Knoted</h3>
@@ -395,6 +384,8 @@
     </div>
   </main>
 
+  </main>
+
   <!-- BOTTOM LEFT -->
   <div class="fixed-bottom-left">
     <span id="privacyLink">© 2025</span>
@@ -616,14 +607,26 @@
           detail._dgRecalc = recalc;
           window.addEventListener('resize', recalc);
 
-          // Touch: swipe orizzontale su mobile
+          // Touch: swipe orizzontale su mobile con momentum
           let tsX = 0, tsY = 0, lastTX = 0;
+          let velocity = 0, lastTime = 0, momentumRAF = null;
+
           function onTouchStart(e) {
             const t = (e.touches && e.touches[0]) || null;
             if (!t) return;
+            // Ferma il momentum se è in corso
+            if (momentumRAF) {
+              cancelAnimationFrame(momentumRAF);
+              momentumRAF = null;
+            }
+            // Rimuovi transizione durante il touch
+            track.style.transition = 'none';
             tsX = lastTX = t.clientX;
             tsY = t.clientY;
+            velocity = 0;
+            lastTime = Date.now();
           }
+
           function onTouchMove(e) {
             const t = (e.touches && e.touches[0]) || null;
             if (!t) return;
@@ -632,13 +635,46 @@
             const horizontal = dxAbs > dyAbs;
             if (horizontal && maxShift > 0) {
               e.preventDefault();
+              const now = Date.now();
+              const dt = Math.max(1, now - lastTime);
               const dx = t.clientX - lastTX;
+
+              // Calcola velocità
+              velocity = dx / dt;
+
               lastTX = t.clientX;
+              lastTime = now;
               shift = Math.min(Math.max(shift - dx, 0), maxShift);
               track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
             }
           }
-          function onTouchEnd() { }
+
+          function onTouchEnd() {
+            // Ripristina transizione CSS
+            track.style.transition = '';
+
+            // Se c'è velocità, applica momentum
+            if (Math.abs(velocity) > 0.1) {
+              const momentumDecay = 0.95;
+              const minVelocity = 0.1;
+
+              function momentumStep() {
+                velocity *= momentumDecay;
+
+                if (Math.abs(velocity) < minVelocity) {
+                  momentumRAF = null;
+                  return;
+                }
+
+                shift = Math.min(Math.max(shift - velocity * 16, 0), maxShift);
+                track.style.transform = 'translate3d(' + (-shift) + 'px,0,0)';
+                momentumRAF = requestAnimationFrame(momentumStep);
+              }
+
+              momentumStep();
+            }
+          }
+
           const touchOpts = { passive: false, capture: true };
           gallery.addEventListener('touchstart', onTouchStart, touchOpts);
           gallery.addEventListener('touchmove', onTouchMove, touchOpts);

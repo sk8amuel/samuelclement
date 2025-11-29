@@ -524,17 +524,15 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
 
 
 
-            /* Responsive: 2 colonne e hero full-width */
+            /* Responsive: una colonna su mobile */
             @media (max-width: 900px) {
               .page-about .about-grid {
                 grid-template-columns: 1fr;
                 /* una sola colonna */
                 gap: 24px;
                 margin-top: 0;
-                /* evita compressioni eccessive su mobile */
                 column-gap: 0;
                 grid-auto-flow: row;
-                /* riempimento in ordine di righe */
               }
 
               .page-about .about-main {
@@ -597,7 +595,6 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
               .page-about .about-grid .col-4 {
                 grid-column: 1 / -1 !important;
                 padding-left: 0;
-                /* nessun offset: partire da sinistra */
               }
 
               /* Hero e foto a tutta larghezza */
@@ -613,23 +610,19 @@ d8F      ^%888E 9888  9888    X888  888X '888>    8888 ,888B . 8888L        888R
 
               .page-about .about-grid .about-photo {
                 transform: none;
-                /* su mobile non alzare la foto oltre il flusso */
                 grid-column: 1 / -1;
-                /* a tutta larghezza in colonna singola */
               }
 
               .page-about .about-photo img {
                 border-radius: 8px;
               }
 
-              /* Rimuovi sollevamenti sotto ABOUT su mobile */
+              /* Rimuovi sollevamenti su mobile */
               .page-about .about-grid .selected-work,
               .page-about .about-grid .focus,
               .page-about .about-grid .capabilities {
                 margin-top: 0;
-                /* pulizia su mobile */
                 transform: none;
-                /* non alzare su mobile */
               }
             }
 
