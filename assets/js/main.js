@@ -107,7 +107,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 
   function waitForFonts() {
     if (document.fonts && document.fonts.ready) {
-      return document.fonts.ready.catch(() => {});
+      return document.fonts.ready.catch(() => { });
     }
     return Promise.resolve();
   }
@@ -232,72 +232,144 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     }, speed);
   }
 
-  function typewriteInPlace(el, speed = 40) {
+  function typewriteInPlace(el, speed = 15) {
     if (!el || el.dataset.tyDone === '1' || el.dataset.tyRun === '1') return;
     el.dataset.tyRun = '1';
     const anchor = el.querySelector('a');
     const target = anchor || el;
     const originalHTML = (target.innerHTML || '').trim();
-    const original = originalHTML
-      .replace(/<br\s*\/?>(?!\n)/gi, '\n')
-      .replace(/<[^>]+>/g, '')
-      .trim();
-    if (!original) { el.dataset.tyDone = '1'; return; }
+    if (!originalHTML) { el.dataset.tyDone = '1'; return; }
+
     const step = Number(el.dataset.tyStep) || 1;
     const start = Number(el.dataset.tyStart) || 0;
-    const preRect = target.getBoundingClientRect();
-    const cs = window.getComputedStyle(target);
-    const textSpan = document.createElement('span');
-    textSpan.className = 'ty-text';
+
+    // Clona il contenuto per mantenerlo durante l'animazione
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = originalHTML;
+
+    // Trova tutti i nodi di testo e wrappa ogni carattere
+    const allChars = [];
+    const textNodes = [];
+
+    function findTextNodes(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (node.textContent.trim()) {
+          textNodes.push(node);
+        }
+      } else {
+        node.childNodes.forEach(child => findTextNodes(child));
+      }
+    }
+
+    findTextNodes(tempContainer);
+
+    // Wrappa ogni carattere in ogni text node
+    textNodes.forEach(textNode => {
+      const text = textNode.textContent;
+      const parent = textNode.parentNode;
+      const fragment = document.createDocumentFragment();
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const charSpan = document.createElement('span');
+        charSpan.className = 'ty-ch';
+        charSpan.textContent = char;
+        charSpan.style.opacity = '0';
+        charSpan.style.transition = 'opacity 0.1s ease';
+        fragment.appendChild(charSpan);
+        allChars.push(charSpan);
+      }
+
+      parent.replaceChild(fragment, textNode);
+    });
+
+    // Crea il caret
+    const caret = document.createElement('span');
+    caret.className = 'ty-caret';
+    caret.style.display = 'inline-block';
+    caret.style.width = '1px';
+    caret.style.height = '1em';
+    caret.style.background = 'currentColor';
+    caret.style.marginLeft = '2px';
+    caret.style.verticalAlign = 'baseline';
+    caret.style.animation = 'ty-caret-blink 1s steps(1, end) infinite';
+
+    // Sostituisci il contenuto con la versione wrappata
     if (anchor) {
-      anchor.textContent = '';
-      anchor.appendChild(textSpan);
+      anchor.innerHTML = '';
+      // Append children individually from tempContainer to anchor
+      while (tempContainer.firstChild) {
+        anchor.appendChild(tempContainer.firstChild);
+      }
     } else {
-      el.textContent = '';
-      el.appendChild(textSpan);
+      el.innerHTML = '';
+      // Append children individually from tempContainer to el
+      while (tempContainer.firstChild) {
+        el.appendChild(tempContainer.firstChild);
+      }
     }
-    const isSmallViewport = (function(){ try { return window.matchMedia('(max-width: 900px)').matches; } catch(_) { return false; } })();
-    textSpan.style.boxSizing = 'border-box';
-    if (isSmallViewport) {
-      textSpan.style.display = 'block';
-      textSpan.style.width = '100%';
-      textSpan.style.height = 'auto';
-      textSpan.style.whiteSpace = 'pre-line';
-    } else {
-      textSpan.style.display = 'inline-block';
-      textSpan.style.width = preRect.width + 'px';
-      textSpan.style.height = preRect.height + 'px';
-      textSpan.style.whiteSpace = 'pre-line';
-    }
-    if (anchor && /^tel:/i.test(anchor.getAttribute('href') || '')) {
-      textSpan.style.whiteSpace = 'nowrap';
-    }
-    textSpan.style.textAlign = cs.textAlign || 'left';
+
     el.style.opacity = '1';
+
+    const len = allChars.length;
     let i = start;
-    const len = original.length;
-    if (start > 0) {
-      textSpan.textContent = original.slice(0, Math.min(start, len));
-      if (start >= len) { el.dataset.tyDone = '1'; return; }
+
+    // Mostra i caratteri iniziali se start > 0
+    for (let j = 0; j < start && j < len; j++) {
+      allChars[j].style.opacity = '1';
     }
-    const initRect = textSpan.getBoundingClientRect();
-    console.groupCollapsed('[error] net::ERR_ABORTED https://cdn.jsdelivr.net/gh/googlefonts/googlesans-code@v6.000/fonts/variable/GoogleSansCode%5Bwght%5D.ttf');
-    console.info('Text space', { x: initRect.left, y: initRect.top, width: initRect.width, height: initRect.height });
-    console.info('Animation start', { x: initRect.left, y: initRect.top });
-    console.groupEnd();
+
+    if (i >= len) {
+      el.dataset.tyDone = '1';
+      return;
+    }
+
+    // Funzione per posizionare il caret dopo l'ultimo carattere visibile
+    function updateCaretPosition() {
+      if (i > 0 && i <= len) {
+        const lastVisibleChar = allChars[i - 1];
+        if (lastVisibleChar && lastVisibleChar.parentNode) {
+          // Inserisci il caret dopo l'ultimo carattere visibile
+          if (caret.parentNode) caret.remove();
+          lastVisibleChar.parentNode.insertBefore(caret, lastVisibleChar.nextSibling);
+        }
+      } else if (i === 0) { // If no characters are visible yet, place caret at the beginning
+        if (caret.parentNode) caret.remove();
+        if (allChars.length > 0) {
+          allChars[0].parentNode.insertBefore(caret, allChars[0]);
+        } else if (anchor) {
+          anchor.appendChild(caret);
+        } else {
+          el.appendChild(caret);
+        }
+      }
+    }
+
+    // Initial caret position
+    updateCaretPosition();
+
     const timer = setInterval(() => {
-      textSpan.textContent += original.slice(i, Math.min(i + step, len));
-      i += step;
+      // Rendi visibili i prossimi 'step' caratteri
+      for (let j = 0; j < step && i < len; j++, i++) {
+        if (allChars[i]) {
+          allChars[i].style.opacity = '1';
+        }
+      }
+
+      updateCaretPosition();
+
       if (i >= len) {
         clearInterval(timer);
-        const finalRect = textSpan.getBoundingClientRect();
-        const parentRect = (anchor || el).getBoundingClientRect();
-        const fits = finalRect.left >= parentRect.left && finalRect.top >= parentRect.top && finalRect.right <= parentRect.right && finalRect.bottom <= parentRect.bottom;
-        console.groupCollapsed('[error] net::ERR_ABORTED https://cdn.jsdelivr.net/gh/googlefonts/googlesans-code@v6.000/fonts/variable/GoogleSansCode%5Bwght%5D.ttf');
-        console.info('Animation end', { x: finalRect.left, y: finalRect.top });
-        console.info('Text generation inside area', { fits });
-        console.groupEnd();
-        textSpan.innerHTML = originalHTML;
+        // Rimuovi il caret e ripristina HTML originale
+        setTimeout(() => {
+          if (caret.parentNode) caret.remove();
+          if (anchor) {
+            anchor.innerHTML = originalHTML;
+          } else {
+            el.innerHTML = originalHTML;
+          }
+          el.dataset.tyDone = '1';
+        }, 150);
         el.dataset.tyDone = '1';
       }
     }, speed);
@@ -356,13 +428,13 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
         const g2 = getTargetsFor(g2Sel);
         const g4 = getTargetsFor(g4Sel);
         const groupGap = 140;
-        const speedFast = 20;
+        const speedFast = 10;
         const runGroup = (arr) => arr.forEach(el => typewriteInPlace(el, Number(el.dataset.tySpeed) || speedFast));
         setTimeout(() => runGroup(g1), 0);
         setTimeout(() => runGroup(g2), groupGap);
         setTimeout(() => runGroup(g4), groupGap * 3);
       }
-      otherTargets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 40));
+      otherTargets.forEach(el => typewrite(el, Number(el.dataset.tySpeed) || 15));
       return;
     }
 
@@ -390,7 +462,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
             target.classList.add('ty-fade-up');
             target.dataset.tyDone = '1';
           } else {
-            const speed = Number(target.dataset.tySpeed) || 40;
+            const speed = Number(target.dataset.tySpeed) || 15;
             typewrite(target, speed);
           }
           io.unobserve(target);
@@ -418,7 +490,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       const g4Text = getTargetsFor(g4Sel);
 
       let g1Started = false, g2Started = false, g3Started = false, g4Started = false;
-      const speedFast = 20;
+      const speedFast = 10;
       const runGroup = (arr) => arr.forEach(el => typewriteInPlace(el, Number(el.dataset.tySpeed) || speedFast));
       const container = document.querySelector('.page-about .about-grid') || document.querySelector('.page-about');
       if (container && 'IntersectionObserver' in window) {
@@ -905,185 +977,185 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.75 });
   items.forEach(i => io.observe(i));
 });
-  document.addEventListener('DOMContentLoaded', () => {
-    const vids = Array.from(document.querySelectorAll('video'));
-    const playIfPossible = (v) => {
-      try {
-        const r = v.play();
-        if (r && typeof r.then === 'function') r.catch(() => {});
-      } catch (_) {}
-    };
-    vids.forEach(v => {
-      v.muted = true;
-      v.autoplay = true;
-      v.playsInline = true;
-      v.setAttribute('playsinline', '');
-      v.setAttribute('webkit-playsinline', '');
-      v.preload = 'metadata';
-      v.addEventListener('loadeddata', () => playIfPossible(v), { once: true });
-    });
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(({ target, isIntersecting }) => {
-          if (isIntersecting) { playIfPossible(target); io.unobserve(target); }
-        });
-      }, { threshold: 0.1 });
-      vids.forEach(v => io.observe(v));
-    } else {
-      vids.forEach(playIfPossible);
-    }
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) vids.forEach(v => { if (v.paused) playIfPossible(v); });
-    });
-    let touched = false;
-    const onTouch = () => {
-      if (touched) return;
-      touched = true;
-      vids.forEach(v => { if (v.paused) playIfPossible(v); });
-    };
-    document.addEventListener('touchstart', onTouch, { once: true });
+document.addEventListener('DOMContentLoaded', () => {
+  const vids = Array.from(document.querySelectorAll('video'));
+  const playIfPossible = (v) => {
+    try {
+      const r = v.play();
+      if (r && typeof r.then === 'function') r.catch(() => { });
+    } catch (_) { }
+  };
+  vids.forEach(v => {
+    v.muted = true;
+    v.autoplay = true;
+    v.playsInline = true;
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+    v.preload = 'metadata';
+    v.addEventListener('loadeddata', () => playIfPossible(v), { once: true });
   });
-  // Sticky About Grid controlled by IntersectionObserver
-(function(){
-  function attach(el){
-     if (!el) return;
-     const a = el.closest('a');
-     const href = a && a.getAttribute('href');
-     const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
-     if (!isCopyTarget) return;
-     if (el.dataset.copyInit === '1') return;
-     el.classList.add('copyelement');
-     el.dataset.copyInit = '1';
-     el.addEventListener('click', (e) => {
-       if (e) { e.preventDefault(); e.stopPropagation(); }
-       const text = (el.textContent || '').trim();
-       if (!text) return;
-       navigator.clipboard.writeText(text).then(() => {
-         const prev = el.querySelector('.copy-tooltip');
-         if (prev) prev.remove();
-         const tip = document.createElement('div');
-         tip.className = 'copy-tooltip';
-         el.appendChild(tip);
-         const tw = document.createElement('span');
-         tw.className = 'typewriter';
-         tip.appendChild(tw);
-         const s = 'Copied';
-         tw.textContent = '';
-         s.split('').forEach((ch, i) => {
-           setTimeout(() => {
-             const strong = 'Copied'.includes(ch) ? true : false;
-             if (strong) {
-               const b = document.createElement('strong');
-               b.textContent = ch;
-               tw.appendChild(b);
-             } else {
-               tw.textContent += ch;
-             }
-           }, i * 50);
-         });
-         const caret = document.createElement('span');
-         caret.className = 'ty-caret';
-         tip.appendChild(caret);
-         setTimeout(() => {
-           tip.style.opacity = '0';
-           setTimeout(() => tip.remove(), 300);
-         }, 2000);
-       });
-     });
-   }
-   function detach(el){
-     if (!el || el.dataset.copyInit !== '1') return;
-     const prev = el.querySelector('.copy-tooltip');
-     if (prev) prev.remove();
-     el.classList.remove('copyelement');
-     el.removeAttribute('data-copy-init');
-     const clone = el.cloneNode(true);
-     el.parentNode && el.parentNode.replaceChild(clone, el);
-   }
-   function init(){
-     const contact = document.querySelector('.about-block.contact');
-     if (!contact) return;
-     const all = contact.querySelectorAll('.ty-text');
-     all.forEach(el => {
-       const a = el.closest('a');
-       const href = a && a.getAttribute('href');
-       const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
-       if (isCopyTarget) attach(el); else detach(el);
-     });
-     if ('MutationObserver' in window){
-       const mo = new MutationObserver(() => {
-         const nodes = contact.querySelectorAll('.ty-text');
-         nodes.forEach(el => {
-           const a = el.closest('a');
-           const href = a && a.getAttribute('href');
-           const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
-           if (isCopyTarget) attach(el); else detach(el);
-         });
-       });
-       mo.observe(contact, { childList: true, subtree: true });
-     }
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting) { playIfPossible(target); io.unobserve(target); }
+      });
+    }, { threshold: 0.1 });
+    vids.forEach(v => io.observe(v));
+  } else {
+    vids.forEach(playIfPossible);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) vids.forEach(v => { if (v.paused) playIfPossible(v); });
+  });
+  let touched = false;
+  const onTouch = () => {
+    if (touched) return;
+    touched = true;
+    vids.forEach(v => { if (v.paused) playIfPossible(v); });
+  };
+  document.addEventListener('touchstart', onTouch, { once: true });
+});
+// Sticky About Grid controlled by IntersectionObserver
+(function () {
+  function attach(el) {
+    if (!el) return;
+    const a = el.closest('a');
+    const href = a && a.getAttribute('href');
+    const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+    if (!isCopyTarget) return;
+    if (el.dataset.copyInit === '1') return;
+    el.classList.add('copyelement');
+    el.dataset.copyInit = '1';
+    el.addEventListener('click', (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const text = (el.textContent || '').trim();
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const prev = el.querySelector('.copy-tooltip');
+        if (prev) prev.remove();
+        const tip = document.createElement('div');
+        tip.className = 'copy-tooltip';
+        el.appendChild(tip);
+        const tw = document.createElement('span');
+        tw.className = 'typewriter';
+        tip.appendChild(tw);
+        const s = 'Copied';
+        tw.textContent = '';
+        s.split('').forEach((ch, i) => {
+          setTimeout(() => {
+            const strong = 'Copied'.includes(ch) ? true : false;
+            if (strong) {
+              const b = document.createElement('strong');
+              b.textContent = ch;
+              tw.appendChild(b);
+            } else {
+              tw.textContent += ch;
+            }
+          }, i * 50);
+        });
+        const caret = document.createElement('span');
+        caret.className = 'ty-caret';
+        tip.appendChild(caret);
+        setTimeout(() => {
+          tip.style.opacity = '0';
+          setTimeout(() => tip.remove(), 300);
+        }, 2000);
+      });
+    });
+  }
+  function detach(el) {
+    if (!el || el.dataset.copyInit !== '1') return;
+    const prev = el.querySelector('.copy-tooltip');
+    if (prev) prev.remove();
+    el.classList.remove('copyelement');
+    el.removeAttribute('data-copy-init');
+    const clone = el.cloneNode(true);
+    el.parentNode && el.parentNode.replaceChild(clone, el);
+  }
+  function init() {
+    const contact = document.querySelector('.about-block.contact');
+    if (!contact) return;
+    const all = contact.querySelectorAll('.ty-text');
+    all.forEach(el => {
+      const a = el.closest('a');
+      const href = a && a.getAttribute('href');
+      const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+      if (isCopyTarget) attach(el); else detach(el);
+    });
+    if ('MutationObserver' in window) {
+      const mo = new MutationObserver(() => {
+        const nodes = contact.querySelectorAll('.ty-text');
+        nodes.forEach(el => {
+          const a = el.closest('a');
+          const href = a && a.getAttribute('href');
+          const isCopyTarget = a && (href && (href.startsWith('mailto:') || href.startsWith('tel:')));
+          if (isCopyTarget) attach(el); else detach(el);
+        });
+      });
+      mo.observe(contact, { childList: true, subtree: true });
+    }
   }
   document.addEventListener('DOMContentLoaded', init);
 })();
 
 // Swipe navigation for mobile
-(function(){
-  function isCoarse(){
-    try { return window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches; } catch(_) { return false; }
+(function () {
+  function isCoarse() {
+    try { return window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches; } catch (_) { return false; }
   }
-  function getLinks(){
-    var about = document.querySelector('.top-nav a[href*="#about"]') || Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ return ((a.textContent||'').trim().toUpperCase()==='ABOUT'); });
-    var index = Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ var h=a.getAttribute('href')||''; return /(^|\/)index\.html$/.test(h); }) || Array.from(document.querySelectorAll('.top-nav a')).find(function(a){ return ((a.textContent||'').trim().toUpperCase()==='INDEX'); }) || document.querySelector('.top-left .brand');
+  function getLinks() {
+    var about = document.querySelector('.top-nav a[href*="#about"]') || Array.from(document.querySelectorAll('.top-nav a')).find(function (a) { return ((a.textContent || '').trim().toUpperCase() === 'ABOUT'); });
+    var index = Array.from(document.querySelectorAll('.top-nav a')).find(function (a) { var h = a.getAttribute('href') || ''; return /(^|\/)index\.html$/.test(h); }) || Array.from(document.querySelectorAll('.top-nav a')).find(function (a) { return ((a.textContent || '').trim().toUpperCase() === 'INDEX'); }) || document.querySelector('.top-left .brand');
     return { about: about, index: index };
   }
-  function navigate(target){
-    if (target) { try { target.click(); } catch(_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
+  function navigate(target) {
+    if (target) { try { target.click(); } catch (_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
   }
-  function init(){
+  function init() {
     var body = document.body;
     if (!body || !body.classList.contains('home')) return;
-    var isMobile = (function(){ try { return window.matchMedia('(max-width: 900px)').matches; } catch(_) { return false; } })();
+    var isMobile = (function () { try { return window.matchMedia('(max-width: 900px)').matches; } catch (_) { return false; } })();
     if (!isMobile) return;
     if (!isCoarse()) return;
-    var startX=0, startY=0, dx=0, dy=0, tracking=false, active=false;
-    var threshold=50;
-    var currentPress=null;
-    function setPress(el){
-      if (currentPress && currentPress!==el) currentPress.classList.remove('nav-press');
-      if (el){ el.classList.add('nav-press'); currentPress = el; }
+    var startX = 0, startY = 0, dx = 0, dy = 0, tracking = false, active = false;
+    var threshold = 50;
+    var currentPress = null;
+    function setPress(el) {
+      if (currentPress && currentPress !== el) currentPress.classList.remove('nav-press');
+      if (el) { el.classList.add('nav-press'); currentPress = el; }
     }
-    function clearPress(){
-      if (currentPress){ currentPress.classList.remove('nav-press'); currentPress=null; }
+    function clearPress() {
+      if (currentPress) { currentPress.classList.remove('nav-press'); currentPress = null; }
     }
-    function onStart(e){
-      if (e.touches && e.touches.length>1) return;
-      var t = e.touches? e.touches[0] : e;
-      startX = t.clientX; startY = t.clientY; dx=0; dy=0; tracking=true; active=false;
+    function onStart(e) {
+      if (e.touches && e.touches.length > 1) return;
+      var t = e.touches ? e.touches[0] : e;
+      startX = t.clientX; startY = t.clientY; dx = 0; dy = 0; tracking = true; active = false;
       clearPress();
     }
-    function onMove(e){
+    function onMove(e) {
       if (!tracking) return;
-      var t = e.touches? e.touches[0] : e;
+      var t = e.touches ? e.touches[0] : e;
       dx = t.clientX - startX; dy = t.clientY - startY;
-      if (!active){
-        if (Math.abs(dx)>12 && Math.abs(dx)>Math.abs(dy)) { active=true; }
-        else if (Math.abs(dy)>12) { tracking=false; active=false; clearPress(); return; }
+      if (!active) {
+        if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { active = true; }
+        else if (Math.abs(dy) > 12) { tracking = false; active = false; clearPress(); return; }
       }
-      if (active){
+      if (active) {
         var links = getLinks();
-        var target = dx<0 ? (links.about||null) : (links.index||null);
+        var target = dx < 0 ? (links.about || null) : (links.index || null);
         setPress(target);
       }
     }
-    function onEnd(){
+    function onEnd() {
       if (!tracking) return;
-      tracking=false;
-      if (!active){ clearPress(); return; }
-      if (Math.abs(dx)>=threshold && Math.abs(dx)>Math.abs(dy)){
+      tracking = false;
+      if (!active) { clearPress(); return; }
+      if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy)) {
         var links = getLinks();
-        var target = dx<0 ? (links.about||null) : (links.index||null);
+        var target = dx < 0 ? (links.about || null) : (links.index || null);
         setPress(target);
-        setTimeout(function(){ navigate(target); clearPress(); }, 300);
+        setTimeout(function () { navigate(target); clearPress(); }, 300);
       } else {
         clearPress();
       }
