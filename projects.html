@@ -486,8 +486,8 @@
             img.loading = 'lazy';
             img.alt = (data && data.title) ? data.title : '';
             wrap.appendChild(img);
-            img.addEventListener('load', () => { wrap.classList.remove('skeleton'); }, { once: true });
-            img.addEventListener('error', () => { wrap.classList.remove('skeleton'); }, { once: true });
+            img.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
+            img.addEventListener('error', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
             if (caps && caps[i]) {
               const cap = document.createElement('div');
               cap.className = 'dg-caption';
@@ -525,7 +525,7 @@
               video.appendChild(srcEl);
               video.addEventListener('loadeddata', () => { try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { } }, { once: true });
               wrap.classList.add('skeleton');
-              video.addEventListener('loadeddata', () => { wrap.classList.remove('skeleton'); }, { once: true });
+              video.addEventListener('loadeddata', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
               video.addEventListener('error', () => {
                 try {
                   const yt = Array.isArray((data && data.videos) || []) ? (data.videos.find(x => typeof x === 'string' && x.startsWith('http')) || null) : null;
@@ -540,6 +540,7 @@
                     wrap.innerHTML = '';
                     wrap.appendChild(iframe);
                     wrap.classList.remove('skeleton');
+                    wrap.classList.add('loaded');
                   } else {
                     const img = document.createElement('img');
                     img.src = (Array.isArray((data && data.images) || []) && data.images.length) ? data.images[0] : '';
@@ -548,6 +549,7 @@
                     wrap.innerHTML = '';
                     wrap.appendChild(img);
                     wrap.classList.remove('skeleton');
+                    wrap.classList.add('loaded');
                   }
                 } catch (_) { }
               });
@@ -561,7 +563,7 @@
               iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
               iframe.allowFullscreen = true;
               wrap.classList.add('skeleton');
-              iframe.addEventListener('load', () => { wrap.classList.remove('skeleton'); }, { once: true });
+              iframe.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
               wrap.appendChild(iframe);
             }
             track.appendChild(wrap);

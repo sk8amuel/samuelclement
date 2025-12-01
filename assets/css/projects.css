@@ -764,3 +764,19 @@ body.privacy-open .project-detail.is-open {
 .skeleton > iframe {
   opacity: 0;
 }
+
+.project-detail .detail-gallery .dg-item > img,
+.project-detail .detail-gallery .dg-item > video,
+.project-detail .detail-gallery .dg-item > iframe {
+  opacity: 0;
+  transition: opacity 360ms ease;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.project-detail .detail-gallery .dg-item.loaded > img,
+.project-detail .detail-gallery .dg-item.loaded > video,
+.project-detail .detail-gallery .dg-item.loaded > iframe {
+  opacity: 1;
+}
