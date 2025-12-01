@@ -727,3 +727,40 @@ body.privacy-open .project-detail.is-open {
     flex: 0 0 auto;
   }
 }
+
+/* Skeleton loading */
+:root {
+  --sk-base: #1a1a1a;
+  --sk-mid: #2a2a2a;
+}
+
+@keyframes sk-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--sk-base);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: linear-gradient(90deg, var(--sk-base) 0%, var(--sk-mid) 50%, var(--sk-base) 100%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}
+
+.skeleton > img,
+.skeleton > video,
+.skeleton > iframe {
+  opacity: 0;
+}

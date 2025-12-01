@@ -432,6 +432,22 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const rows = Array.from(document.querySelectorAll('.project-item'));
+      const previews = Array.from(document.querySelectorAll('.project-detail-inner .detail-image-wrap'));
+      previews.forEach(wrap => {
+        const media = wrap.querySelector('img, video');
+        if (!media) return;
+        const done = () => { wrap.classList.remove('skeleton'); };
+        wrap.classList.add('skeleton');
+        if (media.tagName === 'IMG') {
+          const img = media;
+          if (img.complete && img.naturalWidth > 0) { done(); }
+          else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+        } else {
+          const vid = media;
+          if (vid.readyState >= 2) { done(); }
+          else { vid.addEventListener('loadeddata', done, { once: true }); vid.addEventListener('error', done, { once: true }); }
+        }
+      });
 
       function openRow(row) {
         const block = row.closest('.project-block');
@@ -464,11 +480,14 @@
           imgs.forEach((src, i) => {
             const wrap = document.createElement('div');
             wrap.className = 'dg-item';
+            wrap.classList.add('skeleton');
             const img = document.createElement('img');
             img.dataset.src = src;
             img.loading = 'lazy';
             img.alt = (data && data.title) ? data.title : '';
             wrap.appendChild(img);
+            img.addEventListener('load', () => { wrap.classList.remove('skeleton'); }, { once: true });
+            img.addEventListener('error', () => { wrap.classList.remove('skeleton'); }, { once: true });
             if (caps && caps[i]) {
               const cap = document.createElement('div');
               cap.className = 'dg-caption';
@@ -505,6 +524,8 @@
               srcEl.type = vv.toLowerCase().endsWith('.mp4') ? 'video/mp4' : 'video/webm';
               video.appendChild(srcEl);
               video.addEventListener('loadeddata', () => { try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { } }, { once: true });
+              wrap.classList.add('skeleton');
+              video.addEventListener('loadeddata', () => { wrap.classList.remove('skeleton'); }, { once: true });
               video.addEventListener('error', () => {
                 try {
                   const yt = Array.isArray((data && data.videos) || []) ? (data.videos.find(x => typeof x === 'string' && x.startsWith('http')) || null) : null;
@@ -518,6 +539,7 @@
                     iframe.allowFullscreen = true;
                     wrap.innerHTML = '';
                     wrap.appendChild(iframe);
+                    wrap.classList.remove('skeleton');
                   } else {
                     const img = document.createElement('img');
                     img.src = (Array.isArray((data && data.images) || []) && data.images.length) ? data.images[0] : '';
@@ -525,6 +547,7 @@
                     img.alt = (data && data.title) ? data.title : '';
                     wrap.innerHTML = '';
                     wrap.appendChild(img);
+                    wrap.classList.remove('skeleton');
                   }
                 } catch (_) { }
               });
@@ -537,6 +560,8 @@
               iframe.frameBorder = '0';
               iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
               iframe.allowFullscreen = true;
+              wrap.classList.add('skeleton');
+              iframe.addEventListener('load', () => { wrap.classList.remove('skeleton'); }, { once: true });
               wrap.appendChild(iframe);
             }
             track.appendChild(wrap);
@@ -547,27 +572,33 @@
           const lazyImgs = Array.from(gallery.querySelectorAll('img[data-src]'));
           const lazyIframes = Array.from(gallery.querySelectorAll('iframe[data-src]'));
           const lazyVideos = Array.from(gallery.querySelectorAll('video[data-lazy="1"]'));
-          const io = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-              if (!entry.isIntersecting) return;
-              const el = entry.target;
-              if (el.tagName === 'IMG') {
-                el.src = el.dataset.src || '';
-                el.removeAttribute('data-src');
-              } else if (el.tagName === 'IFRAME') {
-                el.src = el.dataset.src || '';
-                el.removeAttribute('data-src');
-              } else if (el.tagName === 'VIDEO') {
-                const s = el.querySelector('source[data-src]');
-                if (s) { s.src = s.dataset.src || ''; s.removeAttribute('data-src'); el.load(); }
-                el.removeAttribute('data-lazy');
-              }
-              io.unobserve(el);
-            });
-          }, { root: null, rootMargin: '100px', threshold: 0.01 });
-          lazyImgs.forEach(el => io.observe(el));
-          lazyIframes.forEach(el => io.observe(el));
-          lazyVideos.forEach(el => io.observe(el));
+          if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver(entries => {
+              entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                if (el.tagName === 'IMG') {
+                  el.src = el.dataset.src || '';
+                  el.removeAttribute('data-src');
+                } else if (el.tagName === 'IFRAME') {
+                  el.src = el.dataset.src || '';
+                  el.removeAttribute('data-src');
+                } else if (el.tagName === 'VIDEO') {
+                  const s = el.querySelector('source[data-src]');
+                  if (s) { s.src = s.dataset.src || ''; s.removeAttribute('data-src'); el.load(); }
+                  el.removeAttribute('data-lazy');
+                }
+                io.unobserve(el);
+              });
+            }, { root: null, rootMargin: '100px', threshold: 0.01 });
+            lazyImgs.forEach(el => io.observe(el));
+            lazyIframes.forEach(el => io.observe(el));
+            lazyVideos.forEach(el => io.observe(el));
+          } else {
+            lazyImgs.forEach(el => { el.src = el.dataset.src || ''; el.removeAttribute('data-src'); });
+            lazyIframes.forEach(el => { el.src = el.dataset.src || ''; el.removeAttribute('data-src'); });
+            lazyVideos.forEach(el => { const s = el.querySelector('source[data-src]'); if (s) { s.src = s.dataset.src || ''; s.removeAttribute('data-src'); el.load(); } el.removeAttribute('data-lazy'); });
+          }
           let shift = 0;
           let maxShift = Math.max(0, track.scrollWidth - gallery.clientWidth);
           function recalc() {
@@ -781,6 +812,7 @@
             video.style.display = 'none';
             pv.appendChild(img);
             pv.appendChild(video);
+            pv.classList.add('skeleton');
             document.body.appendChild(pv);
           }
           const imgEl = pv.querySelector('img');
@@ -804,16 +836,21 @@
             const key = row.dataset.project || '';
             const src = previewMap[key];
             if (!src) return;
+            pv.classList.add('skeleton');
             if (/\.(webm|mp4)(\?.*)?$/i.test(src)) {
               imgEl.style.display = 'none';
               vidEl.src = src;
               vidEl.style.display = 'block';
               try { const r = vidEl.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { }
+              if (vidEl.readyState >= 2) { pv.classList.remove('skeleton'); }
+              else { vidEl.addEventListener('loadeddata', () => pv.classList.remove('skeleton'), { once: true }); vidEl.addEventListener('error', () => pv.classList.remove('skeleton'), { once: true }); }
             } else {
               vidEl.pause();
               vidEl.style.display = 'none';
               imgEl.src = src;
               imgEl.style.display = 'block';
+              if (imgEl.complete && imgEl.naturalWidth > 0) { pv.classList.remove('skeleton'); }
+              else { imgEl.addEventListener('load', () => pv.classList.remove('skeleton'), { once: true }); imgEl.addEventListener('error', () => pv.classList.remove('skeleton'), { once: true }); }
             }
             pv.classList.add('visible');
           });
@@ -824,11 +861,13 @@
             clearTimeout(showTimer);
             try { vidEl.pause(); } catch (_) { }
             pv.classList.remove('visible');
+            pv.classList.remove('skeleton');
           });
           row.addEventListener('click', () => {
             clearTimeout(showTimer);
             try { vidEl.pause(); } catch (_) { }
             pv.classList.remove('visible');
+            pv.classList.remove('skeleton');
           });
         }
       });
