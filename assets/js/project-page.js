@@ -91,16 +91,17 @@
       io.observe(sentinel);
     }
 
-    const thesisLink = document.querySelector('.detail-links .thesis-link[aria-label="view the thesis"]');
     const thesisModal = document.getElementById('thesis-modal');
     const thesisOverlay = document.getElementById('thesisOverlay');
     const thesisClose = document.getElementById('thesisClose');
-    function openThesis(e) {
-      e.preventDefault();
-      if (!thesisModal) return;
+    function openPdfModal(url) {
+      if (!thesisModal) return false;
+      const iframe = thesisModal.querySelector('iframe');
+      if (iframe && typeof url === 'string' && url) iframe.src = url;
       thesisModal.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
       document.body.classList.add('thesis-open');
+      return true;
     }
     function closeThesis() {
       if (!thesisModal) return;
@@ -108,14 +109,28 @@
       document.body.style.overflow = '';
       document.body.classList.remove('thesis-open');
     }
-    if (thesisLink) thesisLink.addEventListener('click', openThesis);
     if (thesisOverlay) thesisOverlay.addEventListener('click', closeThesis);
     if (thesisClose) thesisClose.addEventListener('click', closeThesis);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeThesis(); });
-    if (thesisLink) {
-      const origTxt = (thesisLink.textContent || '').trim();
-      thesisLink.setAttribute('aria-label', origTxt);
-    }
+    const pdfLinks = Array.from(document.querySelectorAll('a[href$=".pdf"]'));
+    const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+    const isIOS = /iPad|iPhone|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const isMobile = isIOS || isAndroid;
+    pdfLinks.forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href') || '';
+        if (!href) return;
+        e.preventDefault();
+        if (isMobile) {
+          const win = window.open(href, '_blank');
+          if (!win) location.href = href;
+          return;
+        }
+        const opened = openPdfModal(href);
+        if (!opened) location.href = href;
+      });
+    });
 
   const jabRow = document.querySelector('.template-jabberwocky .hero-row');
   function applyPairAspect(img) {

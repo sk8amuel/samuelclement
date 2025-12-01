@@ -1,0 +1,444 @@
+/* Griglia About a 4 colonne (ripristino originale) */
+.page-about .about-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* stessa griglia del container */
+    column-gap: var(--column-gap);
+    row-gap: 8px;
+    align-items: start;
+    margin-top: -48px;
+    /* alza l’intera sezione */
+    position: relative;
+    /* per eventuali riferimenti */
+}
+
+/* 4 colonne mappate su 12 colonne: 3-3-3-3 */
+.page-about .about-grid .col-1 {
+    grid-column: 1 / span 3;
+}
+
+.page-about .about-grid .col-2 {
+    grid-column: 4 / span 3;
+}
+
+.page-about .about-grid .col-3 {
+    grid-column: 7 / span 3;
+}
+
+.page-about .about-grid .col-4 {
+    grid-column: 10 / span 3;
+}
+
+/* Riga verticale all’inizio di ogni blocco About */
+.page-about .about-grid .col-1,
+.page-about .about-grid .col-2,
+.page-about .about-grid .col-3,
+.page-about .about-grid .col-4,
+.page-about .about-grid .about-hero-word,
+.page-about .about-grid .about-photo {
+    position: relative;
+}
+
+/* I contenuti partono a destra della seconda linea */
+.page-about .about-grid .col-1,
+.page-about .about-grid .col-2,
+.page-about .about-grid .col-3,
+.page-about .about-grid .col-4,
+.page-about .about-grid .about-hero-word,
+.page-about .about-grid .about-photo {
+    padding-left: var(--start-line-offset);
+}
+
+.page-about .about-grid .col-1::before,
+.page-about .about-grid .col-2::before,
+.page-about .about-grid .col-3::before,
+.page-about .about-grid .col-4::before,
+.page-about .about-grid .about-hero-word::before,
+.page-about .about-grid .about-photo::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--start-line-width);
+    background: var(--start-line-color);
+    pointer-events: none;
+}
+
+.page-about .about-grid .col-1::after,
+.page-about .about-grid .col-2::after,
+.page-about .about-grid .col-3::after,
+.page-about .about-grid .col-4::after,
+.page-about .about-grid .about-hero-word::after,
+.page-about .about-grid .about-photo::after {
+    content: "";
+    position: absolute;
+    left: var(--start-line-gap);
+    top: 0;
+    bottom: 0;
+    width: var(--start-line-width);
+    background: var(--start-line-color);
+    pointer-events: none;
+}
+
+/* Disabilita righe locali: usiamo overlay globale del container */
+.page-about .about-grid .col-1::before,
+.page-about .about-grid .col-2::before,
+.page-about .about-grid .col-3::before,
+.page-about .about-grid .col-4::before,
+.page-about .about-grid .about-hero-word::before,
+.page-about .about-grid .about-photo::before,
+.page-about .about-grid .col-1::after,
+.page-about .about-grid .col-2::after,
+.page-about .about-grid .col-3::after,
+.page-about .about-grid .col-4::after,
+.page-about .about-grid .about-hero-word::after,
+.page-about .about-grid .about-photo::after {
+    content: none !important;
+    display: none !important;
+}
+
+.page-about .about-grid .about-block {
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.page-about .about-grid .about-block {
+    position: relative;
+    padding-top: 12px;
+}
+
+.page-about .about-grid .about-block::before {
+    content: none;
+    display: none;
+}
+
+.page-about .about-grid .about-block {
+    border-top: none;
+}
+
+.page-about .about-grid .intro,
+.page-about .about-grid .design-approach,
+.page-about .about-grid .background,
+.page-about .about-grid .education {
+    border-top: none;
+}
+
+.page-about .about-grid .contact,
+.page-about .about-grid .selected-work,
+.page-about .about-grid .focus,
+.page-about .about-grid .capabilities {
+    border-top: 1px solid #c7c7c7;
+}
+
+.page-about .about-grid .intro::before {
+    content: none;
+    display: none;
+}
+
+/* ABOUT come blocco nel flusso, span 2 colonne (1–2) */
+.page-about .about-grid .about-hero-word {
+    position: static;
+    grid-column: 1 / span 6;
+    font-size: clamp(64px, 31vw, 180px);
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    color: var(--color-foreground);
+    opacity: 1;
+    pointer-events: none;
+    display: block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+    align-self: end;
+    transform: translateY(-90px);
+}
+
+/* Foto in colonna 4 adattiva */
+.page-about .about-photo img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: grayscale(1);
+}
+
+/* La foto mantiene la classe col-4 per stare nella quarta colonna */
+
+/* Abbassa i blocchi sotto ABOUT di almeno 160px */
+.page-about .about-grid .selected-work,
+.page-about .about-grid .focus,
+.page-about .about-grid .capabilities {
+    margin-top: 0;
+    position: relative;
+    transform: translateY(-24px);
+}
+
+/* Alza SOLO la foto un po’ di più */
+.page-about .about-grid .about-photo {
+    margin-top: 0;
+    position: relative;
+    transform: translateY(-72px);
+    align-self: end;
+    grid-column: 10 / span 3;
+    /* mantenuta in quarta colonna mappata */
+}
+
+.page-about .about-grid .selected-work::before {
+    content: none;
+    display: none;
+}
+
+.page-about .about-grid .focus::before {
+    content: none;
+}
+
+.page-about .about-label {
+    color: #dcdcdc !important;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+}
+
+.page-about .about-label span {
+    color: #dcdcdc !important;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+}
+
+.page-about .about-label::before {
+    content: none;
+}
+
+.page-about .about-label::after {
+    content: none;
+}
+
+.page-about .about-block p:not(.about-label) {
+    color: #FFFFFF !important;
+}
+
+.page-about .about-block a {
+    color: #FFFFFF !important;
+}
+
+.page-about .about-grid p,
+.page-about .about-grid a {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.page-about .about-grid p,
+.page-about .about-grid a {
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+}
+
+.page-about .about-grid .about-block p:not(.about-label) {
+    line-height: 1.35;
+}
+
+.page-about .about-grid .background .role-title {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.page-about .about-grid .background .role-title::before {
+    content: "→";
+    color: #dcdcdc;
+    margin-right: 8px;
+}
+
+.page-about .about-grid .background .role-desc {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.page-about .about-grid .capabilities .role-title {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.page-about .about-grid .capabilities .role-title::before {
+    content: "→";
+    color: #dcdcdc;
+    margin-right: 8px;
+}
+
+.page-about .about-grid .capabilities .role-desc {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.page-about .about-grid p:not(.about-label) span,
+.page-about .about-grid a span {
+    color: #FFFFFF !important;
+}
+
+.page-about .about-label span {
+    color: #aeaeae !important;
+}
+
+
+
+
+/* Responsive: una colonna su mobile */
+@media (max-width: 900px) {
+    .page-about .about-grid {
+        grid-template-columns: 1fr;
+        /* una sola colonna */
+        gap: 24px;
+        margin-top: 0;
+        column-gap: 0;
+        grid-auto-flow: row;
+    }
+
+    .page-about .about-main {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .page-about .about-grid .about-block {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .page-about .about-grid .about-label {
+        font-size: 10px;
+        letter-spacing: 0.08em;
+    }
+
+    .page-about .about-grid p,
+    .page-about .about-grid a {
+        font-size: 26px;
+        line-height: 1.2;
+    }
+
+    .page-about .about-grid p,
+    .page-about .about-grid a {
+        word-break: normal;
+        overflow-wrap: normal;
+        hyphens: none;
+    }
+
+    .page-about .about-grid .background .role-title {
+        font-size: 26px;
+        line-height: 1.2;
+    }
+
+    .page-about .about-grid .capabilities .role-title {
+        font-size: 26px;
+        line-height: 1.2;
+    }
+
+    .page-about .about-grid .about-hero-word,
+    .page-about .about-grid .about-photo {
+        transform: none;
+    }
+
+    .page-about .about-grid .selected-work::before {
+        content: none;
+        display: none;
+    }
+
+    .page-about .about-grid .intro::before {
+        content: none;
+        display: none;
+    }
+
+    /* Tutti i blocchi testuali occupano l'intera larghezza */
+    .page-about .about-grid .col-1,
+    .page-about .about-grid .col-2,
+    .page-about .about-grid .col-3,
+    .page-about .about-grid .col-4 {
+        grid-column: 1 / -1 !important;
+        padding-left: 0;
+    }
+
+    /* Hero e foto a tutta larghezza */
+    .page-about .about-grid .about-hero-word {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        font-size: clamp(64px, 27vw, 160px);
+    }
+
+    .page-about .about-grid .intro {
+        grid-row: 1;
+    }
+
+    .page-about .about-grid .about-photo {
+        transform: none;
+        grid-column: 1 / -1;
+    }
+
+    .page-about .about-photo img {
+        border-radius: 8px;
+    }
+
+    /* Rimuovi sollevamenti su mobile */
+    .page-about .about-grid .selected-work,
+    .page-about .about-grid .focus,
+    .page-about .about-grid .capabilities {
+        margin-top: 0;
+        transform: none;
+    }
+}
+
+.page-about .back-to-home-btn {
+    position: relative;
+    margin: 224px auto 0;
+    width: fit-content;
+    z-index: 2;
+}
+
+.page-about .back-to-home-btn a {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    background: transparent;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.page-about .back-to-home-btn a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .page-about .back-to-home-btn {
+        margin-top: 120px;
+    }
+
+    .page-about .about-main {
+        padding-bottom: 180px;
+    }
+
+    .page-about .about-mobile-note {
+        display: inline-block !important;
+        text-align: center;
+        margin: 600px auto 0;
+        color: #ffffff;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        padding: 8px 12px;
+    }
+
+    .page-about .about-mobile-note.second {
+        margin: 680px auto 0;
+    }
+}
+
+.page-about .about-mobile-note {
+    display: none;
+}
+
+.page-about .about-main {
+    padding-bottom: 72px;
+}

@@ -768,7 +768,11 @@ document.addEventListener('DOMContentLoaded', () => {
       img.src = src;
       img.loading = "lazy";
       img.alt = data.title || "";
-      imagesWrap.appendChild(img);
+      const wrap = document.createElement('div');
+      wrap.className = 'has-skeleton';
+      wrap.appendChild(img);
+      imagesWrap.appendChild(wrap);
+      if (typeof attachSkeletonForImage === 'function') attachSkeletonForImage(img);
     });
 
     if (!imgs.length) {
@@ -1096,6 +1100,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   document.addEventListener('DOMContentLoaded', init);
+})();
+
+(function(){
+  function attachSkeletonForImage(img){
+    if(!img) return;
+    var parent = img.parentElement;
+    var container = img.closest('.hero-media') || (parent && parent.classList && parent.classList.contains('has-skeleton') ? parent : null);
+    if(container){
+      if(!container.classList.contains('has-skeleton')) container.classList.add('has-skeleton');
+      var markLoaded = function(){ container.classList.add('is-loaded'); };
+      if(img.complete && img.naturalWidth > 0){ markLoaded(); }
+      else {
+        img.addEventListener('load', markLoaded, { once:true });
+        img.addEventListener('error', markLoaded, { once:true });
+      }
+      return;
+    }
+    img.classList.add('skeleton-media');
+    var markLoaded2 = function(){ img.classList.add('is-loaded'); };
+    if(img.complete && img.naturalWidth > 0){ markLoaded2(); }
+    else {
+      img.addEventListener('load', markLoaded2, { once:true });
+      img.addEventListener('error', markLoaded2, { once:true });
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var imgs = Array.from(document.querySelectorAll('.template-hero .hero-media img, .projects-grid img, .about-photo img, .project-modal-images img'));
+    imgs.forEach(attachSkeletonForImage);
+    var wrap = document.getElementById('project-modal-images');
+    if(wrap && 'MutationObserver' in window){
+      var mo = new MutationObserver(function(ms){
+        ms.forEach(function(m){
+          m.addedNodes.forEach(function(n){
+            if(n && n.nodeType===1){
+              var imgs = [];
+              if(n.tagName==='IMG') imgs=[n]; else imgs=Array.from(n.querySelectorAll('img'));
+              imgs.forEach(attachSkeletonForImage);
+            }
+          });
+        });
+      });
+      mo.observe(wrap,{childList:true,subtree:true});
+    }
+  });
 })();
 
 // Swipe navigation for mobile
