@@ -149,8 +149,37 @@
     }
   }
 
-    
+  const vimeoFrames = Array.from(document.querySelectorAll('.template-hero .hero-media iframe'));
+  vimeoFrames.forEach(ifr => {
+    const wrap = ifr.closest('.hero-media');
+    if (!wrap) return;
+    wrap.classList.add('skeleton');
+    let player = null;
+    try { if (window.Vimeo && window.Vimeo.Player) player = new window.Vimeo.Player(ifr); } catch(_) {}
+    if (player) {
+      player.on('play', () => { wrap.classList.remove('skeleton'); });
+      player.ready().then(() => { player.play().catch(() => {}); }).catch(() => {});
+      wrap.addEventListener('click', () => { player.play().catch(() => {}); });
+      wrap.addEventListener('touchstart', () => { player.play().catch(() => {}); }, { passive: true });
+    } else {
+      ifr.addEventListener('load', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { once: true });
+      wrap.addEventListener('click', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } });
+      wrap.addEventListener('touchstart', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { passive: true });
+    }
+    setTimeout(() => { if (!wrap.classList.contains('skeleton')) return; ifr.src = ifr.src; }, 1200);
+  });
 
+  window.addEventListener('message', (e) => {
+    const origin = e.origin || '';
+    if (!/vimeo\.com/i.test(origin)) return;
+    let data = e.data;
+    if (typeof data === 'string') { try { data = JSON.parse(data); } catch(_) {} }
+    if (!data || !(data.event === 'play' || data.event === 'playProgress')) return;
+    const ifr = vimeoFrames.find(x => { try { return x.contentWindow === e.source; } catch(_) { return false; } });
+    if (!ifr) return;
+    const wrap = ifr.closest('.hero-media');
+    if (wrap) wrap.classList.remove('skeleton');
+  });
   
   });
 })();

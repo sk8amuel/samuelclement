@@ -174,6 +174,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     if (!isHome) return;
     const mql = window.matchMedia('(max-width: 768px)');
     if (!(mql && mql.matches)) return;
+    if (localStorage.getItem('lottieOverlaySeen')) return;
     // Crea overlay mobile (trasparente) e prepara struttura interna
     const overlay = document.getElementById('mobile-swipe-overlay') || (() => {
       const el = document.createElement('div');
@@ -182,19 +183,25 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       return el;
     })();
     overlay.classList.add('is-visible');
-    overlay.style.background = 'rgba(0, 0, 0, 0.9)';
+    overlay.style.background = 'rgba(0, 0, 0, 0.65)';
+    overlay.style.transition = 'none';
+    overlay.style.justifyContent = 'flex-end';
+    overlay.style.alignItems = 'center';
+    overlay.style.paddingRight = '12px';
     overlay.innerHTML = '';
     // Wrapper: area della GIF con sfondo nero al 50% (proporzioni rispettate)
     const wrap = document.createElement('div');
     wrap.className = 'swipe-wrap';
     overlay.appendChild(wrap);
-    // GIF: nessuna modifica alla proprietà CSS 'display'
-    const img = document.createElement('img');
-    img.className = 'swipe-gif';
-    img.alt = 'Swipe';
-    img.src = 'assets/img/swipe.gif';
-    wrap.appendChild(img);
-    // Uscita con animazione fade-down
+    // Lottie animation al posto della GIF
+    const lottie = document.createElement('dotlottie-wc');
+    lottie.className = 'swipe-gif';
+    lottie.setAttribute('src', 'https://lottie.host/980f7a73-7249-43d3-ace8-78d67d71b571/8vAudaUC0f.lottie');
+    lottie.setAttribute('autoplay', '');
+    lottie.setAttribute('loop', '');
+    lottie.style.width = '160px';
+    lottie.style.height = '160px';
+    wrap.appendChild(lottie);
     const hide = () => {
       wrap.classList.remove('swipe-enter');
       overlay.classList.remove('swipe-enter');
@@ -205,15 +212,18 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
         if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
       }, 380);
     };
-    img.addEventListener('error', hide, { once: true });
-    // Entrata con animazione fade-up e delay 1s
-    img.addEventListener('load', () => {
+    lottie.addEventListener('error', hide, { once: true });
+    let started = false;
+    const start = () => {
+      if (started) return; started = true;
       wrap.classList.add('swipe-enter');
       overlay.classList.add('swipe-enter');
-      const dur = window.SWIPE_GIF_DURATION_MS;
-      if (typeof dur === 'number' && dur > 0) { setTimeout(hide, dur); return; }
-      estimateGifDuration(img.src).then(ms => setTimeout(hide, ms));
-    }, { once: true });
+      localStorage.setItem('lottieOverlaySeen', '1');
+      const dur = 1200;
+      setTimeout(hide, dur);
+    };
+    ['ready', 'load'].forEach(ev => lottie.addEventListener(ev, start, { once: true }));
+    setTimeout(start, 300);
   }
 
   // Avvio con ritardo di 1s dalla fine del preloader (home ready)
@@ -715,12 +725,16 @@ const projectsData = {
   },
   afterbook: {
     title: "After Book",
-    meta: "Collaborative · 2024 · Identity / Motion",
+    meta: "School Project · 2023 · Identity / Motion",
     body: `
-      Dynamic typographic and motion system for an experimental publication.
+      After Book is a concept app brought to life through an animated promotional video, designed to enhance your reading experience through sound.
+      The app generates adaptive background audio based on the content you're reading, whether it's a tense thriller, a peaceful fantasy, or a dramatic novel.
+      As the story shifts, so does the atmosphere. I developed the idea and created the animated video to showcase how After Book turns every page into an immersive, multi-sensory experience.
     `,
     images: [
-      "assets/img/projects/after-book-project.gif"
+      "assets/img/projects/After Book/Afterbook-mockup.webp",
+      "assets/img/projects/After Book/Afterbook-mockup-2.webp",
+      "assets/img/projects/After Book/Afterbook-mockup-3.webp"
     ]
   },
   "365posters": {

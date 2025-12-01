@@ -190,8 +190,9 @@ body.project-page {
   height: auto;
   aspect-ratio: 16 / 9;
   display: block;
-  background: #000;
+  background: #1a1a1a;
 }
+
 
 .hero-media.hero-video {
   height: auto;
