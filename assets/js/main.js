@@ -150,6 +150,86 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   });
 })();
 
+// ---------- MOBILE SWIPE OVERLAY (index, dopo preloader) ----------
+(function () {
+  function estimateGifDuration(url) {
+    return fetch(url, { cache: 'force-cache' }).then(r => r.arrayBuffer()).then(buf => {
+      const a = new Uint8Array(buf);
+      let total = 0;
+      for (let i = 0; i < a.length - 7; i++) {
+        if (a[i] === 0x21 && a[i + 1] === 0xF9 && a[i + 2] === 0x04) {
+          const lo = a[i + 4];
+          const hi = a[i + 5];
+          const delay = (hi << 8) | lo;
+          total += delay;
+        }
+      }
+      const ms = total * 10;
+      return Math.max(500, Math.min(ms || 2500, 15000));
+    }).catch(() => 2500);
+  }
+
+  function initSwipe() {
+    const isHome = document.body && document.body.classList.contains('home');
+    if (!isHome) return;
+    const mql = window.matchMedia('(max-width: 768px)');
+    if (!(mql && mql.matches)) return;
+    // Crea overlay mobile (trasparente) e prepara struttura interna
+    const overlay = document.getElementById('mobile-swipe-overlay') || (() => {
+      const el = document.createElement('div');
+      el.id = 'mobile-swipe-overlay';
+      document.body.appendChild(el);
+      return el;
+    })();
+    overlay.classList.add('is-visible');
+    overlay.style.background = 'rgba(0, 0, 0, 0.9)';
+    overlay.innerHTML = '';
+    // Wrapper: area della GIF con sfondo nero al 50% (proporzioni rispettate)
+    const wrap = document.createElement('div');
+    wrap.className = 'swipe-wrap';
+    overlay.appendChild(wrap);
+    // GIF: nessuna modifica alla proprietà CSS 'display'
+    const img = document.createElement('img');
+    img.className = 'swipe-gif';
+    img.alt = 'Swipe';
+    img.src = 'assets/img/swipe.gif';
+    wrap.appendChild(img);
+    // Uscita con animazione fade-down
+    const hide = () => {
+      wrap.classList.remove('swipe-enter');
+      overlay.classList.remove('swipe-enter');
+      wrap.classList.add('swipe-exit');
+      overlay.classList.add('swipe-exit');
+      setTimeout(() => {
+        overlay.classList.remove('is-visible');
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 380);
+    };
+    img.addEventListener('error', hide, { once: true });
+    // Entrata con animazione fade-up e delay 1s
+    img.addEventListener('load', () => {
+      wrap.classList.add('swipe-enter');
+      overlay.classList.add('swipe-enter');
+      const dur = window.SWIPE_GIF_DURATION_MS;
+      if (typeof dur === 'number' && dur > 0) { setTimeout(hide, dur); return; }
+      estimateGifDuration(img.src).then(ms => setTimeout(hide, ms));
+    }, { once: true });
+  }
+
+  // Avvio con ritardo di 1s dalla fine del preloader (home ready)
+  function startSwipeWithDelay() {
+    setTimeout(initSwipe, 3000);
+  }
+
+  window.addEventListener('load', () => {
+    if (document.body.classList.contains('grid-ready')) { startSwipeWithDelay(); return; }
+    const mo = new MutationObserver(() => {
+      if (document.body.classList.contains('grid-ready')) { startSwipeWithDelay(); mo.disconnect(); }
+    });
+    mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  }, { once: true });
+})();
+
 // ---------- TYPEWRITER (riattivato) ----------
 (function () {
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

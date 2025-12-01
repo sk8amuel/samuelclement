@@ -1024,18 +1024,18 @@
    }
  }
 
- /* ========== PRELOADER ========== */
- #preloader {
-   position: fixed;
-   inset: 0;
-   background: #000;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   z-index: 999999;
-   opacity: 1;
-   transition: opacity 0.5s ease-out;
- }
+/* ========== PRELOADER ========== */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
 
  #preloader img {
    max-width: 22%;
@@ -1054,9 +1054,79 @@
  }
 
  /* Nascondi la linea sotto l'header solo durante il preloader attivo */
- body.preloader-active .top-line {
-   display: none !important;
- }
+body.preloader-active .top-line {
+  display: none !important;
+}
+
+/* ========== MOBILE SWIPE OVERLAY ========== */
+#mobile-swipe-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 1000000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: background 300ms ease;
+}
+
+#mobile-swipe-overlay.is-visible {
+  display: flex;
+}
+
+#mobile-swipe-overlay .swipe-gif {
+  max-width: 80vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  image-rendering: auto;
+}
+
+#mobile-swipe-overlay .swipe-wrap {
+  display: inline-block;
+  background: transparent;
+}
+
+/* Animazioni entrata/uscita overlay e contenuto */
+#mobile-swipe-overlay.swipe-enter {
+  animation: swipeOverlayFadeUp 420ms ease-out forwards;
+}
+
+#mobile-swipe-overlay.swipe-exit {
+  animation: swipeOverlayFadeDown 380ms ease-in forwards;
+}
+
+#mobile-swipe-overlay .swipe-wrap.swipe-enter {
+  animation: swipeContentFadeUp 420ms ease-out forwards;
+}
+
+#mobile-swipe-overlay .swipe-wrap.swipe-exit {
+  animation: swipeContentFadeDown 380ms ease-in forwards;
+}
+
+@keyframes swipeOverlayFadeUp {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes swipeOverlayFadeDown {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes swipeContentFadeUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes swipeContentFadeDown {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(12px); }
+}
+
+@media (min-width: 769px) {
+  #mobile-swipe-overlay { display: none !important; }
+}
 
  /* ========== FLIP SCENE (INDEX / ABOUT) ========== */
  .page-flip-scene {
