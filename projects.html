@@ -14,15 +14,11 @@
   <link
     href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/png" href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
-  <link rel="apple-touch-icon" sizes="180x180"
-    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
-  <link rel="apple-touch-icon" sizes="167x167"
-    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
-  <link rel="apple-touch-icon" sizes="152x152"
-    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
-  <link rel="apple-touch-icon" sizes="120x120"
-    href="https://www.samuelclement.it/3/wp-content/uploads/2025/04/cropped-Logo.png">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon.png">
 
   <!-- Base CSS (stesso dell'index) -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -182,8 +178,7 @@
         <div class="project-detail" id="proj-005">
           <div class="project-detail-inner">
             <a href="projects/after-book.html" class="detail-image-wrap" data-project="afterbook" data-transition>
-              <video src="assets/img/projects/after-book-project.webm" autoplay muted loop playsinline
-                preload="metadata"></video>
+              <img src="assets/img/projects/After Book/Afterbook-mockup.webp" alt="After Book" loading="lazy" width="1000" height="1200">
             </a>
             <div class="detail-text">
               <h3 class="detail-title">After Book</h3>
@@ -583,7 +578,13 @@
                   el.src = el.dataset.src || '';
                   el.removeAttribute('data-src');
                 } else if (el.tagName === 'IFRAME') {
-                  el.src = el.dataset.src || '';
+                  try {
+                    const u = new URL(el.dataset.src || '', window.location.href);
+                    if (!u.searchParams.has('enablejsapi')) u.searchParams.set('enablejsapi', '1');
+                    if (!u.searchParams.has('origin')) u.searchParams.set('origin', location.origin);
+                    if (!u.searchParams.has('playsinline')) u.searchParams.set('playsinline', '1');
+                    el.src = u.toString();
+                  } catch { el.src = el.dataset.src || ''; }
                   el.removeAttribute('data-src');
                 } else if (el.tagName === 'VIDEO') {
                   const s = el.querySelector('source[data-src]');
@@ -598,7 +599,7 @@
             lazyVideos.forEach(el => io.observe(el));
           } else {
             lazyImgs.forEach(el => { el.src = el.dataset.src || ''; el.removeAttribute('data-src'); });
-            lazyIframes.forEach(el => { el.src = el.dataset.src || ''; el.removeAttribute('data-src'); });
+            lazyIframes.forEach(el => { try { const u = new URL(el.dataset.src || '', window.location.href); if (!u.searchParams.has('enablejsapi')) u.searchParams.set('enablejsapi', '1'); if (!u.searchParams.has('origin')) u.searchParams.set('origin', location.origin); if (!u.searchParams.has('playsinline')) u.searchParams.set('playsinline', '1'); el.src = u.toString(); } catch { el.src = el.dataset.src || ''; } el.removeAttribute('data-src'); });
             lazyVideos.forEach(el => { const s = el.querySelector('source[data-src]'); if (s) { s.src = s.dataset.src || ''; s.removeAttribute('data-src'); el.load(); } el.removeAttribute('data-lazy'); });
           }
           let shift = 0;

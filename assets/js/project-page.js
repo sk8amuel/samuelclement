@@ -149,7 +149,10 @@
     }
   }
 
-  const vimeoFrames = Array.from(document.querySelectorAll('.template-hero .hero-media iframe'));
+  const heroFrames = Array.from(document.querySelectorAll('.template-hero .hero-media iframe'));
+  const vimeoFrames = heroFrames.filter(ifr => /vimeo\.com/i.test(String(ifr.src || '')));
+  const ytFrames = heroFrames.filter(ifr => /(youtube|youtu\.be|youtube-nocookie\.com)/i.test(String(ifr.src || '')));
+
   vimeoFrames.forEach(ifr => {
     const wrap = ifr.closest('.hero-media');
     if (!wrap) return;
@@ -157,24 +160,89 @@
     let player = null;
     try { if (window.Vimeo && window.Vimeo.Player) player = new window.Vimeo.Player(ifr); } catch(_) {}
     if (player) {
-      player.on('play', () => { wrap.classList.remove('skeleton'); });
-      player.ready().then(() => { player.play().catch(() => {}); }).catch(() => {});
+      let hasStarted = false;
+      const clearSkeleton = () => { if (!hasStarted) { hasStarted = true; wrap.classList.remove('skeleton'); } };
+      let clearOnReady = false;
+      try {
+        const u = new URL(ifr.src);
+        const bg = u.searchParams.get('background');
+        const controls = u.searchParams.get('controls');
+        if ((controls === '1') || (bg === '0')) clearOnReady = true;
+      } catch (_) {}
+      player.on('play', clearSkeleton);
+      player.on('timeupdate', (data) => { if (data && (data.seconds > 0 || data.percent > 0)) clearSkeleton(); });
+      player.on('loaded', () => { if (clearOnReady) clearSkeleton(); });
+      player.ready().then(() => {
+        player.setMuted(true).catch(() => {});
+        player.setAutopause(false).catch(() => {});
+        player.setLoop(true).catch(() => {});
+        player.play().catch(() => {});
+        if (clearOnReady) clearSkeleton();
+      }).catch(() => {});
       wrap.addEventListener('click', () => { player.play().catch(() => {}); });
       wrap.addEventListener('touchstart', () => { player.play().catch(() => {}); }, { passive: true });
+      setTimeout(() => {
+        if (!hasStarted) {
+          try { player.play().catch(() => {}); } catch (_) {}
+        }
+      }, 1200);
+      setTimeout(() => {
+        if (!hasStarted) {
+          // fallback: abilita controlli se non parte
+          try {
+            const url = new URL(ifr.src);
+            url.searchParams.set('background', '0');
+            url.searchParams.set('controls', '1');
+            ifr.src = url.toString();
+          } catch (_) {}
+        }
+      }, 4000);
     } else {
       ifr.addEventListener('load', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { once: true });
       wrap.addEventListener('click', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } });
       wrap.addEventListener('touchstart', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { passive: true });
     }
-    setTimeout(() => { if (!wrap.classList.contains('skeleton')) return; ifr.src = ifr.src; }, 1200);
+    setTimeout(() => { if (!wrap.classList.contains('skeleton')) return; ifr.src = ifr.src; }, 2000);
   });
+
+  function setupYTPlayers() {
+    ytFrames.forEach(ifr => {
+      const wrap = ifr.closest('.hero-media');
+      if (!wrap) return;
+      wrap.classList.add('skeleton');
+      // Non modificare lo src dell'iframe per evitare ERR_ABORTED
+      ifr._ytAdjusted = true;
+      if (window.YT && window.YT.Player) {
+        const player = new window.YT.Player(ifr, {
+          events: {
+            onReady: (e) => { try { e.target.mute(); e.target.playVideo(); wrap.classList.remove('skeleton'); } catch (_) { wrap.classList.remove('skeleton'); } },
+            onStateChange: (ev) => { if (ev && ev.data === 1) { wrap.classList.remove('skeleton'); } }
+          }
+        });
+        wrap.addEventListener('click', () => { try { player.playVideo(); } catch (_) {} });
+        wrap.addEventListener('touchstart', () => { try { player.playVideo(); } catch (_) {} }, { passive: true });
+        setTimeout(() => { if (wrap.classList.contains('skeleton')) { try { player.playVideo(); } catch (_) { wrap.classList.remove('skeleton'); } } }, 1600);
+      }
+    });
+  }
+
+  if (ytFrames.length) {
+    if (window.YT && window.YT.Player) setupYTPlayers();
+    else {
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(s);
+      const old = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function() { try { setupYTPlayers(); } catch (_) {} if (typeof old === 'function') { try { old(); } catch (_) {} } };
+    }
+  }
 
   window.addEventListener('message', (e) => {
     const origin = e.origin || '';
     if (!/vimeo\.com/i.test(origin)) return;
     let data = e.data;
     if (typeof data === 'string') { try { data = JSON.parse(data); } catch(_) {} }
-    if (!data || !(data.event === 'play' || data.event === 'playProgress')) return;
+    if (!data || !(data.event === 'play' || data.event === 'playProgress' || data.event === 'timeupdate' || data.event === 'playing')) return;
     const ifr = vimeoFrames.find(x => { try { return x.contentWindow === e.source; } catch(_) { return false; } });
     if (!ifr) return;
     const wrap = ifr.closest('.hero-media');
