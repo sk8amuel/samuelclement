@@ -1,0 +1,388 @@
+<?xml version="1.0"?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="3.0" prefix="rendition: http://www.idpf.org/vocab/rendition/# ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+<!-- METADATA -->
+	<meta name="generator" content="PubCoder for Mac OS X"/>
+	<meta property="rendition:layout">pre-paginated</meta>	
+	<meta property="rendition:orientation">auto</meta>
+	<meta property="rendition:spread">none</meta>
+	<meta property="dcterms:modified">2025-12-02T20:01:04Z</meta>
+	<meta property="media:active-class">-epub-media-overlay-active</meta>
+	<meta property="media:duration">00:00:00</meta>
+	
+	<dc:title>Spade</dc:title>
+	<dc:creator>Samuel Clement</dc:creator>
+	<dc:description>Powered by PubCoder</dc:description>
+	<dc:publisher>Samuel Clement</dc:publisher>
+	<dc:date>2025-12-02</dc:date>
+	<dc:rights>© 2024 Samuel Clement</dc:rights>
+	<dc:language>en</dc:language>
+	<dc:identifier id="BookID">381C0A4D705E425A93EB99054496CDC7</dc:identifier>
+	<meta name="cover" content="cover-image" />
+</metadata>	
+<!-- MANIFEST -->
+	<manifest>
+<!-- GENERAL ASSETS  -->
+		<item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+		<item id="cssContent" href="css/general.styles.css" media-type="text/css"/>
+		<item id="animateCss" href="css/animate.css" media-type="text/css"/>
+		<item id="jqueryUI" href="css/jquery-ui.min.css" media-type="text/css"/>
+		<item id="jqueryUI-structure" href="css/jquery-ui.structure.min.css" media-type="text/css"/>
+		<item id="jqueryUI-theme" href="css/jquery-ui.theme.min.css" media-type="text/css"/>
+		<item id="cover-image" properties="cover-image" href="assets/images/pubcoder_book_cover.jpg" media-type="image/jpeg"/>
+		
+		<item id="SCNavigationLeft-image" href="images/scnavigation-prev-btn.png" media-type="image/png"/>
+		<item id="SCNavigationLeft-image-active" href="images/scnavigation-prev-btn-active.png" media-type="image/png"/>
+		<item id="SCNavigationLeft-image-hover" href="images/scnavigation-prev-btn-hover.png" media-type="image/png"/>
+		<item id="SCNavigationRight-image" href="images/scnavigation-next-btn.png" media-type="image/png"/>
+		<item id="SCNavigationRight-image-active" href="images/scnavigation-next-btn-active.png" media-type="image/png"/>
+		<item id="SCNavigationRight-image-hover" href="images/scnavigation-next-btn-hover.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-fullscreen-close-image" href="images/scphotogallery-fullscreen-close.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-fullscreen-open-image" href="images/scphotogallery-fullscreen-open.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-index-close-image" href="images/scphotogallery-index-close.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-index-open-image" href="images/scphotogallery-index-open.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-next-image" href="images/scphotogallery-next.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-prev-image" href="images/scphotogallery-prev.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-thumb-next-image" href="images/scphotogallery-thumb-next.png" media-type="image/png"/>
+		<item id="SCPhotoGallery-thumb-prev-image" href="images/scphotogallery-thumb-prev.png" media-type="image/png"/>
+		
+		<item id="SCQuiz-check-off" href="images/scquiz-check-off.png" media-type="image/png"/>
+		<item id="SCQuiz-check-on" href="images/scquiz-check-on.png" media-type="image/png"/>
+		<item id="SCQuiz-check-right" href="images/scquiz-check-right.png" media-type="image/png"/>
+		<item id="SCQuiz-check-wrong" href="images/scquiz-check-wrong.png" media-type="image/png"/>
+		<item id="SCQuiz-radio-off" href="images/scquiz-radio-off.png" media-type="image/png"/>
+		<item id="SCQuiz-radio-on" href="images/scquiz-radio-on.png" media-type="image/png"/>
+		<item id="SCQuiz-radio-right" href="images/scquiz-radio-right.png" media-type="image/png"/>
+		<item id="SCQuiz-radio-wrong" href="images/scquiz-radio-wrong.png" media-type="image/png"/>
+		<item id="SCQuiz-next" href="images/scquiz-next.png" media-type="image/png"/>
+		<item id="SCQuiz-prev" href="images/scquiz-prev.png" media-type="image/png"/>
+		<item id="SCQuiz-radio-missed" href="images/scquiz-radio-missed.png" media-type="image/png"/>
+		<item id="SCQuiz-check-missed" href="images/scquiz-check-missed.png" media-type="image/png"/>
+		<item id="SCDrawer-trash" href="images/scdrawer-trash.png" media-type="image/png"/>
+        <item id="SCDrawer-transparent" href="images/scdrawer-transparent_color.png" media-type="image/png"/>
+        <item id="SCDrawer-tool-drawer" href="images/scdrawer-draw_tool_icon.png" media-type="image/png"/>
+        <item id="SCDrawer-tool-eraser" href="images/scdrawer-erase_tool_icon.png" media-type="image/png"/>
+        <item id="SCDrawer-tool-filler" href="images/scdrawer-fill_tool_icon.png" media-type="image/png"/>
+        <item id="SCDrawer-tool-crayon" href="images/scdrawer-crayon_tool_icon.png" media-type="image/png"/>
+		
+		<item id="scdrawer-brush_svg" href="images/scdrawer-brush.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-close_svg" href="images/scdrawer-close.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-eraser_svg" href="images/scdrawer-eraser.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-fill_svg" href="images/scdrawer-fill.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-highlighter_svg" href="images/scdrawer-highlighter.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-note_svg" href="images/scdrawer-note.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-pencil_svg" href="images/scdrawer-pencil.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-redo_svg" href="images/scdrawer-redo.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-trash_svg" href="images/scdrawer-trash.svg" media-type="image/svg+xml"/>
+		<item id="scdrawer-undo_svg" href="images/scdrawer-undo.svg" media-type="image/svg+xml"/>
+		<item id="sctruefalse-down" href="images/sctruefalse-down.png" media-type="image/png"/>
+		<item id="sctruefalse-radio-missed" href="images/sctruefalse-radio-missed.png" media-type="image/png"/>
+		<item id="sctruefalse-radio-off" href="images/sctruefalse-radio-off.png" media-type="image/png"/>
+		<item id="sctruefalse-radio-on" href="images/sctruefalse-radio-on.png" media-type="image/png"/>
+		<item id="sctruefalse-radio-right" href="images/sctruefalse-radio-right.png" media-type="image/png"/>
+		<item id="sctruefalse-radio-wrong" href="images/sctruefalse-radio-wrong.png" media-type="image/png"/>
+		<item id="sctruefalse-up" href="images/sctruefalse-up.png" media-type="image/png"/>
+		<item id="ui-icons_444444_256x240" href="images/ui-icons_444444_256x240.png" media-type="image/png"/>
+		<item id="ui-icons_555555_256x240" href="images/ui-icons_555555_256x240.png" media-type="image/png"/>
+		<item id="ui-icons_777620_256x240" href="images/ui-icons_777620_256x240.png" media-type="image/png"/>
+		<item id="ui-icons_777777_256x240" href="images/ui-icons_777777_256x240.png" media-type="image/png"/>
+		<item id="ui-icons_cc0000_256x240" href="images/ui-icons_cc0000_256x240.png" media-type="image/png"/>
+		<item id="ui-icons_ffffff_256x240" href="images/ui-icons_ffffff_256x240.png" media-type="image/png"/>
+<!-- FONTS -->		
+		
+<item id="font1" href="fonts/IBM-Plex-Sans-300italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font2" href="fonts/IBM-Plex-Sans-Condensed-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font3" href="fonts/IBM-Plex-Serif-200italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font4" href="fonts/IBM-Plex-Sans-Condensed-600italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font5" href="fonts/IBM-Plex-Sans-Condensed-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font6" href="fonts/IBM-Plex-Sans-JP-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font7" href="fonts/IBM-Plex-Sans-Arabic-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font8" href="fonts/IBM-Plex-Sans-Arabic-200.ttf" media-type="application/x-font-truetype"/>
+<item id="font9" href="fonts/OpenDyslexic3.ttf" media-type="application/x-font-truetype"/>
+<item id="font10" href="fonts/IBM-Plex-Sans-Condensed-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font11" href="fonts/Cormorant-Garamond-italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font12" href="fonts/Anonymous-Pro.ttf" media-type="application/x-font-truetype"/>
+<item id="font13" href="fonts/IBM-Plex-Sans-600italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font14" href="fonts/IBM-Plex-Sans-Condensed-100.ttf" media-type="application/x-font-truetype"/>
+<item id="font15" href="fonts/EB-Garamond-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font16" href="fonts/MyriadVariableConcept-Roman.otf" media-type="application/x-font-opentype"/>
+<item id="font17" href="fonts/Cormorant-Garamond-500italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font18" href="fonts/EB-Garamond-500italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font19" href="fonts/IBM-Plex-Serif-700italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font20" href="fonts/IBM-Plex-Sans-Condensed-300italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font21" href="fonts/UnifrakturCook-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font22" href="fonts/EB-Garamond-600italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font23" href="fonts/Cormorant-Garamond-600italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font24" href="fonts/IBM-Plex-Sans-Condensed-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font25" href="fonts/UnifrakturMaguntia-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font26" href="fonts/IBM-Plex-Sans-500italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font27" href="fonts/IBM-Plex-Sans-Arabic-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font28" href="fonts/Droid-Sans.ttf" media-type="application/x-font-truetype"/>
+<item id="font29" href="fonts/IBM-Plex-Sans-Arabic-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font30" href="fonts/Tinos.ttf" media-type="application/x-font-truetype"/>
+<item id="font31" href="fonts/Didot.ttf" media-type="application/x-font-truetype"/>
+<item id="font32" href="fonts/EB-Garamond-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font33" href="fonts/IBM-Plex-Sans-Arabic-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font34" href="fonts/Roboto-Mono.ttf" media-type="application/x-font-truetype"/>
+<item id="font35" href="fonts/Roboto-Slab.ttf" media-type="application/x-font-truetype"/>
+<item id="font36" href="fonts/IBM-Plex-Sans-Arabic-100.ttf" media-type="application/x-font-truetype"/>
+<item id="font37" href="fonts/IBM-Plex-Sans-Condensed-500italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font38" href="fonts/IBM-Plex-Serif-100italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font39" href="fonts/Open-Sans.ttf" media-type="application/x-font-truetype"/>
+<item id="font40" href="fonts/MyriadPro-Regular.otf" media-type="application/x-font-opentype"/>
+<item id="font41" href="fonts/Cormorant-Garamond-300italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font42" href="fonts/IBM-Plex-Sans-italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font43" href="fonts/Cormorant-Garamond-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font44" href="fonts/IBM-Plex-Sans-Arabic-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font45" href="fonts/IBM-Plex-Sans-Condensed-italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font46" href="fonts/EB-Garamond-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font47" href="fonts/IBM-Plex-Sans-Condensed-200.ttf" media-type="application/x-font-truetype"/>
+<item id="font48" href="fonts/IBM-Plex-Sans-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font49" href="fonts/IBM-Plex-Sans-Condensed-200italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font50" href="fonts/IBM-Plex-Serif-600italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font51" href="fonts/Roboto.ttf" media-type="application/x-font-truetype"/>
+<item id="font52" href="fonts/IBM-Plex-Sans-JP-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font53" href="fonts/IBM-Plex-Sans-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font54" href="fonts/IBM-Plex-Serif-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font55" href="fonts/Source-Sans-Pro.ttf" media-type="application/x-font-truetype"/>
+<item id="font56" href="fonts/IBM-Plex-Sans-700italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font57" href="fonts/MyriadPro-It.otf" media-type="application/x-font-opentype"/>
+<item id="font58" href="fonts/EB-Garamond-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font59" href="fonts/IBM-Plex-Serif-100.ttf" media-type="application/x-font-truetype"/>
+<item id="font60" href="fonts/IBM-Plex-Sans-100.ttf" media-type="application/x-font-truetype"/>
+<item id="font61" href="fonts/IBM-Plex-Sans-JP-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font62" href="fonts/IBM-Plex-Sans-JP-100.ttf" media-type="application/x-font-truetype"/>
+<item id="font63" href="fonts/MyriadVariableConcept-Italic.otf" media-type="application/x-font-opentype"/>
+<item id="font64" href="fonts/EB-Garamond-800italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font65" href="fonts/EB-Garamond-italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font66" href="fonts/MyriadPro-Bold.otf" media-type="application/x-font-opentype"/>
+<item id="font67" href="fonts/IBM-Plex-Sans-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font68" href="fonts/IBM-Plex-Serif-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font69" href="fonts/IBM-Plex-Serif-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font70" href="fonts/IBM-Plex-Sans-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font71" href="fonts/IBM-Plex-Sans-Condensed-700italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font72" href="fonts/IBM-Plex-Serif-300italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font73" href="fonts/IBM-Plex-Serif-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font74" href="fonts/Cormorant-Garamond-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font75" href="fonts/IBM-Plex-Sans-200italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font76" href="fonts/IBM-Plex-Sans-JP-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font77" href="fonts/IBM-Plex-Sans-Condensed-regular.ttf" media-type="application/x-font-truetype"/>
+<item id="font78" href="fonts/IBM-Plex-Sans-100italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font79" href="fonts/IBM-Plex-Sans-JP-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font80" href="fonts/EB-Garamond-800.ttf" media-type="application/x-font-truetype"/>
+<item id="font81" href="fonts/Cormorant-Garamond-300.ttf" media-type="application/x-font-truetype"/>
+<item id="font82" href="fonts/IBM-Plex-Sans-200.ttf" media-type="application/x-font-truetype"/>
+<item id="font83" href="fonts/IBM-Plex-Serif-200.ttf" media-type="application/x-font-truetype"/>
+<item id="font84" href="fonts/Cormorant-Garamond-700.ttf" media-type="application/x-font-truetype"/>
+<item id="font85" href="fonts/Source-Code-Pro.ttf" media-type="application/x-font-truetype"/>
+<item id="font86" href="fonts/IBM-Plex-Serif-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font87" href="fonts/Droid-Serif.ttf" media-type="application/x-font-truetype"/>
+<item id="font88" href="fonts/IBM-Plex-Sans-600.ttf" media-type="application/x-font-truetype"/>
+<item id="font89" href="fonts/IBM-Plex-Sans-JP-200.ttf" media-type="application/x-font-truetype"/>
+<item id="font90" href="fonts/IBM-Plex-Serif-italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font91" href="fonts/MyriadPro-BoldIt.otf" media-type="application/x-font-opentype"/>
+<item id="font92" href="fonts/Droid-Sans-Mono.ttf" media-type="application/x-font-truetype"/>
+<item id="font93" href="fonts/IBM-Plex-Serif-500italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font94" href="fonts/Cormorant-Garamond-500.ttf" media-type="application/x-font-truetype"/>
+<item id="font95" href="fonts/IBM-Plex-Sans-Condensed-100italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font96" href="fonts/Cormorant-Garamond-700italic.ttf" media-type="application/x-font-truetype"/>
+<item id="font97" href="fonts/Lato.ttf" media-type="application/x-font-truetype"/>
+<item id="font98" href="fonts/EB-Garamond-700italic.ttf" media-type="application/x-font-truetype"/>
+<!-- JAVASCRIPT -->
+				<item id="jquery" href="js/jquery.js" media-type="text/javascript" />
+		<item id="jquery_ui" href="js/jquery-ui.min.js" media-type="text/javascript" />
+        <item id="spritespin_api" href="js/spritespin.api.js" media-type="text/javascript" />
+        <item id="spritespin" href="js/spritespin.js" media-type="text/javascript" />
+		<item id="spritespin_mod_360" href="js/spritespin.mod-360.js" media-type="text/javascript" />
+		<item id="jquery_scrollTo" href="js/jquery.scrollTo.min.js" media-type="text/javascript" />
+		<item id="jquery_easie" href="js/jquery.easie-min.js" media-type="text/javascript" />
+		<item id="jquery_move" href='js/jquery.move.js' media-type="text/javascript" />
+		<item id="jquery_SCswipe" href='js/jquery.SCswipe.js' media-type="text/javascript" />
+		<item id="jquery-css-transform" href='js/jquery-css-transform.js' media-type="text/javascript" />
+		<item id="jquery-animate-css-rotate-scale" href='js/jquery-animate-css-rotate-scale.js' media-type="text/javascript" />
+		<item id="jquery-animate-shadow" href='js/jquery.animate-shadow-min.js' media-type="text/javascript" />
+		<item id="jquery-animate-dropshadow" href='js/jquery.animate-dropshadow.js' media-type="text/javascript" />
+        <item id="jquery_panzoom_js" href='js/jquery.panzoom.min.js' media-type="text/javascript" />
+        <item id="underscore_js" href='js/underscore-min.js' media-type="text/javascript" />
+		<item id="remodal_js" href='js/remodal.js' media-type="text/javascript" />
+		<item id="pubcoder_js" href='js/pubcoder.js' media-type="text/javascript" />
+		<item id="pubcoder_devicemotion_js" href='js/pubcoder.devicemotion.js' media-type="text/javascript" />
+		<item id="pubcoder_general_functions" href='js/general.functions.js' media-type="text/javascript" />
+		<item id="unmask_js" href='js/unmask.js' media-type="text/javascript" />
+		<item id="swiper_js" href='js/idangerous.swiper-2.3.js' media-type="text/javascript" />
+		<item id="photogallery_js" href='js/photogallery.js' media-type="text/javascript" />
+		<item id="quiz_multi_js" href='js/quiz-multi.js' media-type="text/javascript" />
+		<item id="drawer_js" href='js/drawer.js' media-type="text/javascript" />
+		<item id="drawer_flood_fill_js" href='js/flood_fill.js' media-type="text/javascript" />
+        <item id="scw_widgets_js" href='js/scw_widgets.js' media-type="text/javascript" />
+        <item id="scw_panzoom_js" href='js/scw_panzoom.js' media-type="text/javascript" />
+        <item id="scw_memory_game_js" href='js/scw_memory_game.js' media-type="text/javascript" />
+		<item id="hammer_min_js" href='js/hammer.min.js' media-type="text/javascript" />
+		<item id="crossword_js" href="js/crossword.js" media-type="text/javascript" />
+		<item id="fill_in_js" href="js/fill-in.js" media-type="text/javascript" />
+		<item id="jquery_ui_touch-punch_js" href="js/jquery.ui.touch-punch.js" media-type="text/javascript" />
+		<item id="matchWordWithPicture_js" href="js/matchWordWithPicture.js" media-type="text/javascript" />
+		<item id="trueFalse_js" href="js/trueFalse.js" media-type="text/javascript" />
+		
+<!-- SHARED ASSETS -->
+		
+<!-- PAGES ASSETS -->
+		<!--page 1-->
+<item id="js1" href="assets/1/actions.js" media-type="text/javascript" />
+<item id="css1" href="assets/1/styles.css" media-type="text/css"/>
+<item id="page1" pageid="2"
+      href="assets/1/page.xhtml" media-type="application/xhtml+xml" properties="scripted"
+      
+      />
+<item id="video99" href="assets/video/7959-205810652.mp4" media-type="video/mp4" />
+<item id="obj1584_image" href="assets/images/obj1584_image.png" media-type="image/png" />
+<item id="obj1682_image" href="assets/images/obj1682_image.png" media-type="image/png" />
+<item id="video101" href="assets/video/Animazione-spade-3.mp4" media-type="video/mp4" />
+<item id="obj2209_image" href="assets/images/obj2209_image.jpeg" media-type="image/jpeg" />
+<item id="obj2220_image" href="assets/images/obj2220_image.jpeg" media-type="image/jpeg" />
+<item id="obj2229_image" href="assets/images/obj2229_image.jpeg" media-type="image/jpeg" />
+<item id="obj2215_image" href="assets/images/obj2215_image.jpeg" media-type="image/jpeg" />
+<item id="obj2320_image" href="assets/images/obj2320_image.jpeg" media-type="image/jpeg" />
+<item id="thumbnail1" href="assets/1/thumbnail.png" media-type="image/png" />
+<item id="loading1" href="assets/1/loading.jpg" media-type="image/jpeg" />
+
+<!--page 1: end-->
+<!--page 2-->
+<item id="js2" href="assets/2/actions.js" media-type="text/javascript" />
+<item id="css2" href="assets/2/styles.css" media-type="text/css"/>
+<item id="page2" pageid="383"
+      href="assets/2/page.xhtml" media-type="application/xhtml+xml" properties="scripted"
+      
+      />
+<item id="video107" href="assets/video/Seamless-Glass-Polygons-Free-Yellow-Background.mp4" media-type="video/mp4" />
+<item id="obj396_image" href="assets/images/obj396_image.png" media-type="image/png" />
+<item id="obj404_image" href="assets/images/obj404_image.png" media-type="image/png" />
+<item id="obj407_image" href="assets/images/obj407_image.png" media-type="image/png" />
+<item id="obj414_image" href="assets/images/obj414_image.png" media-type="image/png" />
+<item id="image109" href="assets/images/Comp-2.gif" media-type="image/gif" />
+<item id="obj497_image" href="assets/images/obj497_image.png" media-type="image/png" />
+<item id="obj498_image" href="assets/images/obj498_image.png" media-type="image/png" />
+<item id="obj499_image" href="assets/images/obj499_image.png" media-type="image/png" />
+<item id="obj503_image" href="assets/images/obj503_image.png" media-type="image/png" />
+<item id="obj504_image" href="assets/images/obj504_image.png" media-type="image/png" />
+<item id="obj505_image" href="assets/images/obj505_image.png" media-type="image/png" />
+<item id="obj1414_image" href="assets/images/obj1414_image.png" media-type="image/png" />
+<item id="obj1414_maskedImage" href="assets/images/obj1414_maskedImage.png" media-type="image/png" />
+<item id="obj1448_image" href="assets/images/obj1448_image.png" media-type="image/png" />
+<item id="obj802_image" href="assets/images/obj802_image.png" media-type="image/png" />
+<item id="obj1785_image" href="assets/images/obj1785_image.png" media-type="image/png" />
+<item id="obj2097_image" href="assets/images/obj2097_image.png" media-type="image/png" />
+<item id="obj2032_image" href="assets/images/obj2032_image.png" media-type="image/png" />
+<item id="obj2047_image" href="assets/images/obj2047_image.png" media-type="image/png" />
+<item id="obj2056_image" href="assets/images/obj2056_image.png" media-type="image/png" />
+<item id="obj2106_image" href="assets/images/obj2106_image.png" media-type="image/png" />
+<item id="obj882_image" href="assets/images/obj882_image.png" media-type="image/png" />
+<item id="obj885_image" href="assets/images/obj885_image.png" media-type="image/png" />
+<item id="obj888_image" href="assets/images/obj888_image.png" media-type="image/png" />
+<item id="obj2261_image" href="assets/images/obj2261_image.png" media-type="image/png" />
+<item id="thumbnail2" href="assets/2/thumbnail.png" media-type="image/png" />
+<item id="loading2" href="assets/2/loading.jpg" media-type="image/jpeg" />
+
+<!--page 2: end-->
+<!--page 3-->
+<item id="js3" href="assets/3/actions.js" media-type="text/javascript" />
+<item id="css3" href="assets/3/styles.css" media-type="text/css"/>
+<item id="page3" pageid="3"
+      href="assets/3/page.xhtml" media-type="application/xhtml+xml" properties="svg scripted"
+      
+      />
+<item id="image118" href="assets/images/defiAsset-4.svg" media-type="image/svg+xml" />
+<item id="image119" href="assets/images/defiAsset-5.svg" media-type="image/svg+xml" />
+<item id="obj211_image" href="assets/images/obj211_image.png" media-type="image/png" />
+<item id="obj216_image" href="assets/images/obj216_image.png" media-type="image/png" />
+<item id="obj1266_image" href="assets/images/obj1266_image.jpeg" media-type="image/jpeg" />
+<item id="obj1269_image" href="assets/images/obj1269_image.jpeg" media-type="image/jpeg" />
+<item id="obj1272_image" href="assets/images/obj1272_image.jpeg" media-type="image/jpeg" />
+<item id="obj1275_image" href="assets/images/obj1275_image.jpeg" media-type="image/jpeg" />
+<item id="obj184_image" href="assets/images/obj184_image.png" media-type="image/png" />
+<item id="obj183_image" href="assets/images/obj183_image.png" media-type="image/png" />
+<item id="video120" href="assets/video/spada-animazione.mp4" media-type="video/mp4" />
+<item id="obj865_image" href="assets/images/obj865_image.png" media-type="image/png" />
+<item id="obj1309_image" href="assets/images/obj1309_image.png" media-type="image/png" />
+<item id="obj1324_image" href="assets/images/obj1324_image.png" media-type="image/png" />
+<item id="obj1335_image" href="assets/images/obj1335_image.png" media-type="image/png" />
+<item id="obj1338_image" href="assets/images/obj1338_image.png" media-type="image/png" />
+<item id="video121" href="assets/video/Seven-samurai---Samurai-duel.mp4" media-type="video/mp4" />
+<item id="thumbnail3" href="assets/3/thumbnail.png" media-type="image/png" />
+<item id="loading3" href="assets/3/loading.jpg" media-type="image/jpeg" />
+
+<!--page 3: end-->
+<!--page 4-->
+<item id="js4" href="assets/4/actions.js" media-type="text/javascript" />
+<item id="css4" href="assets/4/styles.css" media-type="text/css"/>
+<item id="page4" pageid="317"
+      href="assets/4/page.xhtml" media-type="application/xhtml+xml" properties="scripted"
+      
+      />
+<item id="obj942_image" href="assets/images/obj942_image.png" media-type="image/png" />
+<item id="obj1137_image" href="assets/images/obj1137_image.png" media-type="image/png" />
+<item id="obj1165_image" href="assets/images/obj1165_image.png" media-type="image/png" />
+<item id="obj1168_image" href="assets/images/obj1168_image.png" media-type="image/png" />
+<item id="obj1487_image" href="assets/images/obj1487_image.png" media-type="image/png" />
+<item id="obj1859_image" href="assets/images/obj1859_image.jpeg" media-type="image/jpeg" />
+<item id="obj1856_image" href="assets/images/obj1856_image.jpeg" media-type="image/jpeg" />
+<item id="obj2171_image" href="assets/images/obj2171_image.png" media-type="image/png" />
+<item id="obj2178_image" href="assets/images/obj2178_image.png" media-type="image/png" />
+<item id="obj2449_image" href="assets/images/obj2449_image.png" media-type="image/png" />
+<item id="image129" href="assets/images/2.png" media-type="image/png" />
+<item id="obj2466_image" href="assets/images/obj2466_image.png" media-type="image/png" />
+<item id="obj2598_image" href="assets/images/obj2598_image.png" media-type="image/png" />
+<item id="thumbnail4" href="assets/4/thumbnail.png" media-type="image/png" />
+<item id="loading4" href="assets/4/loading.jpg" media-type="image/jpeg" />
+
+<!--page 4: end-->
+<!--page 5-->
+<item id="js5" href="assets/5/actions.js" media-type="text/javascript" />
+<item id="css5" href="assets/5/styles.css" media-type="text/css"/>
+<item id="page5" pageid="1155"
+      href="assets/5/page.xhtml" media-type="application/xhtml+xml" properties="scripted svg"
+      
+      />
+<item id="obj1195_image" href="assets/images/obj1195_image.png" media-type="image/png" />
+<item id="obj1192_image" href="assets/images/obj1192_image.png" media-type="image/png" />
+<item id="obj1625_image" href="assets/images/obj1625_image.png" media-type="image/png" />
+<item id="obj1639_image" href="assets/images/obj1639_image.png" media-type="image/png" />
+<item id="obj1642_image" href="assets/images/obj1642_image.png" media-type="image/png" />
+<item id="obj1200_image" href="assets/images/obj1200_image.png" media-type="image/png" />
+<item id="obj1199_image" href="assets/images/obj1199_image.png" media-type="image/png" />
+<item id="video135" href="assets/video/Comp-1.mp4" media-type="video/mp4" />
+<item id="obj2608_image" href="assets/images/obj2608_image.png" media-type="image/png" />
+<item id="thumbnail5" href="assets/5/thumbnail.png" media-type="image/png" />
+<item id="loading5" href="assets/5/loading.jpg" media-type="image/jpeg" />
+
+<!--page 5: end-->
+<!--page 6-->
+<item id="js6" href="assets/6/actions.js" media-type="text/javascript" />
+<item id="css6" href="assets/6/styles.css" media-type="text/css"/>
+<item id="page6" pageid="1493"
+      href="assets/6/page.xhtml" media-type="application/xhtml+xml" properties="scripted"
+      
+      />
+<item id="obj1698_image" href="assets/images/obj1698_image.png" media-type="image/png" />
+<item id="obj2325_image" href="assets/images/obj2325_image.png" media-type="image/png" />
+<item id="obj2330_image" href="assets/images/obj2330_image.png" media-type="image/png" />
+<item id="thumbnail6" href="assets/6/thumbnail.png" media-type="image/png" />
+<item id="loading6" href="assets/6/loading.jpg" media-type="image/jpeg" />
+
+<!--page 6: end-->
+	</manifest>
+	
+	<spine page-progression-direction="ltr">
+		<itemref idref="page1" />
+<itemref idref="page2" />
+<itemref idref="page3" />
+<itemref idref="page4" />
+<itemref idref="page5" />
+<itemref idref="page6" />
+	</spine>
+	
+	<guide> 
+      <reference type="cover" title="Cover" href="assets/1/page.xhtml"/>
+      <reference type="text" title="Story start" href="assets/2/page.xhtml"/>
+  </guide>	
+</package>

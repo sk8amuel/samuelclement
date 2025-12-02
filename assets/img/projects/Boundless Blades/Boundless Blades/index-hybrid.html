@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>XReader</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.transit.min.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/underscore-min.js"></script>  <!-- required for lms.js on XPUBs built with PubCoder < 4.0 -->
+
+  <style>
+    
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: transparent;
+      -webkit-user-select: none; /* Safari */
+      -ms-user-select: none; /* IE 10 and IE 11 */
+      user-select: none; /* Standard syntax */
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      /* -webkit-backface-visibility: hidden; */ /* to do investigate if this prevents flickering even further on Android */
+    }
+
+    .ReaderPage {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      border: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+      background-color: transparent;
+    }
+    #ReaderPageOneColumn {
+      left: 0%;
+      background-color: transparent;
+    }
+    #ReaderPageTwoColumn {
+      left: 50%;
+      background-color: transparent;
+    }
+
+    #ReaderLeftThumbnailOneColumn {
+      position: fixed;
+      left: -100%;
+      background-color: transparent;
+    }
+    #ReaderLeftThumbnailTwoColumn {
+      position: fixed;
+      left: -50%;
+      background-color: transparent;
+    }
+
+    #ReaderRightThumbnailOneColumn {
+      position: fixed;
+      left: 100%;
+      background-color: transparent;
+    }
+    #ReaderRightThumbnailTwoColumn {
+      position: fixed;
+      left: 150%;
+      background-color: transparent;
+    }
+
+    #spread {
+      position: absolute;
+      display: block;
+      overflow: hidden;
+      top: 0px;
+      left: 0px;
+      width: 320px;
+      height: 480px;
+      -webkit-backface-visibility: hidden; /* seems to prevent flickering, expecially when zooming on Android */
+    }
+
+    #overlay {
+      position: fixed;
+      display: block;
+      overflow: hidden;
+      top: 0px;
+      left: 0px;
+      width: 320px;
+      height: 480px;
+      z-index: 9999;
+      /*background-color: rgba(200,0,0,0.5);*/
+    }
+
+    #container {
+      position: absolute;
+      display: block;
+      top: 0px;
+      left: 0px;
+      width: 320px;
+      height: 480px;
+      -webkit-backface-visibility: hidden; /* seems to prevent flickering, expecially when zooming on Android */
+    }
+
+    .ReaderColumn {
+      position: absolute;
+      display: block;
+      vertical-align: middle;
+      width: 50%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ReaderPageWrapper {
+      background-image: none;
+      background-size: cover;
+      position: absolute;
+      display: block;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .ReaderPage {
+      -webkit-transform-origin: 0 0;
+    }
+
+    iframe:-webkit-full-screen {
+      transform: none !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="spread">
+
+    <div id="container">
+      
+      <div id="ReaderLeftThumbnailOneColumn" class="ReaderColumn">
+        <div id="ReaderLeftThumbnailOne" class="ReaderPageWrapper"></div>
+      </div>
+      <div id="ReaderLeftThumbnailTwoColumn" class="ReaderColumn">
+        <div id="ReaderLeftThumbnailTwo" class="ReaderPageWrapper"></div>
+      </div>
+
+      <div id="ReaderPageOneColumn" class="ReaderColumn">
+        <div id="ReaderPageOneWrapper" class="ReaderPageWrapper">
+          <iframe id="ReaderPageOne" src="" class="ReaderPage" ></iframe>
+        </div>
+      </div>
+      <div id="ReaderPageTwoColumn" class="ReaderColumn">
+        <div id="ReaderPageTwoWrapper" class="ReaderPageWrapper">
+          <iframe id="ReaderPageTwo" src="" class="ReaderPage" ></iframe>
+        </div>
+      </div>
+
+      <div id="ReaderRightThumbnailOneColumn" class="ReaderColumn">
+        <div id="ReaderRightThumbnailOne" class="ReaderPageWrapper"></div>
+      </div>
+      <div id="ReaderRightThumbnailTwoColumn" class="ReaderColumn">
+        <div id="ReaderRightThumbnailTwo" class="ReaderPageWrapper"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="overlay"></div>
+
+</body>
+</html>

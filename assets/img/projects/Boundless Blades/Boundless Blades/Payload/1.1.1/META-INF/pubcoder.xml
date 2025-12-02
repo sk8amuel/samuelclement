@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pubcoder>
+	<integratedUI>true</integratedUI>
+	<restoreLatestPage>true</restoreLatestPage>
+	<onTouchSystemUI>false</onTouchSystemUI>
+	<enableThumbnails>false</enableThumbnails>
+	<enableSwipe>false</enableSwipe>
+	<enableSearch>false</enableSearch>
+    <enableReadAloud>true</enableReadAloud>
+    <enableBookmarks>true</enableBookmarks>
+    <enableInfoCredits>true</enableInfoCredits>
+    <skinBackground>#f7f7f7B3</skinBackground>
+    <skinTint>#000000B3</skinTint>
+    <skinSelected>#4278f5</skinSelected>
+	<numPagesLandscape>1</numPagesLandscape>
+	<orientation>auto</orientation>
+	<thumbnailHeight>110</thumbnailHeight>
+	<thumbnailWidth>158</thumbnailWidth>
+	<viewportHeight>820</viewportHeight>
+	<viewportWidth>1180</viewportWidth>
+	<hasReadaloud>false</hasReadaloud>
+	<hasSoundtrack>false</hasSoundtrack>
+	<enableAnnotations>false</enableAnnotations>
+	<soundtrackVolume>80</soundtrackVolume>
+	<enableWebViewPinchToZoom>false</enableWebViewPinchToZoom>
+	<indexedDBsNames>pubcoder,scdrawer</indexedDBsNames>
+</pubcoder>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+  <meta charset="utf-8">
+  <title>Spade</title>
+</head>
+
+<body style="height: 100%">
+  <div id="sadScreen" style="display: none; position: relative; top: 20%; text-align: center;">
+    <img src="images/sad.svg" alt="sad" width="150" height="150">
+    <p id="noLocal" style="display: none;">Sorry, due to browser security restrictions, this content does not work from a file URL. Please upload it to a web server.</p>
+    <p id="noIE" style="display: none;">Sorry, Internet Explorer is not supported. Please use another browser.</p>
+  </div>
+
+  <script type="text/javascript">
+    function getCookie(name) {
+      const ca = document.cookie.split(';');
+      const caLen = ca.length;
+      const cookieName = name + "=";
+      let c;
+      for (let i = 0; i < caLen; i += 1) {
+        c = ca[i].replace(/^\s+/g, '');
+        if (c.indexOf(cookieName) === 0) {
+          return c.substring(cookieName.length, c.length);
+        }
+      }
+      return '';
+    }
+
+    if (navigator.userAgent.indexOf("XReaderWebView") >= 0) {
+      window.location.href = "index-hybrid.html" + window.location.search;
+    } else if (document.location.protocol == "file:") {
+      document.querySelector("#sadScreen").style.display = "block";
+      document.querySelector("#noLocal").style.display = "block";
+    } else if (navigator.userAgent.indexOf("MSIE ") >= 0 || navigator.userAgent.indexOf("Trident/") >= 0) {
+      document.querySelector("#sadScreen").style.display = "block";
+      document.querySelector("#noIE").style.display = "block";
+    } else if (getCookie("xreaderjs_url")) {
+      window.location.href = "index-shelf.html" + window.location.search;
+    } else {
+      window.location.href = "index-standalone.html" + window.location.search;
+    }
+  </script>
+</body>
+
+</html>

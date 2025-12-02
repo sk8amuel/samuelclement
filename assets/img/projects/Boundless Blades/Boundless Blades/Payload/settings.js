@@ -1,0 +1,1 @@
+PubViewer.Document.Settings = {"appIdentifier":"BA84B2CAD96E43E89898CB2AA36DB155","appName":"Spade","backgroundColor":"#EFEEE8","facingPagesInLandscape":false,"lockOrientation":false,"restoreLatestPage":true};

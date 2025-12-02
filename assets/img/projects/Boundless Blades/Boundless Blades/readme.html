@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+    margin: 10px 0 15px 0;
+    border-collapse: collapse;
+}
+td,th { 
+    border: 1px solid #ddd;
+    padding: 3px 10px;
+}
+th {
+    padding: 5px 10px;  
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+    -webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+    body,code,pre code,h1,h2,h3,h4,h5,h6 {
+        color: black;
+    }
+    table, pre {
+        page-break-inside: avoid;
+    }
+}
+</style>
+<title>PubCoder HTML5 Export User Guide</title>
+</head>
+<body>
+<script tpye="javascript">
+    var loc = window.location.pathname;
+    var dir = loc.substring(0, loc.lastIndexOf('/'));
+    var dirs = dir.split('/');
+    var singleDir = dirs[dirs.length-1];
+    //singleDir
+</script>
+<h1>PubCoder HTML5 Export User Guide</h1>
+
+<h3>What's Included</h3>
+
+<p>The PubCoder HTML5 export package directory includes a directory with the following files:</p>
+
+<ul>
+<li>index.html</li>
+<li>index-standalone.html</li>
+<li>index-shelf.html</li>
+<li>readme.html (current file)</li>
+</ul>
+
+
+<p>And the following sub-directories:</p>
+
+<ul>
+<li>js</li>
+<li>css</li>
+<li>images</li>
+<li>Payload</li>
+</ul>
+
+<h3>Technical Requirements</h3>
+
+<p>Due to browser security policies, for the publication to work all files must be installed behind a webserver of any kind (Apache, IIS, nginx, etc.). It will not work locally on your computer from a <code>file:///</code> URL</p>
+
+<h3>How to Install</h3>
+
+<p>Upload this directory in any location under the <em>public_html</em> directory on your web server - using a FTP client or the File Manager in your website control panel - for instance:</p>
+
+<pre><code id="upload"><script>document.write("/var/www/html/yourwebsite.com/public_html/" + singleDir)</script></code></pre>
+
+<p><strong>Make sure to upload the entire webapp folder with all of its files and directories, otherwise the publication will not work correctly.</strong></p>
+
+<p>Once your webapp folder is uploaded, you can make it available on your website in two different modes:</p>
+
+<p>1) <strong>Full View</strong> mode: the content can be viewed accessing the following url:</p>
+
+<pre><code id="url"><script>document.write("https://yourwebsite.com/" + singleDir + "/")</script></code></pre>
+
+<p>2) <strong>Embedded</strong> mode: the content can be embedded in an iframe inside any of your html pages by including the following code:</p>
+
+<pre><code id="embedded"><script>document.write('&lt;iframe src="https://yourwebsite.com/'+ singleDir + '/" width="%width%" height="%height%" frameBorder="0" scrolling="no" allowfullscreen&gt;&lt;/iframe&gt;')</script></code></pre>
+
+<p>Where "yourwebsite" is the name of the website url, %width% and %height% are respectively the iframe width and height in pixels</p>
+</body>
+
+</html>

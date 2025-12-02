@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>Spade</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
+</head>
+
+<body style="opacity: 0;">
+
+<div id="spread" style="display: none;">
+
+  <div id="container">
+
+    <div id="ReaderLeftThumbnailOneColumn" class="ReaderColumn">
+      <div id="ReaderLeftThumbnailOne" class="ReaderPageWrapper"></div>
+    </div>
+    <div id="ReaderLeftThumbnailTwoColumn" class="ReaderColumn">
+      <div id="ReaderLeftThumbnailTwo" class="ReaderPageWrapper"></div>
+    </div>
+
+    <div id="ReaderPageOneColumn" class="ReaderColumn">
+      <div id="ReaderPageOneWrapper" class="ReaderPageWrapper">
+        <div class="SCLoader" style="display: none;"><div class="clear-loading loading-effect-1"><span></span><span></span><span></span></div></div>
+        <iframe id="ReaderPageOne" src="" class="ReaderPage" allow="autoplay; fullscreen"></iframe>
+      </div>
+    </div>
+    <div id="ReaderPageTwoColumn" class="ReaderColumn">
+      <div id="ReaderPageTwoWrapper" class="ReaderPageWrapper">
+        <div class="SCLoader" style="display: none;"><div class="clear-loading loading-effect-1"><span></span><span></span><span></span></div></div>
+        <iframe id="ReaderPageTwo" src="" class="ReaderPage" allow="autoplay; fullscreen"></iframe>
+      </div>
+    </div>
+
+    <div id="ReaderRightThumbnailOneColumn" class="ReaderColumn">
+      <div id="ReaderRightThumbnailOne" class="ReaderPageWrapper"></div>
+    </div>
+    <div id="ReaderRightThumbnailTwoColumn" class="ReaderColumn">
+      <div id="ReaderRightThumbnailTwo" class="ReaderPageWrapper"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="overlay"></div>
+<nav id="navigation" aria-label="Navigation Arrows">
+  <div id="previousPageBtn" class="navArrow" style="display: none;" role="button" aria-label="Previous Page">
+    <div class="icon"></div>
+  </div>
+  <div id="nextPageBtn" class="navArrow" style="display: none;" role="button" aria-label="Next Page">
+    <div class="icon"></div>
+  </div>
+</nav>
+
+<div id="xreaderUI" style="display: none;">
+  <div id="xreaderTopMenuView" role="region" aria-label="Menu">
+    <audio id="soundtrackAudioPlayer" style="display: none;" controls loop></audio>
+    <audio id="readaloudAudioPlayer" style="display: none;" controls></audio>
+    <div class="xr-controls">
+      <div id="tocBtn" class="xr-btn" role="button" data-toggle="modal" data-target="#tocModal" ></div>
+      <div id="audioControlsBtn" class="xr-btn" role="button" data-toggle="modal" data-target="#audioControlsModal" ></div>
+
+      <div id="searchControlsBtn" class="xr-btn" role="button" data-toggle="modal" data-target="#searchControlsModal" ></div>
+
+      <div id="languageBtn" class="xr-btn" role="button" data-toggle="modal" data-target="#languageControlsModal" ></div>
+      <!-- <div id="annotationBtn" class="xr-btn" role="button"></div> -->
+    </div>
+  </div>
+  <nav id="xreaderBottomMenuView" class="pagesThumbnailsContainer" aria-label="Pages List">
+  </nav>
+</div>
+
+
+<!-- TOC -->
+<div class="modal fade" id="tocModal" tabindex="-1" role="dialog" aria-label="Table of Contents"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Table of Contents</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="chapterSelector" class="list-group list-group-flush"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Language Controls -->
+<div class="modal fade" id="languageControlsModal" tabindex="-1" role="dialog" aria-label="Language"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Language</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="languageSelector" class="list-group list-group-flush"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Audio Controls -->
+<div class="modal fade" id="audioControlsModal" tabindex="-1" role="dialog" aria-label="Audio Controls"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Audio</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div id="readaloudSettingsContainer" class="container">
+          <h6>Read Aloud</h6>
+          <div class="row row-cols-12 xr-group">
+            <div class="col">
+
+              <div class="row row-cols-12">
+                <div class="col">
+                  <div class="audio-slider">
+                    <img alt="" width="22" height="22" srcset="images/xr_Volume.png 1x, images/xr_Volume@2x.png 2x" src="images/xr_Volume.png">
+                    <input type="range" class="custom-range" id="readaloudVolumeSlider"
+                           oninput="app.readaloudVolume = this.value"
+                           min="0" max="100" value="100"
+                    >
+                    <img alt="" width="22" height="22" srcset="images/xr_Volume_2.png 1x, images/xr_Volume_2@2x.png 2x" src="images/xr_Volume_2.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-cols-12">
+                <div class="col">
+                  <div class="custom-control custom-checkbox">
+                    <input id="readaloudTurnPagesCheckbox" type="checkbox" class="custom-control-input xr-control"
+                           onchange="app.readaloudTurnsPagesAutomatically = this.checked;">
+                    <label class="custom-control-label" for="readaloudTurnPagesCheckbox">Turn Pages Automatically</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-cols-12">
+                <div class="col">
+                  <button id="readaloudToggleBtn" type="button" class="btn btn-block btn-primary xr-control"
+                    onclick="app.toggleReadaloud();">Start Read Aloud</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="soundtrackSettingsContainer" class="container">
+          <h6>Soundtrack</h6>
+          <div class="row row-cols-12 xr-group">
+            <div class="col">
+
+              <div class="row row-cols-12">
+                <div class="col">
+                  <div class="audio-slider">
+                    <img alt="" width="22" height="22" srcset="images/xr_Volume.png 1x, images/xr_Volume@2x.png 2x" src="images/xr_Volume.png">
+                    <input type="range" class="custom-range" id="soundtrackVolumeSlider"
+                           oninput="app.soundtrackVolume = this.value"
+                           min="0" max="100" value="100"
+                    >
+                    <img alt="" width="22" height="22" srcset="images/xr_Volume_2.png 1x, images/xr_Volume_2@2x.png 2x" src="images/xr_Volume_2.png">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row row-cols-12">
+                <div class="col">
+                  <button id="soundtrackToggleBtn" type="button" class="btn btn-block btn-primary xr-control"
+                    onclick="app.toggleSoundtrack();">Start Soundtrack</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search Controls -->
+<div class="modal fade" id="searchControlsModal" tabindex="-1" role="dialog" aria-label="Find"
+  aria-hidden="true">
+  <div class="modal-dialog xr-right-panel modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form onsubmit="app.searchInPage(); event.preventDefault(); return false;">
+          <div class="form-group">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text"><img alt="" srcset="images/xr_Search.png 1x, images/xr_Search@2x.png 2x" src="images/xr_Search.png"></div>
+              </div>
+              <input type="text" class="form-control" id="searchField" aria-label="Search Field" placeholder="Search" oninput="app.searchInProject()" autocomplete="off">
+              <div class="input-group-append">
+                <div class="input-group-text"><img class="btn m-0 p-0" srcset="images/xr_X.png 1x, images/xr_X@2x.png 2x" src="images/xr_X.png" role="button" alt="Clear Search" onclick="app.clearSearch()"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="searchResultsContainer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="playScreen" style="display: none;">
+  <img src="images/reader_play.svg" alt="Start" width="150" height="150">
+</div>
+
+<script type="text/javascript">
+  function getCookie(name) {
+    const ca = document.cookie.split(';');
+    const caLen = ca.length;
+    const cookieName = `${name}=`;
+    let c;
+    for (let i = 0; i < caLen; i += 1) {
+      c = ca[i].replace(/^\s+/g, '');
+      if (c.indexOf(cookieName) === 0) {
+        return c.substring(cookieName.length, c.length);
+      }
+    }
+    return '';
+  }
+  
+  var xreaderjsUrl = decodeURIComponent(getCookie("xreaderjs_url"));
+  var myScript = document.createElement("script");
+  myScript.setAttribute("src", xreaderjsUrl);
+  document.head.appendChild(myScript);
+
+</script>
+
+</body>
+  
+</html>
