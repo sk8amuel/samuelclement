@@ -219,6 +219,14 @@ body.project-page {
   height: calc(100vh - 120px);
   overflow-y: auto;
   overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.template-left::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .template-bottom {

@@ -702,7 +702,8 @@ const projectsData = {
       "assets/img/projects/Jabberwocky/Jabberwocky-2.jpg",
       "assets/img/projects/Jabberwocky/Jabberwocky-3.jpeg",
       "assets/img/projects/Jabberwocky/Jabberwocky-4.jpeg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-extract-1.jpeg"
+      "assets/img/projects/Jabberwocky/Jabberwocky-extract-1.jpeg",
+      "assets/img/projects/Jabberwocky/Jabberwocky-detail.webp"
     ]
   },
   knoted: {
@@ -768,6 +769,13 @@ const projectsData = {
       High-energy visual system merging metallic textures, sharp forms and fluid motion.
     `,
     images: [
+      "assets/img/projects/Boundless Blades/Boundless-blades-mockup.webp",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/1/thumbnail.png",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/2/thumbnail.png",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/3/thumbnail.png",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/4/thumbnail.png",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/5/thumbnail.png",
+      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/6/thumbnail.png",
       "assets/img/projects/boundless-blades-project.gif"
     ]
   },
