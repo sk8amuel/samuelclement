@@ -183,8 +183,6 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       return el;
     })();
     overlay.classList.add('is-visible');
-    overlay.style.background = 'rgba(0, 0, 0, 0.65)';
-    overlay.style.transition = 'none';
     overlay.style.justifyContent = 'flex-end';
     overlay.style.alignItems = 'center';
     overlay.style.paddingRight = '12px';
@@ -205,6 +203,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const hide = () => {
       wrap.classList.remove('swipe-enter');
       overlay.classList.remove('swipe-enter');
+      overlay.classList.remove('has-bg');
       wrap.classList.add('swipe-exit');
       overlay.classList.add('swipe-exit');
       setTimeout(() => {
@@ -216,6 +215,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     let started = false;
     const start = () => {
       if (started) return; started = true;
+      overlay.classList.add('has-bg');
       wrap.classList.add('swipe-enter');
       overlay.classList.add('swipe-enter');
       localStorage.setItem('lottieOverlaySeen', '1');

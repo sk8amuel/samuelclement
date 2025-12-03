@@ -173,17 +173,16 @@
       player.on('timeupdate', (data) => { if (data && (data.seconds > 0 || data.percent > 0)) clearSkeleton(); });
       player.on('loaded', () => { if (clearOnReady) clearSkeleton(); });
       player.ready().then(() => {
-        player.setMuted(true).catch(() => {});
         player.setAutopause(false).catch(() => {});
         player.setLoop(true).catch(() => {});
-        player.play().catch(() => {});
+        // Non forzare play: con controls=1 lasciamo che l'utente avvii
         if (clearOnReady) clearSkeleton();
       }).catch(() => {});
       wrap.addEventListener('click', () => { player.play().catch(() => {}); });
       wrap.addEventListener('touchstart', () => { player.play().catch(() => {}); }, { passive: true });
       setTimeout(() => {
         if (!hasStarted) {
-          try { player.play().catch(() => {}); } catch (_) {}
+          // Se non parte, lascia i controlli visibili
         }
       }, 1200);
       setTimeout(() => {
@@ -197,6 +196,19 @@
           } catch (_) {}
         }
       }, 4000);
+      // Ultimo fallback: mostra link Vimeo se ancora bloccato
+      setTimeout(() => {
+        if (!wrap.classList.contains('skeleton')) return;
+        const id = (function(){ try { return new URL(ifr.src).pathname.split('/').pop(); } catch(_) { return ''; } })();
+        const a = document.createElement('a');
+        a.className = 'hero-video-link';
+        a.href = id ? `https://vimeo.com/${id}` : ifr.src;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = 'Watch on Vimeo';
+        wrap.innerHTML = '';
+        wrap.appendChild(a);
+      }, 7000);
     } else {
       ifr.addEventListener('load', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { once: true });
       wrap.addEventListener('click', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } });
@@ -248,6 +260,24 @@
     const wrap = ifr.closest('.hero-media');
     if (wrap) wrap.classList.remove('skeleton');
   });
+  const testVideo = document.createElement('video');
+  const canWebm = !!testVideo.canPlayType && !!testVideo.canPlayType('video/webm');
+  if (!canWebm) {
+    const vids = Array.from(document.querySelectorAll('.project-page .hero-video'));
+    vids.forEach(v => {
+      const id = v.getAttribute('data-vimeo');
+      const fig = v.closest('.hero-media');
+      if (!fig) return;
+      const link = document.createElement('a');
+      link.className = 'hero-video-link';
+      link.href = id ? `https://vimeo.com/${id}` : '#';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Watch on Vimeo';
+      fig.innerHTML = '';
+      fig.appendChild(link);
+    });
+  }
   
   });
 })();
