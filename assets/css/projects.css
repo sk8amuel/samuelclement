@@ -380,6 +380,7 @@ body.privacy-open .project-detail.is-open {
   padding: 14px 0 18px 0;
   align-items: flex-start;
   background: #000000;
+  position: relative;
 }
 
 /* immagine */
@@ -424,6 +425,15 @@ body.privacy-open .project-detail.is-open {
 .detail-image-wrap:hover video {
   transform: scale(1.03);
   opacity: 0.9;
+}
+
+.detail-link-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: block;
+  background: transparent;
+  cursor: pointer;
 }
 
 /* testo descrizione */

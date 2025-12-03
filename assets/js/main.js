@@ -1117,6 +1117,28 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   document.addEventListener('touchstart', onTouch, { once: true });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  if (!body || !body.classList.contains('projects')) return;
+  const blocks = Array.from(document.querySelectorAll('.project-detail'));
+  blocks.forEach(block => {
+    const inner = block.querySelector('.project-detail-inner');
+    if (!inner) return;
+    const imgLink = inner.querySelector('.detail-image-wrap[href]');
+    if (!imgLink) return;
+    const href = imgLink.getAttribute('href');
+    if (!href) return;
+    if (inner.querySelector('.detail-link-overlay')) return;
+    const a = document.createElement('a');
+    a.className = 'detail-link-overlay';
+    a.href = href;
+    const t = inner.querySelector('.detail-title');
+    if (t && t.textContent) a.setAttribute('aria-label', t.textContent.trim());
+    const dt = imgLink.getAttribute('data-transition');
+    if (dt !== null) a.setAttribute('data-transition', dt);
+    inner.appendChild(a);
+  });
+});
 // Sticky About Grid controlled by IntersectionObserver
 (function () {
   function attach(el) {
