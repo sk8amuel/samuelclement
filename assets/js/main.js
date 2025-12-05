@@ -1,4 +1,4 @@
-// ---------- FIXED PROJECT BOX (solo se presente) ----------
+// ---------- FIXED PROJECT BOX (only if present) ----------
 
 const projectItems = document.querySelectorAll('.project-item');
 const fpIndex = document.querySelector('.fp-index');
@@ -43,7 +43,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       linesContainer.appendChild(l3);
     }
 
-    // Applica subito l'effetto fade-up anche al primo render e agli aggiornamenti
+    // Apply fade-up effect immediately on first render and updates
     const created = Array.from(linesContainer.querySelectorAll('.fp-line'));
     created.forEach((line, idx) => {
       line.classList.add('ty-fade-up');
@@ -56,16 +56,16 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     el.style.opacity = 1;
   }
 
-  // Inizializza con il primo progetto
+  // Initialize with first project
   setProjectBox(projectItems[0]);
 
-  // Cambia al passaggio del mouse
+  // Change on mouse over
   projectItems.forEach(item => {
     item.addEventListener('mouseenter', () => setProjectBox(item));
     item.addEventListener('focus', () => setProjectBox(item));
   });
 
-  // Scroll-based highlight (solo dove ha senso)
+  // Scroll-based highlight (only where appropriate)
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -80,7 +80,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 }
 
 
-// ---------- PRELOADER (solo home) ----------
+// ---------- PRELOADER (Home only) ----------
 
 (function () {
   const path = window.location.pathname.replace(/\/+$/, '');
@@ -97,7 +97,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   const preloaderStart = Date.now();
   const minimumMs = 400;
 
-  // Attende che il sito sia pronto: window load, font e immagini non-lazy
+  // Wait for site ready: window load, fonts and non-lazy images
   function waitForWindowLoad() {
     return new Promise(resolve => {
       if (document.readyState === 'complete') { resolve(); return; }
@@ -150,7 +150,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   });
 })();
 
-// ---------- MOBILE SWIPE OVERLAY (index, dopo preloader) ----------
+// ---------- MOBILE SWIPE OVERLAY (index, after preloader) ----------
 (function () {
   function estimateGifDuration(url) {
     return fetch(url, { cache: 'force-cache' }).then(r => r.arrayBuffer()).then(buf => {
@@ -175,7 +175,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const mql = window.matchMedia('(max-width: 768px)');
     if (!(mql && mql.matches)) return;
     if (localStorage.getItem('lottieOverlaySeen')) return;
-    // Crea overlay mobile (trasparente) e prepara struttura interna
+    // Create mobile overlay (transparent) and prepare inner structure
     const overlay = document.getElementById('mobile-swipe-overlay') || (() => {
       const el = document.createElement('div');
       el.id = 'mobile-swipe-overlay';
@@ -187,14 +187,14 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     overlay.style.alignItems = 'center';
     overlay.style.paddingRight = '12px';
     overlay.innerHTML = '';
-    // Wrapper: area della GIF con sfondo nero al 50% (proporzioni rispettate)
+    // Wrapper: GIF area with 50% black background (proportions respected)
     const wrap = document.createElement('div');
     wrap.className = 'swipe-wrap';
     overlay.appendChild(wrap);
-    // Lottie animation al posto della GIF
+    // Lottie animation instead of GIF
     const lottie = document.createElement('dotlottie-wc');
     lottie.className = 'swipe-gif';
-    lottie.setAttribute('src', 'https://lottie.host/980f7a73-7249-43d3-ace8-78d67d71b571/8vAudaUC0f.lottie');
+    lottie.setAttribute('src', 'assets/lottie/swipe-gesture.lottie');
     lottie.setAttribute('autoplay', '');
     lottie.setAttribute('loop', '');
     lottie.style.width = '160px';
@@ -226,7 +226,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     setTimeout(start, 300);
   }
 
-  // Avvio con ritardo di 1s dalla fine del preloader (home ready)
+  // Start with 1s delay after preloader ends (home ready)
   function startSwipeWithDelay() {
     setTimeout(initSwipe, 3000);
   }
@@ -240,7 +240,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   }, { once: true });
 })();
 
-// ---------- TYPEWRITER (riattivato) ----------
+// ---------- TYPEWRITER (Reactivated) ----------
 (function () {
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -333,11 +333,11 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const step = Number(el.dataset.tyStep) || 1;
     const start = Number(el.dataset.tyStart) || 0;
 
-    // Clona il contenuto per mantenerlo durante l'animazione
+    // Clone content to preserve it during animation
     const tempContainer = document.createElement('div');
     tempContainer.innerHTML = originalHTML;
 
-    // Trova tutti i nodi di testo e wrappa ogni carattere
+    // Find all text nodes and wrap each character
     const allChars = [];
     const textNodes = [];
 
@@ -353,7 +353,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 
     findTextNodes(tempContainer);
 
-    // Wrappa ogni carattere in ogni text node
+    // Wrap each character in every text node
     textNodes.forEach(textNode => {
       const text = textNode.textContent;
       const parent = textNode.parentNode;
@@ -373,7 +373,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       parent.replaceChild(fragment, textNode);
     });
 
-    // Crea il caret
+    // Create caret
     const caret = document.createElement('span');
     caret.className = 'ty-caret';
     caret.style.display = 'inline-block';
@@ -384,7 +384,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     caret.style.verticalAlign = 'baseline';
     caret.style.animation = 'ty-caret-blink 1s steps(1, end) infinite';
 
-    // Sostituisci il contenuto con la versione wrappata
+    // Replace content with wrapped version
     if (anchor) {
       anchor.innerHTML = '';
       // Append children individually from tempContainer to anchor
@@ -404,7 +404,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     const len = allChars.length;
     let i = start;
 
-    // Mostra i caratteri iniziali se start > 0
+    // Show initial characters if start > 0
     for (let j = 0; j < start && j < len; j++) {
       allChars[j].style.opacity = '1';
     }
@@ -414,12 +414,12 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       return;
     }
 
-    // Funzione per posizionare il caret dopo l'ultimo carattere visibile
+    // Function to position caret after last visible character
     function updateCaretPosition() {
       if (i > 0 && i <= len) {
         const lastVisibleChar = allChars[i - 1];
         if (lastVisibleChar && lastVisibleChar.parentNode) {
-          // Inserisci il caret dopo l'ultimo carattere visibile
+          // Insert caret after last visible character
           if (caret.parentNode) caret.remove();
           lastVisibleChar.parentNode.insertBefore(caret, lastVisibleChar.nextSibling);
         }
@@ -439,7 +439,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     updateCaretPosition();
 
     const timer = setInterval(() => {
-      // Rendi visibili i prossimi 'step' caratteri
+      // Make next 'step' characters visible
       for (let j = 0; j < step && i < len; j++, i++) {
         if (allChars[i]) {
           allChars[i].style.opacity = '1';
@@ -450,7 +450,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
 
       if (i >= len) {
         clearInterval(timer);
-        // Rimuovi il caret e ripristina HTML originale
+        // Remove caret and restore original HTML
         setTimeout(() => {
           if (caret.parentNode) caret.remove();
           if (anchor) {
@@ -528,12 +528,12 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
       return;
     }
 
-    // Applica un effetto fade-up alle linee già presenti nella fixed project box
+    // Apply fade-up effect to existing lines in fixed project box
     const fpInfo = document.querySelector('.fp-info');
     if (fpInfo) {
       const initialLines = fpInfo.querySelectorAll('.fp-line');
-      const baseDelay = 80; // ritardo iniziale ancora più rapido
-      const stagger = 110;  // ritardo tra le righe più rapido
+      const baseDelay = 80; // faster initial delay
+      const stagger = 110;  // faster stagger between lines
       initialLines.forEach((line, idx) => {
         line.classList.remove('ty-fade-in');
         line.classList.add('ty-fade-up');
@@ -617,9 +617,9 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     }
   }
 
-  // Avvio solo quando i testi sono effettivamente visibili:
-  // - sulle altre pagine: dopo DOMContentLoaded
-  // - sulla home: dopo la fine del preloader (quando body riceve la classe 'grid-ready')
+  // Start only when texts are actually visible:
+  // - on other pages: after DOMContentLoaded
+  // - on home: after preloader ends (when body gets 'grid-ready' class)
   document.addEventListener('DOMContentLoaded', () => {
     const isHome = document.body && document.body.classList.contains('home');
     if (!isHome) { initTypewriter(); return; }
@@ -633,9 +633,9 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
     mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
   });
 
-  // Gestione linee dinamiche nella fixed project box (Index):
-  // quando setProjectBox aggiorna .fp-info e aggiunge nuove .fp-line,
-  // applico subito l'animazione o almeno rendo visibili i nuovi nodi.
+  // Manage dynamic lines in fixed project box (Index):
+  // when setProjectBox updates .fp-info and adds new .fp-line,
+  // apply animation immediately or make new nodes visible.
   document.addEventListener('DOMContentLoaded', () => {
     if (reduceMotion) return;
     const linesWrap = document.querySelector('.fp-lines');
@@ -648,8 +648,8 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
             node.classList.add('ty-fade-up');
             const all = Array.from(linesWrap.querySelectorAll('.fp-line'));
             const idx = all.indexOf(node);
-            const baseDelay = 80; // ritardo iniziale ancora più rapido
-            const stagger = 110;  // spaziatura tra linee più rapida
+            const baseDelay = 80; // faster initial delay
+            const stagger = 110;  // faster stagger between lines
             if (idx >= 0) node.style.animationDelay = `${baseDelay + idx * stagger}ms`;
             node.dataset.tyDone = '1';
           }
@@ -660,189 +660,18 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   });
 })();
 
-// (rimosso) Effetto pixel in overlay: eliminato completamente su richiesta
 
 
-// ---------- DATI PROGETTI PER MODAL ----------
 
-const projectsData = {
-  atm: {
-    title: "At the Mountains of Madness",
-    meta: "Personal Project · 2024 · Editorial / Illustration",
-    body: `
-      Editorial project inspired by Lovecraft. Strict grid, cold typography and layered illustration
-      exploring vertical tension and monotone atmospheres.
-    `,
-    images: [
-      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-1.jpg",
-      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-2.jpeg",
-      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-4.jpeg",
-      "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-6.jpeg"
-    ]
-  },
-  ilgermoglio: {
-    title: "Il Germoglio",
-    meta: "Client: Il Germoglio · 2024 · Brand Identity / Packaging",
-    body: `
-      Identity and packaging for an organic store. Modular system, soft tones and clear hierarchy between product lines.
-    `,
-    images: [
-      "assets/img/projects/ilgermoglio-project.png"
-    ]
-  },
-  jabberwocky: {
-    title: "Jabberwocky",
-    meta: "Personal Project · 2024 · Motion / Visual Experiment",
-    body: `
-      Experimental motion piece translating Lewis Carroll’s poem into fractured typography,
-      grain, and glitch transitions.
-    `,
-    images: [
-      "assets/img/projects/Jabberwocky/Jabberwocky-1.jpg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-2.jpg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-3.jpeg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-4.jpeg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-extract-1.jpeg",
-      "assets/img/projects/Jabberwocky/Jabberwocky-detail.webp"
-    ]
-  },
-  knoted: {
-    title: "Knoted",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Visual identity and motion assets for a digital platform. Interlocking forms,
-      tight grid and kinetic behaviour across media.
-    `,
-    images: [
-      "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
-    ],
-    videos: [
-      "assets/img/projects/Knoted-project.webm",
-      "assets/img/projects/Knoted/Knoted-Splash-Logo.webm",
-      "assets/img/projects/Knoted/Animazione-cards-Knoted.webm",
-      "assets/img/projects/Knoted/Animazione-sito-Knoted.webm",
-      "https://www.youtube-nocookie.com/embed/WQWhOHWkcBY?controls=1&modestbranding=1&rel=0&playsinline=1"
-    ]
-  },
-  afterbook: {
-    title: "After Book",
-    meta: "School Project · 2023 · Identity / Motion",
-    body: `
-      After Book is a concept app brought to life through an animated promotional video, designed to enhance your reading experience through sound.
-      The app generates adaptive background audio based on the content you're reading, whether it's a tense thriller, a peaceful fantasy, or a dramatic novel.
-      As the story shifts, so does the atmosphere. I developed the idea and created the animated video to showcase how After Book turns every page into an immersive, multi-sensory experience.
-    `,
-    images: [
-      "assets/img/projects/After Book/Afterbook-mockup.webp",
-      "assets/img/projects/After Book/Afterbook-mockup-2.webp",
-      "assets/img/projects/After Book/Afterbook-mockup-3.webp"
-    ]
-  },
-  "365posters": {
-    title: "365 Posters",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Daily poster exploration focused on rhythm, contrast and iterative structures.
-    `,
-    images: [
-      "assets/img/projects/365/Poster-1.jpeg",
-      "assets/img/projects/365/Poster-2.jpg",
-      "assets/img/projects/365/Poster-3.jpg",
-      "assets/img/projects/365/Poster-4.jpg",
-      "assets/img/projects/365/Poster-5.jpg",
-      "assets/img/projects/365/Poster-6.jpg",
-      "assets/img/projects/365/Poster-7.jpg",
-      "assets/img/projects/365/Poster-8.jpg",
-      "assets/img/projects/365/Poster-9.jpg",
-      "assets/img/projects/365/Poster-10.jpg",
-      "assets/img/projects/365/Poster-11.jpg",
-      "assets/img/projects/365/Poster-12.jpg",
-      "assets/img/projects/365/Poster-13.jpg",
-      "assets/img/projects/365/Poster-14.jpg",
-      "assets/img/projects/365/Poster-15.jpg"
-    ]
-  },
-  boundless: {
-    title: "Boundless Blades",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      High-energy visual system merging metallic textures, sharp forms and fluid motion.
-    `,
-    images: [
-      "assets/img/projects/Boundless Blades/Boundless-blades-mockup.webp",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/1/thumbnail.png",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/2/thumbnail.png",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/3/thumbnail.png",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/4/thumbnail.png",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/5/thumbnail.png",
-      "assets/img/projects/Boundless Blades/Boundless Blades/Payload/1.1.1/OEBPS/assets/6/thumbnail.png",
-      "assets/img/projects/boundless-blades-project.gif"
-    ]
-  },
-  cumpa: {
-    title: "Cumpa",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Brand and motion design for a creative collective — bold, warm and grid-conscious.
-    `,
-    images: [
-      "assets/img/projects/Cumpa-project.jpg"
-    ]
-  },
-  luminal: {
-    title: "Luminal",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Conceptual identity built on light refraction, minimal typography and slow motion.
-    `,
-    images: [
-      "assets/img/projects/Luminal-project.gif"
-    ]
-  },
-  speaklouder: {
-    title: "Speak Louder",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Typographic motion manifesto about clarity and presence; bold, direct and kinetic.
-    `,
-    images: [
-      "assets/img/projects/speak-louder-project.png"
-    ]
-  },
-  futureai: {
-    title: "The Future of AI",
-    meta: "School project · 2024 · Motion Graphic",
-    body: `
-      Animated short exploring AI’s human impact with textured, fast-paced motion.
-      Frame-by-frame simulation style, dynamic shadows and a playful yet reflective tone.
-    `,
-    images: [
-      "assets/img/projects/the-future-of-ai.gif",
-      "assets/img/projects/The future of Ai/ThefutureofAi-Storyboard.jpg"
-    ],
-    videos: [
-      "https://www.youtube-nocookie.com/embed/cx0mgJdX250?controls=1&modestbranding=1&rel=0&playsinline=1"
-    ]
-  },
-  pastiglie: {
-    title: "Pastiglie Leone",
-    meta: "Collaborative · 2024 · Identity / Motion",
-    body: `
-      Contemporary reinterpretation of an iconic confectionery brand with refined textures and motion nostalgia.
-    `,
-    images: [
-      "assets/img/projects/pastiglie-leone-project.png"
-    ]
-  }
-};
+// projectsData moved to assets/js/projects-data.js
 
 
 // ---------- MODAL LOGIC ----------
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Fade-in d'ingresso per le card progetto sulla home
+  // Entry fade-in for project cards on home
   const reduceMotionFade = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Disabilitato effetto opacità su caricamento delle card
+  // Disabled opacity effect on card load
 
   const modal = document.getElementById('project-modal');
   if (!modal) return;
@@ -890,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   }
 
-  // Qualsiasi elemento con data-project apre il modal
+  // Any element with data-project opens the modal
   document.querySelectorAll('[data-project]').forEach(el => {
     el.addEventListener('click', (e) => {
       e.preventDefault();
@@ -907,9 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeProjectModal();
   });
 });
-// (Transizioni pagina e fallback Safari rimossi per ripristinare stato precedente)
 
-// (Toggle tema chiaro rimosso su richiesta)
 document.addEventListener('DOMContentLoaded', () => {
   const links = Array.from(document.querySelectorAll('#privacyLink, #privacyLinkDesktop'));
   const modal = document.getElementById('privacy-modal');
@@ -1291,3 +1118,118 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.addEventListener('DOMContentLoaded', init);
 })();
+
+// ---------- RANDOM ORDER PROJECTS (Index) ----------
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.querySelector('.projects-grid');
+  if (!grid) return;
+  const projects = Array.from(grid.children);
+  projects.sort(() => Math.random() - 0.5);
+  projects.forEach(p => grid.appendChild(p));
+});
+
+// ---------- FLIP LOGIC (Index/About) ----------
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body;
+  const navIndex = document.querySelector('.nav-link[data-view="index"]');
+  const navAbout = document.querySelector('.nav-link[data-view="about"]');
+
+  if (!navIndex || !navAbout) return;
+
+  function smoothTop(duration = 650) {
+    const scroller = document.scrollingElement || document.documentElement || document.body;
+    const start = scroller.scrollTop || window.pageYOffset || 0;
+    if (start <= 0) return;
+    const startTime = performance.now();
+    const ease = (t) => 1 - Math.pow(1 - t, 3);
+    if (!('requestAnimationFrame' in window)) { scroller.scrollTop = 0; return; }
+    if (window.__scrollTopRAF) cancelAnimationFrame(window.__scrollTopRAF);
+    const step = (now) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      const current = Math.round(start * (1 - ease(t)));
+      scroller.scrollTop = current;
+      if (t < 1) {
+        window.__scrollTopRAF = requestAnimationFrame(step);
+      } else {
+        scroller.scrollTop = 0;
+      }
+    };
+    window.__scrollTopRAF = requestAnimationFrame(step);
+  }
+
+  function showIndex(e) {
+    if (e) e.preventDefault();
+    body.classList.remove('is-about');
+    navIndex.classList.add('active');
+    navAbout.classList.remove('active');
+    // remove hash to return to index
+    if (location.hash === '#about') {
+      history.replaceState(null, '', location.pathname);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // reaffirm scroll at end of flip for max reliability
+    const flipEl = document.querySelector('.page-flip');
+    const performSmoothTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (flipEl) {
+      const onFlipEnd = (ev) => {
+        if (ev.propertyName === 'transform') {
+          flipEl.removeEventListener('transitionend', onFlipEnd);
+          performSmoothTop();
+        }
+      };
+      flipEl.addEventListener('transitionend', onFlipEnd);
+      // fallback in case transitionend doesn't fire (e.g. reduced-motion)
+      setTimeout(() => {
+        flipEl.removeEventListener('transitionend', onFlipEnd);
+        performSmoothTop();
+      }, 1100);
+    } else {
+      performSmoothTop();
+    }
+  }
+
+  function showAbout(e) {
+    if (e) e.preventDefault();
+    body.classList.add('is-about');
+    navIndex.classList.remove('active');
+    navAbout.classList.add('active');
+    // set hash for direct link and scroll to top
+    if (location.hash !== '#about') {
+      location.hash = 'about';
+    }
+    // no forced scroll on ABOUT: keep current position
+
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+    try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.documentElement.scrollTop = 0; }
+    try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.body.scrollTop = 0; }
+  }
+
+
+  // bind
+  navIndex.addEventListener('click', showIndex);
+  navAbout.addEventListener('click', showAbout);
+
+  const backHome = document.getElementById('backToHome');
+  if (backHome) backHome.addEventListener('click', showIndex);
+
+  const mql = window.matchMedia('(max-width: 900px)');
+
+  const aboutNotes = document.querySelectorAll('.about-mobile-note');
+  if (aboutNotes.length) {
+    const toTop = (e) => {
+      e.preventDefault();
+      if (mql && mql.matches) {
+        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { window.scrollTo(0, 0); }
+        try { document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.documentElement.scrollTop = 0; }
+        try { document.body.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { document.body.scrollTop = 0; }
+      }
+    };
+    aboutNotes.forEach(n => n.addEventListener('click', toTop));
+  }
+
+  // initial state from hash (e.g. arriving from projects with index.html#about)
+  if (location.hash === '#about') {
+    showAbout();
+  }
+});

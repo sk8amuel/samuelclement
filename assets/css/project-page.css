@@ -9,7 +9,7 @@ body.project-page {
   width: var(--container-width);
   margin: 0 auto;
   padding-top: 96px;
-  /* spazio sotto header */
+  /* space below header */
   padding-bottom: 120px;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -120,7 +120,7 @@ body.project-page {
   }
 }
 
-/* Template specifico Knoted */
+/* Specific Knoted template */
 .template-knoted {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
@@ -220,7 +220,7 @@ body.project-page {
   border-color: #ffffff;
 }
 
-/* Video finale più alto e non croppato */
+/* Taller final video, not cropped */
 
 .hero-box {
   background: #E1E5E7;
@@ -685,6 +685,19 @@ body.project-page {
 @media (max-width: 600px) {
   .template-jabberwocky .template-title {
     font-size: clamp(50px, 7vw, 72px);
+  }
+}
+
+.template-cumpa .template-title {
+  /* Very large on desktop */
+  font-size: clamp(65px, 12vw, 90px) !important;
+  line-height: 0.9;
+}
+
+@media (max-width: 600px) {
+  .template-cumpa .template-title {
+    /* Very large on mobile */
+    font-size: clamp(100px, 18vw, 120px) !important;
   }
 }
 
