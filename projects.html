@@ -969,6 +969,8 @@
           fixedBox.addEventListener('touchstart', (e) => { e.preventDefault(); playFn(); }, { passive: false });
           fixedBox.addEventListener('touchend', (e) => { e.preventDefault(); rewindFn(); }, { passive: false });
           fixedBox.addEventListener('touchcancel', (e) => { e.preventDefault(); rewindFn(); }, { passive: false });
+          // Prevent context menu on long press
+          fixedBox.addEventListener('contextmenu', (e) => { e.preventDefault(); });
         }
       }
     });
