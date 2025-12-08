@@ -4,99 +4,132 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
     /* stessa griglia del container */
     column-gap: var(--column-gap);
-    row-gap: 8px;
+    row-gap: 48px;
+    /* Increased gap for better breathing room */
     align-items: start;
-    margin-top: -48px;
-    /* alza l’intera sezione */
+    margin-top: -24px;
     position: relative;
-    /* per eventuali riferimenti */
 }
 
-/* 4 colonne mappate su 12 colonne: 3-3-3-3 */
-.page-about .about-grid .col-1 {
+/* --- Global Full-Height Grid Lines (Desktop) --- */
+.page-about .about-main {
+    position: relative;
+    /* Anchor for background lines */
+}
+
+/* Replicate Grid Exactly like Home/Index */
+.page-about::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--container-width);
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-bg);
+    background-repeat: repeat-x;
+    background-size: calc((100% - (var(--grid-columns) - 1) * var(--column-gap)) / var(--grid-columns) + var(--column-gap)) 100%;
+    background-position: left top;
+    opacity: var(--overlay-opacity);
+    will-change: transform;
+    /* Ensure it shows up */
+}
+
+/* Ensure content is above lines */
+.page-about .about-block,
+.page-about .about-photo {
+    z-index: 1;
+}
+
+/* Hide the main body grid when About is open to prevent double/blurred lines */
+body.is-about::before {
+    opacity: 0 !important;
+    transition: opacity 300ms ease;
+}
+
+/* --- Row 1 --- */
+
+/* Intro: Large text, spans first 6 columns */
+.page-about .about-grid .intro {
+    grid-column: 1 / span 6;
+    grid-row: 1;
+}
+
+.page-about .about-grid .intro p:not(.about-label) {
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 8px;
+}
+
+/* Design Approach: Next 3 columns */
+.page-about .about-grid .design-approach {
+    grid-column: 7 / span 3;
+    grid-row: 1;
+}
+
+/* Photo: Last 3 columns */
+.page-about .about-grid .about-photo {
+    grid-column: 10 / span 3;
+    grid-row: 1;
+    margin-top: 0;
+    transform: none;
+    /* Reset distinct transform */
+}
+
+/* --- Row 2 --- */
+
+.page-about .about-grid .contact {
     grid-column: 1 / span 3;
 }
 
-.page-about .about-grid .col-2 {
+.page-about .about-grid .education {
     grid-column: 4 / span 3;
 }
 
-.page-about .about-grid .col-3 {
+.page-about .about-grid .selected-work {
     grid-column: 7 / span 3;
 }
 
-.page-about .about-grid .col-4 {
+.page-about .about-grid .focus {
     grid-column: 10 / span 3;
 }
 
-/* Riga verticale all’inizio di ogni blocco About */
-.page-about .about-grid .col-1,
-.page-about .about-grid .col-2,
-.page-about .about-grid .col-3,
-.page-about .about-grid .col-4,
-.page-about .about-grid .about-hero-word,
-.page-about .about-grid .about-photo {
-    position: relative;
+/* --- Row 3 --- */
+
+.page-about .about-grid .background {
+    grid-column: 1 / span 3;
 }
 
-/* I contenuti partono a destra della seconda linea */
-.page-about .about-grid .col-1,
-.page-about .about-grid .col-2,
-.page-about .about-grid .col-3,
-.page-about .about-grid .col-4,
-.page-about .about-grid .about-hero-word,
+.page-about .about-grid .capabilities {
+    grid-column: 4 / span 6;
+    /* Give it more space */
+}
+
+
+/* --- General Styles --- */
+
+/* Removed local borders from blocks */
+.page-about .about-grid .about-block,
 .page-about .about-grid .about-photo {
+    position: relative;
     padding-left: var(--start-line-offset);
 }
 
-.page-about .about-grid .col-1::before,
-.page-about .about-grid .col-2::before,
-.page-about .about-grid .col-3::before,
-.page-about .about-grid .col-4::before,
-.page-about .about-grid .about-hero-word::before,
+.page-about .about-grid .about-block::before,
 .page-about .about-grid .about-photo::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: var(--start-line-width);
-    background: var(--start-line-color);
-    pointer-events: none;
+    content: none;
+    display: none;
 }
 
-.page-about .about-grid .col-1::after,
-.page-about .about-grid .col-2::after,
-.page-about .about-grid .col-3::after,
-.page-about .about-grid .col-4::after,
-.page-about .about-grid .about-hero-word::after,
+.page-about .about-grid .about-block::after,
 .page-about .about-grid .about-photo::after {
-    content: "";
-    position: absolute;
-    left: var(--start-line-gap);
-    top: 0;
-    bottom: 0;
-    width: var(--start-line-width);
-    background: var(--start-line-color);
-    pointer-events: none;
+    content: none;
+    display: none;
 }
 
-/* Disabilita righe locali: usiamo overlay globale del container */
-.page-about .about-grid .col-1::before,
-.page-about .about-grid .col-2::before,
-.page-about .about-grid .col-3::before,
-.page-about .about-grid .col-4::before,
-.page-about .about-grid .about-hero-word::before,
-.page-about .about-grid .about-photo::before,
-.page-about .about-grid .col-1::after,
-.page-about .about-grid .col-2::after,
-.page-about .about-grid .col-3::after,
-.page-about .about-grid .col-4::after,
-.page-about .about-grid .about-hero-word::after,
-.page-about .about-grid .about-photo::after {
-    content: none !important;
-    display: none !important;
-}
 
 .page-about .about-grid .about-block {
     font-size: 11px;
@@ -104,59 +137,17 @@
 }
 
 .page-about .about-grid .about-block {
-    position: relative;
-    padding-top: 12px;
+    border-top: none;
+    padding-top: 0;
+    /* Remove top padding as we use grid gaps */
 }
 
-.page-about .about-grid .about-block::before {
-    content: none;
+/* Hide legacy elements */
+.page-about .about-hero-word {
     display: none;
 }
 
-.page-about .about-grid .about-block {
-    border-top: none;
-}
-
-.page-about .about-grid .intro,
-.page-about .about-grid .design-approach,
-.page-about .about-grid .background,
-.page-about .about-grid .education {
-    border-top: none;
-}
-
-.page-about .about-grid .contact,
-.page-about .about-grid .selected-work,
-.page-about .about-grid .focus,
-.page-about .about-grid .capabilities {
-    border-top: 1px solid #c7c7c7;
-}
-
-.page-about .about-grid .intro::before {
-    content: none;
-    display: none;
-}
-
-/* ABOUT come blocco nel flusso, span 2 colonne (1–2) */
-.page-about .about-grid .about-hero-word {
-    position: static;
-    grid-column: 1 / span 6;
-    font-size: clamp(64px, 31vw, 180px);
-    letter-spacing: -0.02em;
-    line-height: 0.85;
-    color: var(--color-foreground);
-    opacity: 1;
-    pointer-events: none;
-    display: block;
-    max-width: 100%;
-    white-space: normal;
-    overflow-wrap: normal;
-    word-break: normal;
-    hyphens: none;
-    align-self: end;
-    transform: translateY(-90px);
-}
-
-/* Foto in colonna 4 adattiva */
+/* Photo Styling */
 .page-about .about-photo img {
     width: 100%;
     height: auto;
@@ -164,54 +155,18 @@
     filter: grayscale(1);
 }
 
-/* La foto mantiene la classe col-4 per stare nella quarta colonna */
-
-/* Abbassa i blocchi sotto ABOUT di almeno 160px */
-.page-about .about-grid .selected-work,
-.page-about .about-grid .focus,
-.page-about .about-grid .capabilities {
-    margin-top: 0;
-    position: relative;
-    transform: translateY(-24px);
-}
-
-/* Alza SOLO la foto un po’ di più */
-.page-about .about-grid .about-photo {
-    margin-top: 0;
-    position: relative;
-    transform: translateY(-72px);
-    align-self: end;
-    grid-column: 10 / span 3;
-    /* mantenuta in quarta colonna mappata */
-}
-
-.page-about .about-grid .selected-work::before {
-    content: none;
-    display: none;
-}
-
-.page-about .about-grid .focus::before {
-    content: none;
-}
-
 .page-about .about-label {
     color: #dcdcdc !important;
     font-size: 10px;
     letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
 }
 
 .page-about .about-label span {
     color: #dcdcdc !important;
     font-size: 10px;
     letter-spacing: 0.06em;
-}
-
-.page-about .about-label::before {
-    content: none;
-}
-
-.page-about .about-label::after {
-    content: none;
 }
 
 .page-about .about-block p:not(.about-label) {
@@ -226,61 +181,16 @@
 .page-about .about-grid a {
     font-size: 13px;
     line-height: 1.5;
-}
-
-.page-about .about-grid p,
-.page-about .about-grid a {
     word-break: normal;
     overflow-wrap: normal;
     hyphens: none;
 }
 
-.page-about .about-grid .about-block p:not(.about-label) {
-    line-height: 1.35;
+.page-about .about-grid .intro p:not(.about-label) {
+    /* Override standard size for intro */
+    font-size: clamp(32px, 4vw, 56px);
+    line-height: 1.05;
 }
-
-.page-about .about-grid .background .role-title {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.page-about .about-grid .background .role-title::before {
-    content: "→";
-    color: #dcdcdc;
-    margin-right: 8px;
-}
-
-.page-about .about-grid .background .role-desc {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.page-about .about-grid .capabilities .role-title {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.page-about .about-grid .capabilities .role-title::before {
-    content: "→";
-    color: #dcdcdc;
-    margin-right: 8px;
-}
-
-.page-about .about-grid .capabilities .role-desc {
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.page-about .about-grid p:not(.about-label) span,
-.page-about .about-grid a span {
-    color: #FFFFFF !important;
-}
-
-.page-about .about-label span {
-    color: #aeaeae !important;
-}
-
-
 
 
 /* Responsive: una colonna su mobile */
@@ -288,106 +198,61 @@
     .page-about .about-grid {
         grid-template-columns: 1fr;
         /* una sola colonna */
-        gap: 24px;
+        gap: 32px;
         margin-top: 0;
         column-gap: 0;
         grid-auto-flow: row;
     }
 
-    .page-about .about-main {
-        font-size: 12px;
-        line-height: 1.7;
+    /* Hide full grid lines on mobile */
+    .page-about .about-grid-line {
+        display: none;
     }
 
-    .page-about .about-grid .about-block {
-        font-size: 12px;
-        line-height: 1.6;
+    .page-about .about-grid .intro,
+    .page-about .about-grid .design-approach,
+    .page-about .about-grid .about-photo,
+    .page-about .about-grid .contact,
+    .page-about .about-grid .education,
+    .page-about .about-grid .selected-work,
+    .page-about .about-grid .focus,
+    .page-about .about-grid .background,
+    .page-about .about-grid .capabilities {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        padding-left: 0;
     }
 
-    .page-about .about-grid .about-label {
-        font-size: 10px;
-        letter-spacing: 0.08em;
+    .page-about .about-grid .intro p:not(.about-label) {
+        font-size: 32px;
+        /* Smaller clear font on mobile */
     }
 
     .page-about .about-grid p,
     .page-about .about-grid a {
         font-size: 26px;
         line-height: 1.2;
-    }
-
-    .page-about .about-grid p,
-    .page-about .about-grid a {
         word-break: normal;
         overflow-wrap: normal;
         hyphens: none;
     }
 
-    .page-about .about-grid .background .role-title {
-        font-size: 26px;
-        line-height: 1.2;
-    }
-
-    .page-about .about-grid .capabilities .role-title {
-        font-size: 26px;
-        line-height: 1.2;
-    }
-
-    .page-about .about-grid .about-hero-word,
-    .page-about .about-grid .about-photo {
-        transform: none;
-    }
-
-    .page-about .about-grid .selected-work::before {
+    .page-about .about-grid .about-block::before,
+    .page-about .about-grid .about-photo::before,
+    .page-about .about-grid .about-block::after,
+    .page-about .about-grid .about-photo::after {
         content: none;
         display: none;
-    }
-
-    .page-about .about-grid .intro::before {
-        content: none;
-        display: none;
-    }
-
-    /* Tutti i blocchi testuali occupano l'intera larghezza */
-    .page-about .about-grid .col-1,
-    .page-about .about-grid .col-2,
-    .page-about .about-grid .col-3,
-    .page-about .about-grid .col-4 {
-        grid-column: 1 / -1 !important;
-        padding-left: 0;
-    }
-
-    /* Hero e foto a tutta larghezza */
-    .page-about .about-grid .about-hero-word {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        font-size: clamp(64px, 27vw, 160px);
-    }
-
-    .page-about .about-grid .intro {
-        grid-row: 1;
-    }
-
-    .page-about .about-grid .about-photo {
-        transform: none;
-        grid-column: 1 / -1;
     }
 
     .page-about .about-photo img {
         border-radius: 8px;
     }
-
-    /* Rimuovi sollevamenti su mobile */
-    .page-about .about-grid .selected-work,
-    .page-about .about-grid .focus,
-    .page-about .about-grid .capabilities {
-        margin-top: 0;
-        transform: none;
-    }
 }
 
 .page-about .back-to-home-btn {
     position: relative;
-    margin: 224px auto 0;
+    margin: 160px auto 0;
     width: fit-content;
     z-index: 2;
 }
@@ -412,26 +277,28 @@
 
 @media (max-width: 900px) {
     .page-about .back-to-home-btn {
-        margin-top: 120px;
+        margin-top: 80px;
     }
 
     .page-about .about-main {
-        padding-bottom: 180px;
+        padding-bottom: 120px;
     }
 
     .page-about .about-mobile-note {
         display: inline-block !important;
         text-align: center;
-        margin: 600px auto 0;
+        margin: 120px auto 0;
         color: #ffffff;
         font-size: 12px;
         letter-spacing: 0.04em;
         text-decoration: none;
         padding: 8px 12px;
+        display: block;
+        width: 100%;
     }
 
     .page-about .about-mobile-note.second {
-        margin: 680px auto 0;
+        margin: 20px auto 0;
     }
 }
 

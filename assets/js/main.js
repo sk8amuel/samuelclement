@@ -1128,6 +1128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   projects.forEach(p => grid.appendChild(p));
 });
 
+
 // ---------- FLIP LOGIC (Index/About) ----------
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;

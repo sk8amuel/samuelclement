@@ -1245,7 +1245,7 @@
  }
 
  body.is-about .page-index {
-   filter: blur(6px) brightness(0.80);
+   filter: blur(12px) brightness(0.80);
  }
 
  body.is-about .page-index::after {
@@ -1258,7 +1258,7 @@
 
  @media (max-width: 900px) {
    body.is-about .page-index {
-     filter: blur(10px) brightness(0.82);
+     filter: blur(16px) brightness(0.82);
    }
  }
 
