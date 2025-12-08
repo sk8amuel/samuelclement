@@ -235,7 +235,8 @@ body.privacy-open .project-detail.is-open {
 
 /* Galleria orizzontale dentro il dettaglio progetto */
 .project-detail .detail-gallery {
-  display: flex;
+  display: block;
+  /* Simplifies layout context for overflow */
   gap: 8px;
   align-items: center;
   overflow: hidden;
@@ -246,7 +247,11 @@ body.privacy-open .project-detail.is-open {
   /* Abilita smooth scroll su touch devices */
   -webkit-overflow-scrolling: touch;
   /* Ottimizza il touch per lo scroll orizzontale */
-  touch-action: pan-x;
+  touch-action: pan-y;
+  /* Allow vertical scroll, let JS handle Horizontal */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .project-detail-inner .detail-gallery {
@@ -438,6 +443,13 @@ body.privacy-open .project-detail.is-open {
   display: block;
   background: transparent;
   cursor: pointer;
+}
+
+/* FIX: Hide overlay when project is open to allow gallery interaction */
+.project-block.is-open .detail-link-overlay,
+.project-detail.is-open .detail-link-overlay {
+  display: none !important;
+  pointer-events: none !important;
 }
 
 /* testo descrizione */
@@ -870,11 +882,20 @@ body.privacy-open .project-detail.is-open {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.fixed-bottom-right:hover .fixed-video-preview,
+/* Active state (JS touch logic) */
 .fixed-bottom-right.is-active .fixed-video-preview {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Hover state (Mouse only) - prevents sticky mobile hover */
+@media (hover: hover) {
+  .fixed-bottom-right:hover .fixed-video-preview {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* Hide on mobile if desired, or keep generic */
@@ -915,5 +936,10 @@ body.privacy-open .project-detail.is-open {
   .fixed-video-preview {
     bottom: 200px;
     /* Higher on mobile */
+  }
+
+  .fixed-video-preview video {
+    box-shadow: none !important;
+    background: transparent !important;
   }
 }

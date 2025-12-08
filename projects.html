@@ -639,6 +639,9 @@
           function onTouchStart(e) {
             const t = (e.touches && e.touches[0]) || null;
             if (!t) return;
+            // Force recalc to ensure maxShift is correct
+            recalc();
+
             // Ferma il momentum se è in corso
             if (momentumRAF) {
               cancelAnimationFrame(momentumRAF);
@@ -655,9 +658,12 @@
           function onTouchMove(e) {
             const t = (e.touches && e.touches[0]) || null;
             if (!t) return;
+
             const dxAbs = Math.abs(t.clientX - tsX);
             const dyAbs = Math.abs(t.clientY - tsY);
             const horizontal = dxAbs > dyAbs;
+
+            // Allow horizontal if significantly more than vertical
             if (horizontal && maxShift > 0) {
               e.preventDefault();
               const now = Date.now();
@@ -991,10 +997,12 @@
         <p>If you choose to contact me via email or contact form, the personal data you provide will be used solely to
           respond to your request. Your data will not be shared with third parties unless required by law.</p>
         <h3>2. Cookies</h3>
-        <p>Cookies are small files stored on your device to ensure the website works correctly and to improve your
-          browsing experience. You can delete or block cookies at any time through your browser settings.</p>
-        <p>This website does not use profiling cookies.</p>
-        <h3>3. Google Analytics (IP anonymized)</h3>
+        <p>This site may use technical cookies necessary for its operation. Tracking or profiling cookies are not used
+          without your explicit consent.</p>
+        <h3>3. Rights of the Data Subject</h3>
+        <p>You can request access, rectification, or deletion of your data at any time by contacting me at: <a
+            href="mailto:samuelclement@example.com">samuelclement.work@gmail.com</a>.</p>
+        <h3>Google Analytics (IP anonymized)</h3>
         <p>8amuel.com uses Google Analytics, a web analytics service provided by Google LLC, configured with IP
           anonymization.</p>
         <p>The data collected is aggregated and does not allow identification of individual users. It includes
@@ -1009,6 +1017,8 @@
       </div>
     </div>
   </div>
+
+
 </body>
 
 </html>
