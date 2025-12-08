@@ -262,27 +262,10 @@ body.privacy-open .project-detail.is-open {
 }
 
 /* Transizione fluida solo su mobile */
+/* Transizione fluida solo su mobile (optional, though JS handles move) */
 @media (max-width: 900px) {
-  .project-detail .detail-gallery {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    /* Optional: snap behavior */
-    padding-bottom: 20px;
-    /* Space for scrollbar if any */
-    max-width: 100%;
-    /* Ensure it doesn't overflow parent */
-    width: 100%;
-    display: flex;
-    /* Ensure flex context for children */
-    box-sizing: border-box;
-  }
-
   .project-detail .detail-gallery .dg-track {
-    /* Disable JS transform logic */
-    transform: none !important;
-    width: max-content;
-    /* Ensure it takes full width of children */
+    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 }
 

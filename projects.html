@@ -700,17 +700,15 @@
             }
           }
 
-          // Enable custom touch scroll ONLY on desktop (or large tablets)
-          // On mobile, we fallback to native CSS scroll for reliability
-          if (!window.matchMedia('(max-width: 900px)').matches) {
-            const touchOpts = { passive: false, capture: true };
-            gallery.addEventListener('touchstart', onTouchStart, touchOpts);
-            gallery.addEventListener('touchmove', onTouchMove, touchOpts);
-            gallery.addEventListener('touchend', onTouchEnd, touchOpts);
-            gallery.addEventListener('touchcancel', onTouchEnd, touchOpts);
-            detail._dgTouch = { onTouchStart, onTouchMove, onTouchEnd };
-            detail._dgTouchTargets = [gallery];
-          }
+          // Re-enable custom touch momentum scroll for ALL devices
+          // User verified this worked previously
+          const touchOpts = { passive: false, capture: true };
+          gallery.addEventListener('touchstart', onTouchStart, touchOpts);
+          gallery.addEventListener('touchmove', onTouchMove, touchOpts);
+          gallery.addEventListener('touchend', onTouchEnd, touchOpts);
+          gallery.addEventListener('touchcancel', onTouchEnd, touchOpts);
+          detail._dgTouch = { onTouchStart, onTouchMove, onTouchEnd };
+          detail._dgTouchTargets = [gallery];
         }
         row.classList.add('is-open');
         if (block) block.classList.add('is-open');
