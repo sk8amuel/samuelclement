@@ -263,8 +263,20 @@ body.privacy-open .project-detail.is-open {
 
 /* Transizione fluida solo su mobile */
 @media (max-width: 900px) {
+  .project-detail .detail-gallery {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    /* Optional: snap behavior */
+    padding-bottom: 20px;
+    /* Space for scrollbar if any */
+  }
+
   .project-detail .detail-gallery .dg-track {
-    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    /* Disable JS transform logic */
+    transform: none !important;
+    width: max-content;
+    /* Ensure it takes full width of children */
   }
 }
 
@@ -876,6 +888,14 @@ body.privacy-open .project-detail.is-open {
 }
 
 /* Hide on mobile if desired, or keep generic */
+.trigger-img-mobile {
+  display: none;
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
 @media (max-width: 900px) {
   .fixed-bottom-right {
     display: flex;
@@ -886,6 +906,14 @@ body.privacy-open .project-detail.is-open {
     right: 0px;
     /* Offset to keep corner anchor */
     bottom: -30px;
+  }
+
+  .trigger-video {
+    display: none !important;
+  }
+
+  .trigger-img-mobile {
+    display: block !important;
   }
 
   .fixed-video-preview {

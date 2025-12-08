@@ -398,6 +398,7 @@
   <div class="fixed-bottom-right">
     <div class="trigger-wrapper">
       <video class="trigger-video" src="assets/img/folder-animation.webm" muted playsinline></video>
+      <img class="trigger-img-mobile" src="assets/img/folder-mobile.png" alt="Folder">
     </div>
     <div class="fixed-video-preview">
       <video src="assets/img/projects/boundless-blades-project.webm" muted loop playsinline preload="metadata"></video>
@@ -699,13 +700,17 @@
             }
           }
 
-          const touchOpts = { passive: false, capture: true };
-          gallery.addEventListener('touchstart', onTouchStart, touchOpts);
-          gallery.addEventListener('touchmove', onTouchMove, touchOpts);
-          gallery.addEventListener('touchend', onTouchEnd, touchOpts);
-          gallery.addEventListener('touchcancel', onTouchEnd, touchOpts);
-          detail._dgTouch = { onTouchStart, onTouchMove, onTouchEnd };
-          detail._dgTouchTargets = [gallery];
+          // Enable custom touch scroll ONLY on desktop (or large tablets)
+          // On mobile, we fallback to native CSS scroll for reliability
+          if (!window.matchMedia('(max-width: 900px)').matches) {
+            const touchOpts = { passive: false, capture: true };
+            gallery.addEventListener('touchstart', onTouchStart, touchOpts);
+            gallery.addEventListener('touchmove', onTouchMove, touchOpts);
+            gallery.addEventListener('touchend', onTouchEnd, touchOpts);
+            gallery.addEventListener('touchcancel', onTouchEnd, touchOpts);
+            detail._dgTouch = { onTouchStart, onTouchMove, onTouchEnd };
+            detail._dgTouchTargets = [gallery];
+          }
         }
         row.classList.add('is-open');
         if (block) block.classList.add('is-open');
@@ -903,6 +908,7 @@
 
         // Function to rewind video
         const rewindVideo = (v) => {
+          if (!v || v.style.display === 'none') return; // Don't rewind if hidden
           clearInterval(rewindInterval);
           rewindInterval = setInterval(() => {
             if (v.currentTime <= 0.1) {
@@ -916,6 +922,7 @@
         };
 
         const playForward = (v) => {
+          if (!v || v.style.display === 'none') return; // Don't play if hidden
           clearInterval(rewindInterval);
           v.play().catch(() => { });
         };
@@ -936,11 +943,19 @@
 
           // Handle Trigger Video (Folder Animation)
           const playFn = () => {
-            playForward(triggerVid);
-            if (previewVid) playForward(previewVid);
+            // Trigger animation only on desktop (when visible)
+            if (getComputedStyle(triggerVid).display !== 'none') {
+              playForward(triggerVid);
+            }
+            if (previewVid) {
+              // Preview video always plays
+              previewVid.play().catch(() => { });
+            }
           };
           const rewindFn = () => {
-            rewindVideo(triggerVid);
+            if (getComputedStyle(triggerVid).display !== 'none') {
+              rewindVideo(triggerVid);
+            }
             if (previewVid) {
               previewVid.pause();
               previewVid.currentTime = 0;
@@ -949,31 +964,6 @@
 
           fixedBox.addEventListener('mouseenter', playFn);
           fixedBox.addEventListener('mouseleave', rewindFn);
-
-          // Handle dynamic source switching
-          const updateSource = () => {
-            const isMobile = window.matchMedia('(max-width: 900px)').matches;
-            const newSrc = isMobile ? 'assets/img/folder-animation-mobile.webm' : 'assets/img/folder-animation.webm';
-            const currentSrc = triggerVid.getAttribute('src'); // Use getAttribute to avoid full URL matching issues
-
-            // Only update if changed
-            if (!currentSrc || !currentSrc.includes(newSrc.split('/').pop())) {
-              triggerVid.src = newSrc;
-              triggerVid.load();
-              // Reset state after load
-              const reset = () => {
-                requestAnimationFrame(() => {
-                  triggerVid.pause();
-                  triggerVid.currentTime = 0;
-                });
-              };
-              triggerVid.addEventListener('loadedmetadata', reset, { once: true });
-            }
-          };
-
-          // Init
-          updateSource();
-          window.addEventListener('resize', updateSource);
 
           // Touch events for mobile (Hold to play)
           fixedBox.addEventListener('touchstart', (e) => { e.preventDefault(); playFn(); }, { passive: false });
