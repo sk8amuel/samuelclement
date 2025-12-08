@@ -392,38 +392,15 @@
 
   <script src="assets/js/projects-data.js"></script>
   <script src="assets/js/main.js?v=2"></script>
-  <div id="privacy-modal" class="privacy-modal" aria-hidden="true">
-    <div class="privacy-overlay" id="privacyOverlay"></div>
-    <div class="privacy-content" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
-      <button class="privacy-close" id="privacyClose" aria-label="Close">×</button>
-      <h2 id="privacyTitle">Privacy Policy</h2>
-      <div class="privacy-body">
-        <h3>Privacy & Cookie Policy</h3>
-        <p>In accordance with Article 13 of EU Regulation 2016/679 ("GDPR"), I inform you that any personal data
-          provided through this website is processed with appropriate technical and organizational measures to ensure
-          security, confidentiality, and protection of your rights.</p>
-        <h3>1. Data Collected</h3>
-        <p>This website may collect basic technical information through automatic tools (such as server logs or
-          anonymous statistics).</p>
-        <p>If you choose to contact me via email or contact form, the personal data you provide will be used solely to
-          respond to your request. Your data will not be shared with third parties unless required by law.</p>
-        <h3>2. Cookies</h3>
-        <p>Cookies are small files stored on your device to ensure the website works correctly and to improve your
-          browsing experience. You can delete or block cookies at any time through your browser settings.</p>
-        <p>This website does not use profiling cookies.</p>
-        <h3>3. Google Analytics (IP anonymized)</h3>
-        <p>8amuel.com uses Google Analytics, a web analytics service provided by Google LLC, configured with IP
-          anonymization.</p>
-        <p>The data collected is aggregated and does not allow identification of individual users. It includes
-          information such as visited pages, visit duration, and browser type.</p>
-        <p>Because IP addresses are anonymized, no specific consent is required.</p>
-        <p>You can disable cookies at any time through your browser settings. For more details, please refer to Google’s
-          official Analytics policies.</p>
-        <h3>Data Controller</h3>
-        <p>Samuel Clement – Owner of 8amuel.com</p>
-        <p>For any inquiries regarding the processing of personal data, you can contact me through the email provided on
-          the website.</p>
-      </div>
+
+
+  <!-- BOTTOM RIGHT HOVER BOX -->
+  <div class="fixed-bottom-right">
+    <div class="trigger-wrapper">
+      <video class="trigger-video" src="assets/img/folder-animation.webm" muted playsinline></video>
+    </div>
+    <div class="fixed-video-preview">
+      <video src="assets/img/projects/boundless-blades-project.webm" muted loop playsinline preload="metadata"></video>
     </div>
   </div>
 
@@ -447,6 +424,15 @@
           else { vid.addEventListener('loadeddata', done, { once: true }); vid.addEventListener('error', done, { once: true }); }
         }
       });
+
+      function checkFixedBoxVisibility() {
+        const anyOpen = document.querySelectorAll('.project-item.is-open').length > 0;
+        const box = document.querySelector('.fixed-bottom-right');
+        if (box) {
+          if (anyOpen) box.classList.add('is-hidden');
+          else box.classList.remove('is-hidden');
+        }
+      }
 
       function openRow(row) {
         const block = row.closest('.project-block');
@@ -736,6 +722,7 @@
             if (meta) meta.remove();
           }
         }
+        checkFixedBoxVisibility();
       }
 
       function closeRow(row) {
@@ -771,6 +758,7 @@
         if (icon && icon.tagName.toLowerCase() === 'img') {
           icon.src = 'assets/img/closed-folder-icon.png';
         }
+        setTimeout(checkFixedBoxVisibility, 50);
       }
 
       rows.forEach(row => {
@@ -904,8 +892,131 @@
           });
         }
       });
+
+      // Fixed Bottom Box Hover Logic
+      const fixedBox = document.querySelector('.fixed-bottom-right');
+      if (fixedBox) {
+        const previewVid = fixedBox.querySelector('.fixed-video-preview video');
+        const triggerVid = fixedBox.querySelector('.trigger-video');
+
+        let rewindInterval = null;
+
+        // Function to rewind video
+        const rewindVideo = (v) => {
+          clearInterval(rewindInterval);
+          rewindInterval = setInterval(() => {
+            if (v.currentTime <= 0.1) {
+              v.currentTime = 0;
+              v.pause();
+              clearInterval(rewindInterval);
+            } else {
+              v.currentTime -= 0.1; // adjust speed of rewind
+            }
+          }, 30); // 30ms interval ~ 33fps
+        };
+
+        const playForward = (v) => {
+          clearInterval(rewindInterval);
+          v.play().catch(() => { });
+        };
+
+        if (triggerVid) {
+          // Force reset on load
+          const resetVid = () => {
+            requestAnimationFrame(() => {
+              triggerVid.pause();
+              triggerVid.currentTime = 0;
+            });
+          };
+
+          if (triggerVid.readyState >= 1) resetVid();
+          triggerVid.addEventListener('loadedmetadata', resetVid, { once: true });
+          triggerVid.addEventListener('loadeddata', resetVid, { once: true });
+          window.addEventListener('load', resetVid, { once: true });
+
+          // Handle Trigger Video (Folder Animation)
+          const playFn = () => {
+            playForward(triggerVid);
+            if (previewVid) playForward(previewVid);
+          };
+          const rewindFn = () => {
+            rewindVideo(triggerVid);
+            if (previewVid) {
+              previewVid.pause();
+              previewVid.currentTime = 0;
+            }
+          };
+
+          fixedBox.addEventListener('mouseenter', playFn);
+          fixedBox.addEventListener('mouseleave', rewindFn);
+
+          // Handle dynamic source switching
+          const updateSource = () => {
+            const isMobile = window.matchMedia('(max-width: 900px)').matches;
+            const newSrc = isMobile ? 'assets/img/folder-animation-mobile.webm' : 'assets/img/folder-animation.webm';
+            const currentSrc = triggerVid.getAttribute('src'); // Use getAttribute to avoid full URL matching issues
+
+            // Only update if changed
+            if (!currentSrc || !currentSrc.includes(newSrc.split('/').pop())) {
+              triggerVid.src = newSrc;
+              triggerVid.load();
+              // Reset state after load
+              const reset = () => {
+                requestAnimationFrame(() => {
+                  triggerVid.pause();
+                  triggerVid.currentTime = 0;
+                });
+              };
+              triggerVid.addEventListener('loadedmetadata', reset, { once: true });
+            }
+          };
+
+          // Init
+          updateSource();
+          window.addEventListener('resize', updateSource);
+
+          // Touch events for mobile (Hold to play)
+          fixedBox.addEventListener('touchstart', (e) => { e.preventDefault(); playFn(); }, { passive: false });
+          fixedBox.addEventListener('touchend', (e) => { e.preventDefault(); rewindFn(); }, { passive: false });
+          fixedBox.addEventListener('touchcancel', (e) => { e.preventDefault(); rewindFn(); }, { passive: false });
+        }
+      }
     });
   </script>
+  <div id="privacy-modal" class="privacy-modal" aria-hidden="true">
+    <div class="privacy-overlay" id="privacyOverlay"></div>
+    <div class="privacy-content" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+      <button class="privacy-close" id="privacyClose" aria-label="Close">×</button>
+      <h2 id="privacyTitle">Privacy Policy</h2>
+      <div class="privacy-body">
+        <h3>Privacy & Cookie Policy</h3>
+        <p>In accordance with Article 13 of EU Regulation 2016/679 ("GDPR"), I inform you that any personal data
+          provided through this website is processed with appropriate technical and organizational measures to ensure
+          security, confidentiality, and protection of your rights.</p>
+        <h3>1. Data Collected</h3>
+        <p>This website may collect basic technical information through automatic tools (such as server logs or
+          anonymous statistics).</p>
+        <p>If you choose to contact me via email or contact form, the personal data you provide will be used solely to
+          respond to your request. Your data will not be shared with third parties unless required by law.</p>
+        <h3>2. Cookies</h3>
+        <p>Cookies are small files stored on your device to ensure the website works correctly and to improve your
+          browsing experience. You can delete or block cookies at any time through your browser settings.</p>
+        <p>This website does not use profiling cookies.</p>
+        <h3>3. Google Analytics (IP anonymized)</h3>
+        <p>8amuel.com uses Google Analytics, a web analytics service provided by Google LLC, configured with IP
+          anonymization.</p>
+        <p>The data collected is aggregated and does not allow identification of individual users. It includes
+          information such as visited pages, visit duration, and browser type.</p>
+        <p>Because IP addresses are anonymized, no specific consent is required.</p>
+        <p>You can disable cookies at any time through your browser settings. For more details, please refer to Google’s
+          official Analytics policies.</p>
+        <h3>Data Controller</h3>
+        <p>Samuel Clement – Owner of 8amuel.com</p>
+        <p>For any inquiries regarding the processing of personal data, you can contact me through the email provided on
+          the website.</p>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

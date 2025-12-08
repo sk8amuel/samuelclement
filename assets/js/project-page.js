@@ -1,5 +1,5 @@
 // Dedicated JS for single project pages
-(function() {
+(function () {
   window.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.top-nav a');
     navLinks.forEach(l => {
@@ -52,7 +52,7 @@
     window.addEventListener('load', scheduleFix);
     window.addEventListener('orientationchange', scheduleFix);
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(scheduleFix).catch(() => {});
+      document.fonts.ready.then(scheduleFix).catch(() => { });
     }
     const bottomNav = document.querySelector('.project-bottom-nav');
     const hero = document.querySelector('.template-hero');
@@ -132,152 +132,141 @@
       });
     });
 
-  const jabRow = document.querySelector('.template-jabberwocky .hero-row');
-  function applyPairAspect(img) {
-    if (!img) return;
-    const w = img.naturalWidth;
-    const h = img.naturalHeight;
-    if (!w || !h) return;
-    const ratio = w + ' / ' + h;
-    jabRow?.querySelectorAll('.hero-media').forEach(el => { el.style.aspectRatio = ratio; });
-  }
-  if (jabRow) {
-    const firstImg = jabRow.querySelector('.hero-media img');
-    if (firstImg) {
-      if (firstImg.complete) applyPairAspect(firstImg);
-      else firstImg.addEventListener('load', () => applyPairAspect(firstImg), { once: true });
+    const jabRow = document.querySelector('.template-jabberwocky .hero-row');
+    function applyPairAspect(img) {
+      if (!img) return;
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      if (!w || !h) return;
+      const ratio = w + ' / ' + h;
+      jabRow?.querySelectorAll('.hero-media').forEach(el => { el.style.aspectRatio = ratio; });
     }
-  }
-
-  const heroFrames = Array.from(document.querySelectorAll('.template-hero .hero-media iframe'));
-  const vimeoFrames = heroFrames.filter(ifr => /vimeo\.com/i.test(String(ifr.src || '')));
-  const ytFrames = heroFrames.filter(ifr => /(youtube|youtu\.be|youtube-nocookie\.com)/i.test(String(ifr.src || '')));
-
-  vimeoFrames.forEach(ifr => {
-    const wrap = ifr.closest('.hero-media');
-    if (!wrap) return;
-    wrap.classList.add('skeleton');
-    let player = null;
-    try { if (window.Vimeo && window.Vimeo.Player) player = new window.Vimeo.Player(ifr); } catch(_) {}
-    if (player) {
-      let hasStarted = false;
-      const clearSkeleton = () => { if (!hasStarted) { hasStarted = true; wrap.classList.remove('skeleton'); } };
-      let clearOnReady = false;
-      try {
-        const u = new URL(ifr.src);
-        const bg = u.searchParams.get('background');
-        const controls = u.searchParams.get('controls');
-        if ((controls === '1') || (bg === '0')) clearOnReady = true;
-      } catch (_) {}
-      player.on('play', clearSkeleton);
-      player.on('timeupdate', (data) => { if (data && (data.seconds > 0 || data.percent > 0)) clearSkeleton(); });
-      player.on('loaded', () => { if (clearOnReady) clearSkeleton(); });
-      player.ready().then(() => {
-        player.setAutopause(false).catch(() => {});
-        player.setLoop(true).catch(() => {});
-        // Non forzare play: con controls=1 lasciamo che l'utente avvii
-        if (clearOnReady) clearSkeleton();
-      }).catch(() => {});
-      wrap.addEventListener('click', () => { player.play().catch(() => {}); });
-      wrap.addEventListener('touchstart', () => { player.play().catch(() => {}); }, { passive: true });
-      setTimeout(() => {
-        if (!hasStarted) {
-          // Se non parte, lascia i controlli visibili
-        }
-      }, 1200);
-      setTimeout(() => {
-        if (!hasStarted) {
-          // fallback: abilita controlli se non parte
-          try {
-            const url = new URL(ifr.src);
-            url.searchParams.set('background', '0');
-            url.searchParams.set('controls', '1');
-            ifr.src = url.toString();
-          } catch (_) {}
-        }
-      }, 4000);
-      // Ultimo fallback: mostra link Vimeo se ancora bloccato
-      setTimeout(() => {
-        if (!wrap.classList.contains('skeleton')) return;
-        const id = (function(){ try { return new URL(ifr.src).pathname.split('/').pop(); } catch(_) { return ''; } })();
-        const a = document.createElement('a');
-        a.className = 'hero-video-link';
-        a.href = id ? `https://vimeo.com/${id}` : ifr.src;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = 'Watch on Vimeo';
-        wrap.innerHTML = '';
-        wrap.appendChild(a);
-      }, 7000);
-    } else {
-      ifr.addEventListener('load', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { once: true });
-      wrap.addEventListener('click', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } });
-      wrap.addEventListener('touchstart', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { passive: true });
+    if (jabRow) {
+      const firstImg = jabRow.querySelector('.hero-media img');
+      if (firstImg) {
+        if (firstImg.complete) applyPairAspect(firstImg);
+        else firstImg.addEventListener('load', () => applyPairAspect(firstImg), { once: true });
+      }
     }
-    setTimeout(() => { if (!wrap.classList.contains('skeleton')) return; ifr.src = ifr.src; }, 2000);
-  });
 
-  function setupYTPlayers() {
-    ytFrames.forEach(ifr => {
+    const heroFrames = Array.from(document.querySelectorAll('.template-hero .hero-media iframe'));
+    const vimeoFrames = heroFrames.filter(ifr => /vimeo\.com/i.test(String(ifr.src || '')));
+    const ytFrames = heroFrames.filter(ifr => /(youtube|youtu\.be|youtube-nocookie\.com)/i.test(String(ifr.src || '')));
+
+    vimeoFrames.forEach(ifr => {
       const wrap = ifr.closest('.hero-media');
       if (!wrap) return;
       wrap.classList.add('skeleton');
-      // Non modificare lo src dell'iframe per evitare ERR_ABORTED
-      ifr._ytAdjusted = true;
-      if (window.YT && window.YT.Player) {
-        const player = new window.YT.Player(ifr, {
-          events: {
-            onReady: (e) => { try { e.target.mute(); e.target.playVideo(); wrap.classList.remove('skeleton'); } catch (_) { wrap.classList.remove('skeleton'); } },
-            onStateChange: (ev) => { if (ev && ev.data === 1) { wrap.classList.remove('skeleton'); } }
-          }
+      let player = null;
+      try { if (window.Vimeo && window.Vimeo.Player) player = new window.Vimeo.Player(ifr); } catch (_) { }
+      // Force fallback: remove skeleton after 3s to ensure visibility
+      setTimeout(() => {
+        if (wrap.classList.contains('skeleton')) {
+          wrap.classList.remove('skeleton');
+        }
+      }, 3000);
+
+      if (player) {
+        let hasStarted = false;
+        const clearSkeleton = () => { if (!hasStarted) { hasStarted = true; wrap.classList.remove('skeleton'); } };
+        let clearOnReady = false;
+        try {
+          const u = new URL(ifr.src);
+          const bg = u.searchParams.get('background');
+          const controls = u.searchParams.get('controls');
+          // If controls are enabled or background is disabled, show immediately
+          if ((controls === '1') || (bg === '0')) clearOnReady = true;
+        } catch (_) { }
+
+        player.on('play', clearSkeleton);
+        player.on('timeupdate', (data) => { if (data && (data.seconds > 0 || data.percent > 0)) clearSkeleton(); });
+        player.on('loaded', () => { if (clearOnReady) clearSkeleton(); });
+        player.ready().then(() => {
+          player.setAutopause(false).catch(() => { });
+          player.setLoop(true).catch(() => { });
+          if (clearOnReady) clearSkeleton();
+        }).catch(() => {
+          // If ready fails, show anyway
+          wrap.classList.remove('skeleton');
         });
-        wrap.addEventListener('click', () => { try { player.playVideo(); } catch (_) {} });
-        wrap.addEventListener('touchstart', () => { try { player.playVideo(); } catch (_) {} }, { passive: true });
-        setTimeout(() => { if (wrap.classList.contains('skeleton')) { try { player.playVideo(); } catch (_) { wrap.classList.remove('skeleton'); } } }, 1600);
+
+        wrap.addEventListener('click', () => { player.play().catch(() => { }); });
+        wrap.addEventListener('touchstart', () => { player.play().catch(() => { }); }, { passive: true });
+      } else {
+        // Fallback for no API
+        ifr.addEventListener('load', () => {
+          wrap.classList.remove('skeleton');
+          if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); }
+        }, { once: true });
+        // Just in case load already happened or fails
+        setTimeout(() => wrap.classList.remove('skeleton'), 1000);
+
+        wrap.addEventListener('click', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } });
+        wrap.addEventListener('touchstart', () => { if (ifr && ifr.contentWindow) { ifr.contentWindow.postMessage('{"method":"play"}', '*'); } }, { passive: true });
       }
     });
-  }
 
-  if (ytFrames.length) {
-    if (window.YT && window.YT.Player) setupYTPlayers();
-    else {
-      const s = document.createElement('script');
-      s.src = 'https://www.youtube.com/iframe_api';
-      document.head.appendChild(s);
-      const old = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = function() { try { setupYTPlayers(); } catch (_) {} if (typeof old === 'function') { try { old(); } catch (_) {} } };
+    function setupYTPlayers() {
+      ytFrames.forEach(ifr => {
+        const wrap = ifr.closest('.hero-media');
+        if (!wrap) return;
+        wrap.classList.add('skeleton');
+        // Non modificare lo src dell'iframe per evitare ERR_ABORTED
+        ifr._ytAdjusted = true;
+        if (window.YT && window.YT.Player) {
+          const player = new window.YT.Player(ifr, {
+            events: {
+              onReady: (e) => { try { e.target.mute(); e.target.playVideo(); wrap.classList.remove('skeleton'); } catch (_) { wrap.classList.remove('skeleton'); } },
+              onStateChange: (ev) => { if (ev && ev.data === 1) { wrap.classList.remove('skeleton'); } }
+            }
+          });
+          wrap.addEventListener('click', () => { try { player.playVideo(); } catch (_) { } });
+          wrap.addEventListener('touchstart', () => { try { player.playVideo(); } catch (_) { } }, { passive: true });
+          setTimeout(() => { if (wrap.classList.contains('skeleton')) { try { player.playVideo(); } catch (_) { wrap.classList.remove('skeleton'); } } }, 1600);
+        }
+      });
     }
-  }
 
-  window.addEventListener('message', (e) => {
-    const origin = e.origin || '';
-    if (!/vimeo\.com/i.test(origin)) return;
-    let data = e.data;
-    if (typeof data === 'string') { try { data = JSON.parse(data); } catch(_) {} }
-    if (!data || !(data.event === 'play' || data.event === 'playProgress' || data.event === 'timeupdate' || data.event === 'playing')) return;
-    const ifr = vimeoFrames.find(x => { try { return x.contentWindow === e.source; } catch(_) { return false; } });
-    if (!ifr) return;
-    const wrap = ifr.closest('.hero-media');
-    if (wrap) wrap.classList.remove('skeleton');
-  });
-  const testVideo = document.createElement('video');
-  const canWebm = !!testVideo.canPlayType && !!testVideo.canPlayType('video/webm');
-  if (!canWebm) {
-    const vids = Array.from(document.querySelectorAll('.project-page .hero-video'));
-    vids.forEach(v => {
-      const id = v.getAttribute('data-vimeo');
-      const fig = v.closest('.hero-media');
-      if (!fig) return;
-      const link = document.createElement('a');
-      link.className = 'hero-video-link';
-      link.href = id ? `https://vimeo.com/${id}` : '#';
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = 'Watch on Vimeo';
-      fig.innerHTML = '';
-      fig.appendChild(link);
+    if (ytFrames.length) {
+      if (window.YT && window.YT.Player) setupYTPlayers();
+      else {
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(s);
+        const old = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = function () { try { setupYTPlayers(); } catch (_) { } if (typeof old === 'function') { try { old(); } catch (_) { } } };
+      }
+    }
+
+    window.addEventListener('message', (e) => {
+      const origin = e.origin || '';
+      if (!/vimeo\.com/i.test(origin)) return;
+      let data = e.data;
+      if (typeof data === 'string') { try { data = JSON.parse(data); } catch (_) { } }
+      if (!data || !(data.event === 'play' || data.event === 'playProgress' || data.event === 'timeupdate' || data.event === 'playing')) return;
+      const ifr = vimeoFrames.find(x => { try { return x.contentWindow === e.source; } catch (_) { return false; } });
+      if (!ifr) return;
+      const wrap = ifr.closest('.hero-media');
+      if (wrap) wrap.classList.remove('skeleton');
     });
-  }
-  
+    const testVideo = document.createElement('video');
+    const canWebm = !!testVideo.canPlayType && !!testVideo.canPlayType('video/webm');
+    if (!canWebm) {
+      const vids = Array.from(document.querySelectorAll('.project-page .hero-video'));
+      vids.forEach(v => {
+        const id = v.getAttribute('data-vimeo');
+        const fig = v.closest('.hero-media');
+        if (!fig) return;
+        const link = document.createElement('a');
+        link.className = 'hero-video-link';
+        link.href = id ? `https://vimeo.com/${id}` : '#';
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Watch on Vimeo';
+        fig.innerHTML = '';
+        fig.appendChild(link);
+      });
+    }
+
   });
 })();
