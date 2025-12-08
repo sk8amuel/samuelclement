@@ -943,6 +943,7 @@
 
           // Handle Trigger Video (Folder Animation)
           const playFn = () => {
+            fixedBox.classList.add('is-active'); // Explicitly active state
             // Trigger animation only on desktop (when visible)
             if (getComputedStyle(triggerVid).display !== 'none') {
               playForward(triggerVid);
@@ -953,6 +954,7 @@
             }
           };
           const rewindFn = () => {
+            fixedBox.classList.remove('is-active'); // Remove active state
             if (getComputedStyle(triggerVid).display !== 'none') {
               rewindVideo(triggerVid);
             }

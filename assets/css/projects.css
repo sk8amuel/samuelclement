@@ -270,6 +270,12 @@ body.privacy-open .project-detail.is-open {
     /* Optional: snap behavior */
     padding-bottom: 20px;
     /* Space for scrollbar if any */
+    max-width: 100%;
+    /* Ensure it doesn't overflow parent */
+    width: 100%;
+    display: flex;
+    /* Ensure flex context for children */
+    box-sizing: border-box;
   }
 
   .project-detail .detail-gallery .dg-track {
@@ -881,7 +887,8 @@ body.privacy-open .project-detail.is-open {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.fixed-bottom-right:hover .fixed-video-preview {
+.fixed-bottom-right:hover .fixed-video-preview,
+.fixed-bottom-right.is-active .fixed-video-preview {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
