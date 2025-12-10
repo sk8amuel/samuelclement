@@ -15,9 +15,11 @@ const projectsData = {
     },
     ilgermoglio: {
         title: "Il Germoglio",
-        meta: "Client: Il Germoglio · 2024 · Brand Identity / Packaging",
+        meta: "Client: Il Germoglio · June 2025 · Brand Identity, Photography",
         body: `
-      Identity and packaging for an organic store. Modular system, soft tones and clear hierarchy between product lines.
+      Il Germoglio is a branding and photography project developed for an agricultural company rooted in tradition but ready to grow.
+
+      The work involved a complete redesign of the visual identity—from a refreshed logo to a new visual style that reflects the company’s values of sustainability, care, and authenticity. Alongside the branding, I produced a dedicated photo shoot to visually narrate the rhythms of the land and the people behind it. The project also included the design and development of the company’s new website, bringing coherence and personality across every touchpoint.
     `,
         images: [
             "assets/img/projects/ilgermoglio-project.png"
@@ -130,9 +132,11 @@ const projectsData = {
     },
     luminal: {
         title: "Luminal",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "School Project · June 2025 · App Design",
         body: `
-      Conceptual identity built on light refraction, minimal typography and slow motion.
+      Luminal is a dream-tracking app designed to guide you through the hidden landscapes of your subconscious.
+
+      This isn’t just a digital journal — Luminal helps you record your dreams, interpret their meanings, and discover patterns that reveal deeper insights about yourself. With an intuitive design and a focus on personal exploration, the app invites you to see your dreams not as random images, but as a map to self-awareness.
     `,
         images: [
             "assets/img/projects/Luminal-project.gif"
@@ -140,9 +144,11 @@ const projectsData = {
     },
     speaklouder: {
         title: "Speak Louder",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "School Project · November 2024 · Type Design",
         body: `
-      Typographic motion manifesto about clarity and presence; bold, direct and kinetic.
+      Speak Louder is a custom typeface created to celebrate the 25th anniversary of Significant Other by Limp Bizkit—a loud, gritty font that channels the raw energy of late-90s nu-metal.
+
+      Designed as both a tribute and a design experiment, the project includes a full reimagining of the album’s visual identity, with bold, distorted letterforms that echo the aggression and chaos of the era. Speak Louder isn’t just a font—it’s a visual scream, built to feel as unapologetic and confrontational as the music that inspired it.
     `,
         images: [
             "assets/img/projects/speak-louder-project.png"
@@ -165,9 +171,12 @@ const projectsData = {
     },
     pastiglie: {
         title: "Pastiglie Leone",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "School Project · April 2024 · Logo Design e Brand Identity",
         body: `
-      Contemporary reinterpretation of an iconic confectionery brand with refined textures and motion nostalgia.
+      This rebranding project for Pastiglie Leone explores the essence of a historic Italian confectionery brand through a contemporary lens.
+      After a thorough analysis of the brand’s heritage, values, and visual language, I developed a fresh identity system that respects its legacy while making it relevant to a modern audience.
+
+      The redesign includes a new logo, an updated visual style, and revamped packaging that blends tradition with minimal, elegant aesthetics. The goal: to enhance brand recognition, appeal to younger consumers, and reinforce Leone’s iconic status in the confectionery market.
     `,
         images: [
             "assets/img/projects/pastiglie-leone-project.png"
