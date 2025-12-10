@@ -17,8 +17,14 @@
     /* Anchor for background lines */
 }
 
-/* Replicate Grid Exactly like Home/Index */
-.page-about::before {
+/* Hide the main body grid (Index style) */
+body.is-about::before {
+    opacity: 0 !important;
+}
+
+/* Create a NEW Fixed grid specifically for About page */
+/* Positioned above opacity layers but behind content */
+body.is-about::after {
     content: "";
     position: fixed;
     top: 0;
@@ -27,26 +33,22 @@
     transform: translateX(-50%);
     width: var(--container-width);
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
+    /* Below About Content (z-index 3) */
     background-image: var(--grid-bg);
     background-repeat: repeat-x;
     background-size: calc((100% - (var(--grid-columns) - 1) * var(--column-gap)) / var(--grid-columns) + var(--column-gap)) 100%;
     background-position: left top;
     opacity: var(--overlay-opacity);
-    will-change: transform;
-    /* Ensure it shows up */
 }
 
-/* Ensure content is above lines */
-.page-about .about-block,
-.page-about .about-photo {
-    z-index: 1;
+.page-about .about-main {
+    padding-bottom: 72px;
 }
 
-/* Hide the main body grid when About is open to prevent double/blurred lines */
-body.is-about::before {
-    opacity: 0 !important;
-    transition: opacity 300ms ease;
+/* Force padding below content */
+body.is-about .page-about .about-main {
+    padding-bottom: 160px !important;
 }
 
 /* --- Row 1 --- */
@@ -308,4 +310,13 @@ body.is-about::before {
 
 .page-about .about-main {
     padding-bottom: 72px;
+}
+
+/* Force padding below content so grid lines extend past the button */
+/* AND ensure full height coverage starting from top */
+body.is-about .page-about .about-main {
+    top: 0 !important;
+    padding-top: 80px !important;
+    min-height: 100vh !important;
+    padding-bottom: 160px !important;
 }
