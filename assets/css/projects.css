@@ -820,10 +820,10 @@ body.privacy-open .project-detail.is-open {
   position: fixed;
   right: calc(50% - 0.5 * var(--container-width) - 50px);
   /* Adjusted to be more visible */
-  bottom: -80px;
+  bottom: -50px;
   /* User preferred adjustment */
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
   display: flex;
   align-items: center;
   justify-content: center;
