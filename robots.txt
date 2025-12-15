@@ -6,7 +6,15 @@ Allow: /
 # Sitemap
 Sitemap: https://www.samuelclement.it/sitemap.xml
 
-# Block indexing of specific directories if needed
-# Disallow: /assets/
-# Disallow: /projects/Knoted/wp-content/
-# Disallow: /projects/Knoted/wp-includes/
+# Block AI training bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
