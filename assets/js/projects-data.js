@@ -1,10 +1,9 @@
 const projectsData = {
     atm: {
         title: "At the Mountains of Madness",
-        meta: "Personal Project · 2024 · Editorial / Illustration",
+        meta: "School Project · 2024 · Editorial / Illustration",
         body: `
-      Editorial project inspired by Lovecraft. Strict grid, cold typography and layered illustration
-      exploring vertical tension and monotone atmospheres.
+      At the Mountain of Madness is a fully illustrated reimagining of H.P. Lovecraft’s cult classic, brought to life through a bold and haunting visual style. This isn’t just a retelling: every page is charged with detailed artwork that intensifies the dread and mystery of the original story. From the icy desolation of Antarctica to the twisted alien architecture, the illustrations immerse you deep into Lovecraft’s cosmic horror - making the madness not just something you read, but something you see and feel.
     `,
         images: [
             "assets/img/projects/At The Mountains Of Madness/At-the-mountains-of-madness-1.jpg",
@@ -15,7 +14,7 @@ const projectsData = {
     },
     ilgermoglio: {
         title: "Il Germoglio",
-        meta: "Client: Il Germoglio · June 2025 · Brand Identity, Photography",
+        meta: "Client: Il Germoglio · 2025 · Brand Identity, Photography",
         body: `
       Il Germoglio is a branding and photography project developed for an agricultural company rooted in tradition but ready to grow.
 
@@ -27,10 +26,9 @@ const projectsData = {
     },
     jabberwocky: {
         title: "Jabberwocky",
-        meta: "Personal Project · 2024 · Motion / Visual Experiment",
+        meta: "School Project · 2024 · Illustration",
         body: `
-      Experimental motion piece translating Lewis Carroll’s poem into fractured typography,
-      grain, and glitch transitions.
+      "Jabberwocky" is a famous nonsense poem written by Lewis Carroll, included in his 1871 book "Through the Looking-Glass, and What Alice Found There," the sequel to "Alice's Adventures in Wonderland." Structure: The poem consists of seven stanzas, each with four lines. It is written in a meter similar to that of English ballads. Language: The poem is notable for its use of portmanteau words, invented by Carroll, which blend together parts of different words to create new ones with unique meanings. Words like "slithy" (a combination of "slimy" and "lithe") and "mimsy" (a blend of "miserable" and "flimsy") contribute to the whimsical and fantastical nature of the poem.
     `,
         images: [
             "assets/img/projects/Jabberwocky/Jabberwocky-1.jpg",
@@ -43,10 +41,9 @@ const projectsData = {
     },
     knoted: {
         title: "Knoted",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "Client: Knoted · 2024 · Identity / Motion",
         body: `
-      Visual identity and motion assets for a digital platform. Interlocking forms,
-      tight grid and kinetic behaviour across media.
+      Visual identity and motion system built on interlocking forms, tight grid and kinetic behaviour across media. Designed for clarity and rhythm, it scales from static print to dynamic interfaces, preserving brand coherence while remaining flexible and expressive.
     `,
         images: [
             "assets/img/projects/Knoted/Logo-Mockup-knoted.png"
@@ -75,9 +72,10 @@ const projectsData = {
     },
     "365posters": {
         title: "365 Posters",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "Personal Project · 2022 · Graphic Design & Illustration",
         body: `
-      Daily poster exploration focused on rhythm, contrast and iterative structures.
+      This project is a year-long creative challenge where I designed one poster every single day for 365 days. Each piece explores different visual styles, techniques, and ideas—ranging from typography experiments to abstract compositions and bold graphic statements. The goal was to push my creative limits, stay consistent, and grow as a designer through daily practice.
+      What you're seeing here is a curated selection of the best posters from the entire series—my personal highlights that represent the most impactful, original, or refined results from the project.
     `,
         images: [
             "assets/img/projects/365/Poster-1.jpeg",
@@ -99,9 +97,9 @@ const projectsData = {
     },
     boundless: {
         title: "Boundless Blades",
-        meta: "Collaborative · 2024 · Identity / Motion",
+        meta: "School project · 2025 · App Design / Editorial",
         body: `
-      High-energy visual system merging metallic textures, sharp forms and fluid motion.
+      Boundless Blades is an interactive digital publication for iPad that explores stories and cultures through the most famous swords in history. You can interact with reconstructions, browse image galleries and uncover facts about distant eras — each sword shares an anecdote or intriguing detail tied to its time and context.
     `,
         images: [
             "assets/img/projects/Boundless Blades/Boundless-blades-mockup.webp",
@@ -118,7 +116,7 @@ const projectsData = {
         title: "Cumpa",
         meta: "School Project · 2024 · Editorial",
         body: `
-      Cumpa is an independent magazine that dives into the skateboarding scene of Valtellina, blending local passion with raw creativity.
+      Cumpa is an independent magazine that dives into the skateboarding scene of Valtellina, blending local passion with raw creativity. This isn’t your typical skate mag: inside, you’ll find photo galleries, personal interviews, and quirky facts that reveal the unique vibe of skating in this Alpine valley. From hidden spots to local legends, *Cumpa* captures the spirit of a tight-knit community riding against the grain in the heart of the mountains.
     `,
         images: [
             "assets/img/projects/Cumpa/cumpa-magazine-mockup.webp",
@@ -132,7 +130,7 @@ const projectsData = {
     },
     luminal: {
         title: "Luminal",
-        meta: "School Project · June 2025 · App Design",
+        meta: "School project · 2025 · App Design",
         body: `
       Luminal is a dream-tracking app designed to guide you through the hidden landscapes of your subconscious.
 
@@ -144,7 +142,7 @@ const projectsData = {
     },
     speaklouder: {
         title: "Speak Louder",
-        meta: "School Project · November 2024 · Type Design",
+        meta: "School Project · 2024 · Type Design",
         body: `
       Speak Louder is a custom typeface created to celebrate the 25th anniversary of Significant Other by Limp Bizkit—a loud, gritty font that channels the raw energy of late-90s nu-metal.
 
@@ -158,8 +156,11 @@ const projectsData = {
         title: "The Future of AI",
         meta: "School project · 2024 · Motion Graphic",
         body: `
-      Animated short exploring AI’s human impact with textured, fast-paced motion.
-      Frame-by-frame simulation style, dynamic shadows and a playful yet reflective tone.
+      What happens when artificial intelligence evolves faster than we can imagine, and how do we, as humans, keep up?
+
+      This animated motion graphic dives into the future of AI and its impact on humanity through a blend of humor and serious reflection. Illustrated in a rich, frame-by-frame simulation style, the video features textured visuals, dynamic shadows, and a fast-paced rhythm that keeps you engaged from start to finish.
+
+      From ethical dilemmas to unexpected AI quirks, "AI & Us" balances playful narration with thought-provoking insights, inviting viewers to question, laugh, and maybe worry just a little about what’s next.
     `,
         images: [
             "assets/img/projects/the-future-of-ai.gif",
@@ -171,7 +172,7 @@ const projectsData = {
     },
     pastiglie: {
         title: "Pastiglie Leone",
-        meta: "School Project · April 2024 · Logo Design e Brand Identity",
+        meta: "School project · 2024 · Logo Design e Brand Identity",
         body: `
       This rebranding project for Pastiglie Leone explores the essence of a historic Italian confectionery brand through a contemporary lens.
       After a thorough analysis of the brand’s heritage, values, and visual language, I developed a fresh identity system that respects its legacy while making it relevant to a modern audience.

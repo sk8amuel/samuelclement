@@ -687,7 +687,7 @@
 
  body.home .project-item.is-active {
    opacity: 1;
-   transform: none;
+   /* transform: none;  <-- REMOVED to avoid conflict with Parallax */
  }
 
  body.home .project-item:hover img,
@@ -2299,4 +2299,96 @@
    font-optical-sizing: auto;
    font-weight: 400;
    font-style: normal;
+ }
+
+ /* ========== COOKIE BANNER ========== */
+ .cookie-banner {
+   position: fixed;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   background: #a6a6a6;
+   border-top: 1px solid #888;
+   color: #000;
+   padding: 16px 24px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 24px;
+   box-sizing: border-box;
+   z-index: 2147483647;
+   font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+   font-size: 11px;
+   line-height: 1.5;
+   transform: translateY(100%);
+   transition: transform 0.4s ease-out;
+ }
+
+ .cookie-banner.is-visible {
+   transform: translateY(0);
+ }
+
+ .cookie-text {
+   flex: 1;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+
+ .cookie-link {
+   text-decoration: underline;
+   cursor: pointer;
+   color: #000;
+   font-weight: 500;
+   margin-left: 4px;
+ }
+
+ .cookie-link:hover {
+   opacity: 0.7;
+ }
+
+ .cookie-actions {
+   display: flex;
+   gap: 12px;
+   flex-shrink: 0;
+ }
+
+ .cookie-btn {
+   background: #000;
+   border: 1px solid #000;
+   color: #fff;
+   padding: 8px 18px;
+   border-radius: 6px;
+   font-family: inherit;
+   font-size: 11px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   white-space: nowrap;
+ }
+
+ .cookie-btn:hover {
+   background: #333;
+   border-color: #333;
+   transform: translateY(-1px);
+ }
+
+ @media (max-width: 768px) {
+   .cookie-banner {
+     flex-direction: column;
+     align-items: flex-start;
+     padding: 20px;
+     gap: 16px;
+   }
+
+   .cookie-text {
+     white-space: normal;
+     /* Allow wrap on mobile */
+     max-width: 100%;
+   }
+
+   .cookie-actions {
+     width: 100%;
+     justify-content: flex-end;
+   }
  }

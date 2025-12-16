@@ -51,6 +51,12 @@ body.is-about .page-about .about-main {
     padding-bottom: 160px !important;
 }
 
+/* Ensure content sits above the fixed background lines (z-index 2) */
+body.is-about .smooth-scroll-content {
+    position: relative;
+    z-index: 3;
+}
+
 /* --- Row 1 --- */
 
 /* Intro: Large text, spans first 6 columns */
@@ -79,6 +85,7 @@ body.is-about .page-about .about-main {
     margin-top: 0;
     transform: none;
     /* Reset distinct transform */
+    z-index: 10;
 }
 
 /* --- Row 2 --- */

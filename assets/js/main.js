@@ -1234,3 +1234,158 @@ document.addEventListener('DOMContentLoaded', () => {
     showAbout();
   }
 });
+// ---------- INDEX PARALLAX (Desktop Only) ----------
+(function () {
+  const isHome = document.body.classList.contains('home');
+  if (!isHome) return;
+
+  function initParallax() {
+    const grid = document.querySelector('.projects-grid');
+    if (!grid) return;
+
+    // Use current DOM order (post-shuffle)
+    let items = Array.from(grid.querySelectorAll('.project-item'));
+    if (items.length === 0) return;
+
+    let rafId = null;
+    let isMobile = false;
+    let itemPositions = [];
+    let gridOffsetTop = 0;
+
+    function cachePositions() {
+      // Refresh items list in case of DOM variation
+      items = Array.from(grid.querySelectorAll('.project-item'));
+
+      // Calculate positions using offsetTop for stability (ignores transforms)
+      const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      const rect = grid.getBoundingClientRect();
+      // grid top relative to document
+      gridOffsetTop = rect.top + scrollTop;
+
+      itemPositions = items.map(item => item.offsetTop + gridOffsetTop);
+
+      items.forEach(item => item.style.willChange = 'transform');
+    }
+
+    function update() {
+      if (isMobile) return;
+
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const viewportHeight = window.innerHeight;
+
+      items.forEach((item, i) => {
+        // Use cached flow position
+        const absoluteTop = itemPositions[i];
+
+        // Formula: as element approaches top being visible
+        // If (absoluteTop <= scrollY + viewportHeight) means it is entering from bottom or visible
+        if (absoluteTop <= scrollY + viewportHeight + 100) { // +100 buffer
+          const factor = i % 2 === 0 ? 0.08 : 0.03;
+          const c = (scrollY - absoluteTop + 240) * factor;
+          const val = Math.max(0, c * 2);
+          const clampedVal = Math.min(val, viewportHeight);
+
+          // Apply negative translation (move UP)
+          item.style.setProperty('transform', `translate3d(0, -${clampedVal}px, 0)`, 'important');
+        } else {
+          item.style.removeProperty('transform');
+        }
+      });
+
+      rafId = requestAnimationFrame(update);
+    }
+
+    let lastWidth = window.innerWidth;
+
+    function onResize() {
+      // Check for actual width change to avoid firing on mobile scroll/toolbar resize
+      // or Safari overscroll bounce which might trigger resize events.
+      // We only want to recalc if the layout width changed.
+      const newWidth = window.innerWidth;
+
+      isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+      if (isMobile) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        items.forEach(item => {
+          item.style.removeProperty('transform');
+          item.style.removeProperty('will-change');
+        });
+      } else {
+        // Only recalculate cache if WIDTH changes or if it's the first run (items empty)
+        // This protects against cache corruption during vertical scroll events
+        if (newWidth !== lastWidth || itemPositions.length === 0) {
+          lastWidth = newWidth;
+          cachePositions();
+        }
+
+        if (!rafId) update();
+      }
+    }
+
+    window.addEventListener('resize', onResize);
+
+    // Ensure we start setup/cache only after everything is loaded (including random sort)
+    if (document.readyState === 'complete') {
+      onResize();
+    } else {
+      window.addEventListener('load', onResize);
+    }
+  }
+
+  // Use simple execution entry point
+  initParallax();
+})();
+
+// ---------- COOKIE CONSENT BANNER ----------
+(function () {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if user has already made a choice
+    if (localStorage.getItem('cookieConsent')) return;
+
+    // Create Banner
+    const banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.innerHTML = `
+      <div class="cookie-text">
+        This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.
+        <span class="cookie-link">Learn more</span>
+      </div>
+      <div class="cookie-actions">
+        <button class="cookie-btn reject">Reject</button>
+        <button class="cookie-btn accept">Accept</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    // Animate in
+    setTimeout(() => banner.classList.add('is-visible'), 1000);
+
+    // Handlers
+    const hide = (choice) => {
+      banner.classList.remove('is-visible');
+      setTimeout(() => banner.remove(), 400);
+      localStorage.setItem('cookieConsent', choice);
+    };
+
+    banner.querySelector('.accept').addEventListener('click', () => hide('true'));
+    banner.querySelector('.reject').addEventListener('click', () => hide('false'));
+
+    // Privacy Policy Trigger
+    banner.querySelector('.cookie-link').addEventListener('click', () => {
+      // Try to find existing triggers for privacy modal
+      const triggers = document.querySelectorAll('#privacyLink, #privacyLinkDesktop');
+      if (triggers.length > 0) {
+        triggers[0].click();
+      } else {
+        // Fallback: manually open if accessible or log error
+        const modal = document.getElementById('privacy-modal');
+        if (modal) {
+          modal.classList.add('is-visible');
+          document.body.classList.add('privacy-open');
+        }
+      }
+    });
+  });
+})();
