@@ -1268,7 +1268,20 @@ document.addEventListener('DOMContentLoaded', () => {
           if (item.offsetParent === null) return 'none';
 
           const rect = item.getBoundingClientRect();
-          const absTop = rect.top + scrollY;
+
+          // Recover the "untransformed" visual position relative to viewport
+          // This prevents the feedback loop from running away (self-reinforcing)
+          // while still reacting to scroll changes.
+          const style = window.getComputedStyle(item);
+          const matrix = new WebKitCSSMatrix(style.transform);
+          const currentTranslateY = matrix.m42; // m42 is translateY in 3d matrix
+
+          // visualAbsTop = where the element WOULD be if no transform was applied
+          // rect.top includes the transform, so we subtract it.
+          const untransformedTop = rect.top - currentTranslateY + scrollY;
+
+          // Use the untransformed top for calculation to ensure stability
+          const absTop = untransformedTop;
 
           if (absTop <= scrollY + viewportHeight) {
             const factor = i % 2 === 0 ? 0.08 : 0.03;
