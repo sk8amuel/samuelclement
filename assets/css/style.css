@@ -2342,6 +2342,7 @@
    color: #000;
    font-weight: 500;
    margin-left: 4px;
+   white-space: nowrap;
  }
 
  .cookie-link:hover {
