@@ -1340,7 +1340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     banner.innerHTML = `
       <div class="cookie-text">
         This website uses cookies to improve your experience. We'll assume you're ok with this, but you can opt-out if you wish.
-        <span class="cookie-link">Learn more</span>
+        <span class="cookie-link">Learn&nbsp;more</span>
       </div>
       <div class="cookie-actions">
         <button class="cookie-btn reject">Reject</button>
