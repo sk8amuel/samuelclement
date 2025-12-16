@@ -1240,69 +1240,63 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!isHome) return;
 
   function initParallax() {
-    const grid = document.querySelector('.projects-grid');
-    if (!grid) return;
+    // Target both grids: Project grid and About grid
+    const projectItems = Array.from(document.querySelectorAll('.projects-grid .project-item'));
+    const aboutItems = Array.from(document.querySelectorAll('.about-grid > div')); // Select all direct children (blocks + photos)
 
-    // Use current DOM order (post-shuffle)
-    let items = Array.from(grid.querySelectorAll('.project-item'));
+    // Combine lists
+    let items = [...projectItems, ...aboutItems];
+
     if (items.length === 0) return;
 
     let rafId = null;
     let isMobile = false;
-    let itemPositions = [];
-    let gridOffsetTop = 0;
 
-    function cachePositions() {
-      // Refresh items list in case of DOM variation
-      items = Array.from(grid.querySelectorAll('.project-item'));
-
-      // Calculate positions using offsetTop for stability (ignores transforms)
-      const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-      const rect = grid.getBoundingClientRect();
-      // grid top relative to document
-      gridOffsetTop = rect.top + scrollTop;
-
-      itemPositions = items.map(item => item.offsetTop + gridOffsetTop);
-
-      items.forEach(item => item.style.willChange = 'transform');
-    }
+    // No caching - calculate continuously to match user script logic
+    // and avoid cache corruption during resize/scroll events.
 
     function update() {
       if (isMobile) return;
 
-      const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      const viewportHeight = window.innerHeight;
+      try {
+        const scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const viewportHeight = window.innerHeight;
 
-      items.forEach((item, i) => {
-        // Use cached flow position
-        const absoluteTop = itemPositions[i];
+        // BATCH READ: Get all positions first
+        const updates = items.map((item, i) => {
+          // Optimization: check if item is effectively part of layout (display none or unrendered)
+          if (item.offsetParent === null) return 'none';
 
-        // Formula: as element approaches top being visible
-        // If (absoluteTop <= scrollY + viewportHeight) means it is entering from bottom or visible
-        if (absoluteTop <= scrollY + viewportHeight + 100) { // +100 buffer
-          const factor = i % 2 === 0 ? 0.08 : 0.03;
-          const c = (scrollY - absoluteTop + 240) * factor;
-          const val = Math.max(0, c * 2);
-          const clampedVal = Math.min(val, viewportHeight);
+          const rect = item.getBoundingClientRect();
+          const absTop = rect.top + scrollY;
 
-          // Apply negative translation (move UP)
-          item.style.setProperty('transform', `translate3d(0, -${clampedVal}px, 0)`, 'important');
-        } else {
-          item.style.removeProperty('transform');
-        }
-      });
+          if (absTop <= scrollY + viewportHeight) {
+            const factor = i % 2 === 0 ? 0.08 : 0.03;
+            const c = (scrollY - absTop + 240) * factor;
+            const val = Math.max(0, c * 2);
+            const clampedVal = Math.min(val, viewportHeight);
+            return `translate3d(0, -${clampedVal}px, 0)`;
+          } else {
+            return 'translate3d(0, 0, 0)';
+          }
+        });
+
+        // BATCH WRITE
+        items.forEach((item, i) => {
+          if (updates[i] === 'none') return;
+          item.style.setProperty('transform', updates[i], 'important');
+        });
+
+      } catch (e) {
+        console.error('Parallax error:', e);
+      }
 
       rafId = requestAnimationFrame(update);
     }
 
-    let lastWidth = window.innerWidth;
-
     function onResize() {
-      // Check for actual width change to avoid firing on mobile scroll/toolbar resize
-      // or Safari overscroll bounce which might trigger resize events.
-      // We only want to recalc if the layout width changed.
-      const newWidth = window.innerWidth;
-
+      // Check mobile state
+      const wasMobile = isMobile;
       isMobile = window.matchMedia('(max-width: 900px)').matches;
 
       if (isMobile) {
@@ -1310,23 +1304,19 @@ document.addEventListener('DOMContentLoaded', () => {
         rafId = null;
         items.forEach(item => {
           item.style.removeProperty('transform');
-          item.style.removeProperty('will-change');
         });
       } else {
-        // Only recalculate cache if WIDTH changes or if it's the first run (items empty)
-        // This protects against cache corruption during vertical scroll events
-        if (newWidth !== lastWidth || itemPositions.length === 0) {
-          lastWidth = newWidth;
-          cachePositions();
+        if (rafId && !wasMobile) {
+          // Already running
+        } else {
+          if (!rafId) update();
         }
-
-        if (!rafId) update();
       }
     }
 
     window.addEventListener('resize', onResize);
 
-    // Ensure we start setup/cache only after everything is loaded (including random sort)
+    // Start logic
     if (document.readyState === 'complete') {
       onResize();
     } else {
