@@ -87,7 +87,7 @@ if (fpInfoBox && fpIndex && fpTitle && projectItems.length > 0) {
   const isHome =
     path === '' ||
     path === '/' ||
-    path.endsWith('/index.html') ||
+    path.endsWith('/') ||
     path === '/3';
 
   const preloader = document.getElementById('preloader');
@@ -1060,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return { about: about, index: index };
   }
   function navigate(target) {
-    if (target) { try { target.click(); } catch (_) { window.location.href = target.getAttribute('href') || 'index.html'; } } else { window.location.href = 'index.html'; }
+    if (target) { try { target.click(); } catch (_) { window.location.href = target.getAttribute('href') || './'; } } else { window.location.href = './'; }
   }
   function init() {
     var body = document.body;

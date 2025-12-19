@@ -1,10 +1,10 @@
-# Robots.txt for samuelclement.it
+# Robots.txt for 8amuel.com
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://www.samuelclement.it/sitemap.xml
+Sitemap: https://www.8amuel.com/sitemap.xml
 
 # Block AI training bots
 User-agent: GPTBot
