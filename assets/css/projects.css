@@ -340,8 +340,8 @@ body.privacy-open .project-detail.is-open {
   left: 0;
   top: 0;
   transform: translate(8px, 8px);
-  width: 260px;
-  max-width: 32vw;
+  width: 340px;
+  max-width: 38vw;
   pointer-events: none;
   z-index: 99999;
   opacity: 0;

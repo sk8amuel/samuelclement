@@ -888,7 +888,8 @@
       document.querySelectorAll('.project-detail-inner').forEach(inner => {
         inner.addEventListener('click', (e) => {
           const t = e.target;
-          if (t && (t.closest('a') || t.closest('button') || t.closest('video') || t.closest('iframe'))) return;
+          if (t && (t.closest('a') || t.closest('button') || t.closest('iframe'))) return;
+          if (t && t.tagName === 'VIDEO' && !t.closest('.detail-image-wrap')) return;
           const link = inner.querySelector('.detail-image-wrap');
           if (!link) return;
           const href = link.getAttribute('href');
