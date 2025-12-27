@@ -180,30 +180,30 @@ const projectsData = {
       The redesign includes a new logo, an updated visual style, and revamped packaging that blends tradition with minimal, elegant aesthetics. The goal: to enhance brand recognition, appeal to younger consumers, and reinforce Leone’s iconic status in the confectionery market.
     `,
         images: [
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-sketch-logo.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-background.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-blueberry.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-iphone.webp"
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-sketch-logo.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-background.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-blueberry.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-iphone.webp"
         ],
         videos: [
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-1.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-2.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-3.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-flowers.webm",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pack.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pattern.mp4"
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-flowers.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.mp4"
         ],
         orderedMedia: [
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-1.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-sketch-logo.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-2.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-3.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-flowers.webm",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pack.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pattern.mp4",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-background.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-blueberry.webp",
-            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-iphone.webp"
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-sketch-logo.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-flowers.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-background.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-blueberry.webp",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-iphone.webp"
         ]
     }
 };
