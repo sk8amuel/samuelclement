@@ -172,7 +172,7 @@ const projectsData = {
     },
     pastiglie: {
         title: "Pastiglie Leone",
-        meta: "School project · 2024 · Logo Design e Brand Identity",
+        meta: "School project · 2023 · Logo Design e Brand Identity",
         body: `
       This rebranding project for Pastiglie Leone explores the essence of a historic Italian confectionery brand through a contemporary lens.
       After a thorough analysis of the brand’s heritage, values, and visual language, I developed a fresh identity system that respects its legacy while making it relevant to a modern audience.
@@ -180,7 +180,18 @@ const projectsData = {
       The redesign includes a new logo, an updated visual style, and revamped packaging that blends tradition with minimal, elegant aesthetics. The goal: to enhance brand recognition, appeal to younger consumers, and reinforce Leone’s iconic status in the confectionery market.
     `,
         images: [
-            "assets/img/projects/pastiglie-leone-project.png"
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-sketch-logo.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-background.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-blueberry.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-iphone.webp"
+        ],
+        videos: [
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-1.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-2.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-flowers.webm",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pack.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pattern.mp4"
         ]
     }
 };
