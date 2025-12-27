@@ -479,41 +479,36 @@
           const track = document.createElement('div');
           track.className = 'dg-track';
           const data = (typeof projectsData !== 'undefined') ? projectsData[key] : null;
-          const imgs = (data && Array.isArray(data.images)) ? data.images : [];
+
+          // Resolve which media to show and in what order
+          let mediaItems = [];
+          if (data && data.orderedMedia) {
+            mediaItems = data.orderedMedia;
+          } else if (data) {
+            const imgs = Array.isArray(data.images) ? data.images : [];
+            const vids = [];
+            if (Array.isArray(data.videos)) vids.push(...data.videos);
+            if (data.video) vids.push(data.video);
+            mediaItems = [...imgs, ...vids];
+          }
+
           const caps = (data && Array.isArray(data.captions)) ? data.captions : null;
+          const seen = new Set();
           let count = 0;
-          imgs.forEach((src, i) => {
+
+          mediaItems.forEach((item, i) => {
+            const vv = String(item || '');
+            if (!vv || seen.has(vv)) return;
+            seen.add(vv);
+
             const wrap = document.createElement('div');
             wrap.className = 'dg-item';
             wrap.classList.add('skeleton');
-            const img = document.createElement('img');
-            img.dataset.src = src;
-            img.loading = 'lazy';
-            img.alt = (data && data.title) ? data.title : '';
-            wrap.appendChild(img);
-            img.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
-            img.addEventListener('error', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
-            if (caps && caps[i]) {
-              const cap = document.createElement('div');
-              cap.className = 'dg-caption';
-              cap.textContent = caps[i];
-              wrap.appendChild(cap);
-            }
-            track.appendChild(wrap);
-            count++;
-          });
-          const videos = [];
-          if (data) {
-            if (Array.isArray(data.videos)) videos.push(...data.videos);
-            if (data.video) videos.push(data.video);
-          }
-          const seen = new Set();
-          videos.forEach(v => {
-            const vv = String(v || '');
-            if (!vv || seen.has(vv)) return; seen.add(vv);
-            const wrap = document.createElement('div');
-            wrap.className = 'dg-item';
-            if (/\.(mp4|webm)(\?.*)?$/i.test(vv)) {
+
+            const isVideo = /\.(mp4|webm|mov)(\?.*)?$/i.test(vv);
+            const isEmbed = /^https?:\/\//i.test(vv) || vv.includes('youtube') || vv.includes('vimeo');
+
+            if (isVideo) {
               const video = document.createElement('video');
               video.controls = false;
               video.autoplay = true;
@@ -528,38 +523,14 @@
               srcEl.dataset.src = vv;
               srcEl.type = vv.toLowerCase().endsWith('.mp4') ? 'video/mp4' : 'video/webm';
               video.appendChild(srcEl);
-              video.addEventListener('loadeddata', () => { try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { } }, { once: true });
-              wrap.classList.add('skeleton');
-              video.addEventListener('loadeddata', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
-              video.addEventListener('error', () => {
-                try {
-                  const yt = Array.isArray((data && data.videos) || []) ? (data.videos.find(x => typeof x === 'string' && x.startsWith('http')) || null) : null;
-                  if (yt) {
-                    const iframe = document.createElement('iframe');
-                    iframe.loading = 'lazy';
-                    iframe.src = yt;
-                    iframe.title = (data && data.title) ? data.title : '';
-                    iframe.frameBorder = '0';
-                    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-                    iframe.allowFullscreen = true;
-                    wrap.innerHTML = '';
-                    wrap.appendChild(iframe);
-                    wrap.classList.remove('skeleton');
-                    wrap.classList.add('loaded');
-                  } else {
-                    const img = document.createElement('img');
-                    img.src = (Array.isArray((data && data.images) || []) && data.images.length) ? data.images[0] : '';
-                    img.loading = 'lazy';
-                    img.alt = (data && data.title) ? data.title : '';
-                    wrap.innerHTML = '';
-                    wrap.appendChild(img);
-                    wrap.classList.remove('skeleton');
-                    wrap.classList.add('loaded');
-                  }
-                } catch (_) { }
-              });
+              video.addEventListener('loadeddata', () => {
+                wrap.classList.remove('skeleton');
+                wrap.classList.add('loaded');
+                try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { }
+              }, { once: true });
+              video.addEventListener('error', () => { wrap.classList.remove('skeleton'); });
               wrap.appendChild(video);
-            } else {
+            } else if (isEmbed) {
               const iframe = document.createElement('iframe');
               iframe.loading = 'lazy';
               iframe.dataset.src = vv;
@@ -567,13 +538,30 @@
               iframe.frameBorder = '0';
               iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
               iframe.allowFullscreen = true;
-              wrap.classList.add('skeleton');
               iframe.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
               wrap.appendChild(iframe);
+            } else {
+              // Assume it's an image
+              const img = document.createElement('img');
+              img.dataset.src = vv;
+              img.loading = 'lazy';
+              img.alt = (data && data.title) ? data.title : '';
+              img.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
+              img.addEventListener('error', () => { wrap.classList.remove('skeleton'); }, { once: true });
+              wrap.appendChild(img);
             }
+
+            if (caps && caps[i]) {
+              const cap = document.createElement('div');
+              cap.className = 'dg-caption';
+              cap.textContent = caps[i];
+              wrap.appendChild(cap);
+            }
+
             track.appendChild(wrap);
             count++;
           });
+
           gallery.appendChild(track);
           gallery.style.setProperty('--dg-count', String(count > 0 ? count : 1));
           const lazyImgs = Array.from(gallery.querySelectorAll('img[data-src]'));

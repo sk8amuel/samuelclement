@@ -192,6 +192,18 @@ const projectsData = {
             "assets/img/projects/Pastiglie Leone/pastiglie-leone-flowers.webm",
             "assets/img/projects/Pastiglie Leone/pastiglie-leone-pack.mp4",
             "assets/img/projects/Pastiglie Leone/pastiglie-leone-pattern.mp4"
+        ],
+        orderedMedia: [
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-1.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-sketch-logo.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-2.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-flowers.webm",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pack.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-pattern.mp4",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-background.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-blueberry.webp",
+            "assets/img/projects/Pastiglie Leone/pastiglie-leone-mockup-iphone.webp"
         ]
     }
 };
