@@ -186,21 +186,21 @@ const projectsData = {
             "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-iphone.webp"
         ],
         videos: [
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.mp4",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.mp4",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.webm",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-flowers.webm",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.mp4",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.mp4"
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.webm"
         ],
         orderedMedia: [
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-1.webm",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-sketch-logo.webp",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.mp4",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-2.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-video-3.webm",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-flowers.webm",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.mp4",
-            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.mp4",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pack.webm",
+            "assets/img/projects/pastiglie-leone/pastiglie-leone-pattern.webm",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-background.webp",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-blueberry.webp",
             "assets/img/projects/pastiglie-leone/pastiglie-leone-mockup-iphone.webp"
