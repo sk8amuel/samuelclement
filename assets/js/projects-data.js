@@ -149,7 +149,16 @@ const projectsData = {
       Designed as both a tribute and a design experiment, the project includes a full reimagining of the album’s visual identity, with bold, distorted letterforms that echo the aggression and chaos of the era. Speak Louder isn’t just a font—it’s a visual scream, built to feel as unapologetic and confrontational as the music that inspired it.
     `,
         images: [
-            "assets/img/projects/speak-louder-project.png"
+            "assets/img/projects/Speak Louder/speak-louder-image1.webp"
+        ],
+        orderedMedia: [
+            "assets/img/projects/Speak Louder/speak-louder-image1.webp",
+            "assets/img/projects/Speak Louder/speak-louder-image2.webm",
+            "assets/img/projects/Speak Louder/speak-louder-image3.webp",
+            "assets/img/projects/Speak Louder/speak-louder-image4.webp",
+            "assets/img/projects/Speak Louder/speak-louder-image5.webp",
+            "assets/img/projects/Speak Louder/speak-louder-image6.webp",
+            "assets/img/projects/Speak Louder/speak-louder-image7.webp"
         ]
     },
     futureai: {
