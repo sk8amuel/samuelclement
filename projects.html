@@ -508,7 +508,25 @@
             const isVideo = /\.(mp4|webm|mov)(\?.*)?$/i.test(vv);
             const isEmbed = /^https?:\/\//i.test(vv) || vv.includes('youtube') || vv.includes('vimeo');
 
+            // Find project URL from the hidden mockup link
+            let projLink = '#';
+            let transitionAttr = '';
+            if (inner) {
+              const mockupWrap = inner.querySelector('.detail-image-wrap');
+              if (mockupWrap) {
+                projLink = mockupWrap.getAttribute('href') || '#';
+                transitionAttr = mockupWrap.getAttribute('data-transition') !== null ? 'data-transition' : '';
+              }
+            }
+
             if (isVideo) {
+              const a = document.createElement('a');
+              a.href = projLink;
+              if (transitionAttr) a.setAttribute('data-transition', '');
+              a.className = 'dg-media-link';
+              a.style.display = 'block';
+              a.style.textDecoration = 'none';
+
               const video = document.createElement('video');
               video.controls = false;
               video.autoplay = true;
@@ -529,7 +547,8 @@
                 try { const r = video.play(); if (r && typeof r.then === 'function') r.catch(() => { }); } catch (_) { }
               }, { once: true });
               video.addEventListener('error', () => { wrap.classList.remove('skeleton'); });
-              wrap.appendChild(video);
+              a.appendChild(video);
+              wrap.appendChild(a);
             } else if (isEmbed) {
               const iframe = document.createElement('iframe');
               iframe.loading = 'lazy';
@@ -542,13 +561,21 @@
               wrap.appendChild(iframe);
             } else {
               // Assume it's an image
+              const a = document.createElement('a');
+              a.href = projLink;
+              if (transitionAttr) a.setAttribute('data-transition', '');
+              a.className = 'dg-media-link';
+              a.style.display = 'block';
+              a.style.textDecoration = 'none';
+
               const img = document.createElement('img');
               img.dataset.src = vv;
               img.loading = 'lazy';
               img.alt = (data && data.title) ? data.title : '';
               img.addEventListener('load', () => { wrap.classList.remove('skeleton'); wrap.classList.add('loaded'); }, { once: true });
               img.addEventListener('error', () => { wrap.classList.remove('skeleton'); }, { once: true });
-              wrap.appendChild(img);
+              a.appendChild(img);
+              wrap.appendChild(a);
             }
 
             if (caps && caps[i]) {
@@ -564,6 +591,7 @@
 
           gallery.appendChild(track);
           gallery.style.setProperty('--dg-count', String(count > 0 ? count : 1));
+
           const lazyImgs = Array.from(gallery.querySelectorAll('img[data-src]'));
           const lazyIframes = Array.from(gallery.querySelectorAll('iframe[data-src]'));
           const lazyVideos = Array.from(gallery.querySelectorAll('video[data-lazy="1"]'));

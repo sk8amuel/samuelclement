@@ -691,6 +691,30 @@ document.addEventListener('DOMContentLoaded', () => {
     metaEl.textContent = data.meta || "";
     bodyEl.innerHTML = (data.body || "").trim();
 
+    if (data.links) {
+      const linksContainer = document.createElement('div');
+      linksContainer.className = 'project-modal-links';
+      linksContainer.style.marginTop = '16px';
+      linksContainer.style.display = 'flex';
+      linksContainer.style.gap = '12px';
+
+      for (const [label, url] of Object.entries(data.links)) {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.textContent = label;
+        link.style.fontSize = '10px';
+        link.style.textTransform = 'uppercase';
+        link.style.letterSpacing = '0.08em';
+        link.style.color = '#b9b9b9';
+        link.style.textDecoration = 'none';
+        link.addEventListener('mouseenter', () => link.style.color = '#fff');
+        link.addEventListener('mouseleave', () => link.style.color = '#b9b9b9');
+        linksContainer.appendChild(link);
+      }
+      bodyEl.appendChild(linksContainer);
+    }
+
     imagesWrap.innerHTML = "";
     const imgs = Array.isArray(data.images) && data.images.length ? data.images : [];
 

@@ -20,8 +20,43 @@ const projectsData = {
 
       The work involved a complete redesign of the visual identity—from a refreshed logo to a new visual style that reflects the company’s values of sustainability, care, and authenticity. Alongside the branding, I produced a dedicated photo shoot to visually narrate the rhythms of the land and the people behind it. The project also included the design and development of the company’s new website, bringing coherence and personality across every touchpoint.
     `,
+        links: {
+            "view brandbook": "assets/img/projects/Il Germoglio/Il Germoglio Brandbook.pdf"
+        },
         images: [
-            "assets/img/projects/ilgermoglio-project.png"
+            "assets/img/projects/ilgermoglio-project.png",
+            "assets/img/projects/Il Germoglio/ilgermoglio-logo.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-illustrazione.png",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-website.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-brochure.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-bv.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-tape.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-shopper.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-shirt.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup2.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup4.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-2.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-3.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-4.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-6.webp"
+        ],
+        orderedMedia: [
+            "assets/img/projects/Il Germoglio/ilgermoglio-logo.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-illustrazione.png",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-website.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-brochure.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-bv.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-tape.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-shopper.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup-shirt.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup2.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-mockup4.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-2.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-3.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-6.webp",
+            "assets/img/projects/Il Germoglio/ilgermoglio-foto-4.webp"
         ]
     },
     jabberwocky: {
@@ -136,8 +171,31 @@ const projectsData = {
 
       This isn’t just a digital journal — Luminal helps you record your dreams, interpret their meanings, and discover patterns that reveal deeper insights about yourself. With an intuitive design and a focus on personal exploration, the app invites you to see your dreams not as random images, but as a map to self-awareness.
     `,
+        links: {
+            "Figma Project": "https://www.figma.com/design/Y23LF5JjwVcXdlpcSTSicM/Samuel-App?node-id=287-2213&t=bQOC5uftvfo0C5VX-1",
+            "view prototype": "https://www.figma.com/design/Y23LF5JjwVcXdlpcSTSicM/Samuel-App?node-id=287-2213&t=bQOC5uftvfo0C5VX-1"
+        },
         images: [
-            "assets/img/projects/Luminal-project.gif"
+            "assets/img/projects/Luminal-project.gif",
+            "assets/img/projects/Luminal/Luminal-mockup-iphone-2.webp",
+            "assets/img/projects/Luminal/Luminal-app-logo.png",
+            "assets/img/projects/Luminal/Luminal-app-screens.webp",
+            "assets/img/projects/Luminal/Luminal-app-icon.png"
+        ],
+        videos: [
+            "assets/img/projects/Luminal-project.webm",
+            "assets/img/projects/Luminal/Luminal-splash-logo.webm",
+            "assets/img/projects/Luminal/luminal-splash-logo-2.webm",
+            "https://www.youtube-nocookie.com/embed/PD9rbIz8yYo?controls=1&modestbranding=1&rel=0&playsinline=1"
+        ],
+        orderedMedia: [
+            "assets/img/projects/Luminal/Luminal-mockup-iphone-2.webp",
+            "assets/img/projects/Luminal/Luminal-app-logo.png",
+            "assets/img/projects/Luminal/Luminal-splash-logo.webm",
+            "assets/img/projects/Luminal/luminal-splash-logo-2.webm",
+            "https://www.youtube-nocookie.com/embed/PD9rbIz8yYo?controls=1&modestbranding=1&rel=0&playsinline=1",
+            "assets/img/projects/Luminal/Luminal-app-screens.webp",
+            "assets/img/projects/Luminal/Luminal-app-icon.png"
         ]
     },
     speaklouder: {
