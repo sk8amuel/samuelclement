@@ -861,10 +861,9 @@ body.privacy-open .project-detail.is-open {
 .fixed-video-preview {
   position: fixed;
   left: 50%;
-  bottom: 40px;
-  /* Raised from bottom */
+  bottom: 80px;
   transform: translateX(-50%);
-  width: 320px;
+  width: 480px;
   max-width: 80vw;
   z-index: 130;
   pointer-events: none;
