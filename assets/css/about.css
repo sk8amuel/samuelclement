@@ -307,7 +307,7 @@ body.is-about .smooth-scroll-content {
     }
 
     .page-about .about-mobile-note.second {
-        margin: 20px auto 0;
+        margin: clamp(320px, 45vh, 640px) auto 0;
     }
 }
 
@@ -326,4 +326,10 @@ body.is-about .page-about .about-main {
     padding-top: 80px !important;
     min-height: 100vh !important;
     padding-bottom: 160px !important;
+}
+
+.page-about oblique {
+    color: #bbbbbb;
+    font-size: 0.88em;
+    font-style: italic;
 }
