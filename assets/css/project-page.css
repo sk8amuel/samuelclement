@@ -521,6 +521,16 @@ body.project-page {
   }
 }
 
+.template-jabberwocky .template-title {
+  font-size: clamp(18px, 4.0vw, 48px);
+}
+
+.template-cumpa .template-title {
+  /* Very large on desktop */
+  font-size: clamp(65px, 12vw, 90px) !important;
+  line-height: 0.9;
+}
+
 @media (max-width: 600px) {
   .detail-row {
     grid-template-columns: 115px 1fr;
@@ -661,43 +671,13 @@ body.project-page {
 }
 
 @media (max-width: 600px) {
-  .template-ai .template-title {
-    font-size: clamp(38px, 8.6vw, 56px);
-  }
-}
-
-@media (max-width: 600px) {
-  .template-madness .template-title {
-    font-size: clamp(34px, 8vw, 56px);
-  }
-}
-
-@media (max-width: 600px) {
-  .template-knoted .template-title {
-    font-size: clamp(42px, 9vw, 60px);
-  }
-}
-
-.template-jabberwocky .template-title {
-  font-size: clamp(18px, 4.0vw, 48px);
-}
-
-@media (max-width: 600px) {
-  .template-jabberwocky .template-title {
-    font-size: clamp(50px, 7vw, 72px);
-  }
-}
-
-.template-cumpa .template-title {
-  /* Very large on desktop */
-  font-size: clamp(65px, 12vw, 90px) !important;
-  line-height: 0.9;
-}
-
-@media (max-width: 600px) {
-  .template-cumpa .template-title {
-    /* Very large on mobile */
-    font-size: clamp(100px, 18vw, 120px) !important;
+  .template-ai .template-title,
+  .template-madness .template-title,
+  .template-knoted .template-title,
+  .template-jabberwocky .template-title,
+  .template-cumpa .template-title,
+  .template-title {
+    font-size: clamp(42px, 9vw, 60px) !important;
   }
 }
 
