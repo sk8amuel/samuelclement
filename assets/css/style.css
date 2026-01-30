@@ -2029,7 +2029,8 @@
  }
 
  .about-block.contact a:hover {
-   color: #ffffff !important;
+  color: #ffffff !important;
+  text-decoration: underline;
  }
 
  .about-block.contact a:hover .ty-text {
