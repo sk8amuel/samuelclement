@@ -55,7 +55,7 @@
         <div class="detail-row">
           <div class="detail-label">Links</div>
           <div class="detail-value detail-links">
-            <a href="../assets/img/projects/Il Germoglio/Il Germoglio Brandbook.pdf" target="_blank" class="thesis-link"
+            <a href="../assets/img/projects/Il Germoglio/Il Germoglio Brandbook.pdf" class="thesis-link"
               aria-label="view brandbook" data-transition>view brandbook</a>
           </div>
         </div>
@@ -155,6 +155,14 @@
       </nav>
     </section>
   </main>
+  <div id="thesis-modal" class="project-modal" aria-hidden="true">
+    <div class="project-modal-overlay" id="thesisOverlay"></div>
+    <div class="project-modal-inner" role="dialog" aria-modal="true" aria-labelledby="thesisModalTitle">
+      <button class="project-modal-close" id="thesisClose" aria-label="Close">CLOSE</button>
+      <iframe src="" title="Il Germoglio - View Brandbook"
+        style="flex:1;width:100%;height:100%;border:0;margin:0;"></iframe>
+    </div>
+  </div>
   <script src="../assets/js/main.js"></script>
   <script src="../assets/js/project-page.js"></script>
 </body>
