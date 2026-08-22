@@ -1,0 +1,337 @@
+/* ========== MINIMAL PORTFOLIO MASONRY STYLING ========== */
+
+body.portfolio-page {
+  background: #000000;
+  color: #ffffff;
+  font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* 12 Column Grid Background Line Overlay */
+body.portfolio-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top;
+  width: var(--container-width, 92%);
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--grid-bg);
+  background-repeat: repeat-x;
+  background-size: calc((100% - (var(--grid-columns, 12) - 1) * var(--column-gap, 16px)) / var(--grid-columns, 12) + var(--column-gap, 16px)) 100%;
+  background-position: left top;
+  opacity: var(--overlay-opacity, 1);
+  will-change: transform;
+  animation: gridGrow 900ms ease-out forwards;
+}
+
+body.portfolio-page > :not(.top-header):not(.top-line) {
+  z-index: 1;
+}
+
+/* Portfolio Main Layout */
+.portfolio-main {
+  padding-top: 90px;
+  padding-bottom: 140px;
+  width: var(--container-width, 92%);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Minimal Hero Header Section */
+.portfolio-hero {
+  margin-bottom: 70px;
+  padding-bottom: 24px;
+}
+
+.portfolio-hero-label {
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #666666;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.portfolio-hero-title {
+  font-size: clamp(32px, 5.5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: #ffffff;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.portfolio-hero-desc {
+  font-size: clamp(13px, 1.4vw, 15px);
+  line-height: 1.6;
+  color: #999999;
+  max-width: 680px;
+  font-weight: 400;
+}
+
+/* Section Header per Cartella */
+.folder-section {
+  margin-bottom: 90px;
+}
+
+.folder-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #222222;
+  margin-bottom: 32px;
+}
+
+.folder-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.folder-number {
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-size: 11px;
+  color: #666666;
+  letter-spacing: 0.12em;
+}
+
+.folder-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.folder-count {
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-size: 10px;
+  color: #555555;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* MASONRY GRID LAYOUT */
+.portfolio-masonry {
+  column-count: 3;
+  column-gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .portfolio-masonry {
+    column-count: 2;
+    column-gap: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .portfolio-masonry {
+    column-count: 1;
+    column-gap: 0;
+  }
+}
+
+/* Minimal Masonry Item */
+.portfolio-item {
+  break-inside: avoid;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #050505;
+  cursor: pointer;
+
+  /* Fade in up veloce e smooth */
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.portfolio-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.portfolio-item img,
+.portfolio-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.portfolio-item:hover img,
+.portfolio-item:hover video {
+  transform: scale(1.025);
+  opacity: 0.92;
+}
+
+/* Lottie Player Styling inside Masonry */
+.portfolio-item lottie-player {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display: block;
+  padding: 16px;
+  background: #080808;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portfolio-item:hover lottie-player {
+  transform: scale(1.03);
+}
+
+/* Link Card Asset */
+a.portfolio-link-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  background: #0a0a0a;
+  border: 1px solid #222222;
+  border-radius: 4px;
+  padding: 32px 24px;
+  min-height: 180px;
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a.portfolio-link-card:hover {
+  background: #141414;
+  border-color: #555555;
+  transform: scale(1.025);
+}
+
+.link-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link-card-tag {
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #777777;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link-card-url {
+  font-family: 'Space Mono', 'PT Mono', monospace;
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 700;
+  color: #ffffff;
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+/* LIGHTBOX MODAL */
+.portfolio-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 40px;
+}
+
+.portfolio-modal.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content-wrap {
+  max-width: 92vw;
+  max-height: 88vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-media-box {
+  max-width: 100%;
+  max-height: 84vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-media-box img,
+.modal-media-box video {
+  max-width: 100%;
+  max-height: 84vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+}
+
+.modal-media-box lottie-player {
+  width: 480px;
+  height: 480px;
+  max-width: 85vw;
+  max-height: 85vw;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  background: none;
+  border: 1px solid #333333;
+  color: #ffffff;
+  font-size: 22px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+  .portfolio-main {
+    padding-top: 75px;
+  }
+  .portfolio-hero {
+    margin-bottom: 44px;
+  }
+  .folder-section {
+    margin-bottom: 60px;
+  }
+  .folder-header {
+    flex-direction: row;
+    align-items: baseline;
+  }
+}
