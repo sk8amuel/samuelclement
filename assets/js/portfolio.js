@@ -1,4 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ---------- ENSURE ALL INLINE VIDEOS PLAY ON SAFARI / MOBILE SAFARI ----------
+  const allVideos = document.querySelectorAll('.portfolio-item video');
+  allVideos.forEach((vid) => {
+    vid.muted = true;
+    vid.defaultMuted = true;
+    vid.playsInline = true;
+    vid.setAttribute('playsinline', '');
+    vid.setAttribute('webkit-playsinline', '');
+    vid.setAttribute('muted', '');
+    
+    // Attempt play immediately
+    const playPromise = vid.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Fallback: play on user touch / scroll if autoplay blocked by low power mode
+        const playOnInteraction = () => {
+          vid.play().catch(() => {});
+          window.removeEventListener('touchstart', playOnInteraction);
+          window.removeEventListener('scroll', playOnInteraction);
+        };
+        window.addEventListener('touchstart', playOnInteraction, { passive: true });
+        window.addEventListener('scroll', playOnInteraction, { passive: true });
+      });
+    }
+  });
+
+  // ---------- BOOMERANG / BOUNCE LOTTIE HANDLER ----------
+  const lottiePlayers = document.querySelectorAll('lottie-player[mode="bounce"]');
+  lottiePlayers.forEach((player) => {
+    player.addEventListener('complete', () => {
+      if (player.getAttribute('mode') === 'bounce') {
+        const instance = player.getLottie ? player.getLottie() : null;
+        if (instance) {
+          const nextDir = instance.playDirection === 1 ? -1 : 1;
+          instance.setDirection(nextDir);
+          instance.play();
+        }
+      }
+    });
+  });
+
   // ---------- SCROLL FADE-IN UP ANIMATION ----------
   const items = Array.from(document.querySelectorAll('.portfolio-item'));
 
@@ -14,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) {
           const item = entry.target;
           item.classList.add('is-visible');
+          const vid = item.querySelector('video');
+          if (vid) {
+            vid.play().catch(() => {});
+          }
           observer.unobserve(item);
         }
       });
@@ -36,16 +81,27 @@ document.addEventListener('DOMContentLoaded', () => {
     modalMediaBox.innerHTML = '';
     const type = item.dataset.type || '';
     const src = item.dataset.src || '';
+    const mode = item.dataset.mode || '';
 
     if (type === 'video') {
       const video = document.createElement('video');
-      video.src = src;
       video.autoplay = true;
       video.controls = true;
       video.loop = true;
-      video.muted = false;
+      video.muted = true;
+      video.defaultMuted = true;
       video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.setAttribute('preload', 'auto');
+      
+      const source = document.createElement('source');
+      source.src = src;
+      source.type = 'video/mp4';
+      video.appendChild(source);
+
       modalMediaBox.appendChild(video);
+      video.play().catch((e) => console.log('Modal video autoplay notice:', e));
     } else if (type === 'lottie') {
       const lottie = document.createElement('lottie-player');
       lottie.setAttribute('src', src);
@@ -53,6 +109,19 @@ document.addEventListener('DOMContentLoaded', () => {
       lottie.setAttribute('speed', '1');
       lottie.setAttribute('loop', '');
       lottie.setAttribute('autoplay', '');
+      
+      if (mode === 'bounce') {
+        lottie.setAttribute('mode', 'bounce');
+        lottie.addEventListener('complete', () => {
+          const instance = lottie.getLottie ? lottie.getLottie() : null;
+          if (instance) {
+            const nextDir = instance.playDirection === 1 ? -1 : 1;
+            instance.setDirection(nextDir);
+            instance.play();
+          }
+        });
+      }
+
       modalMediaBox.appendChild(lottie);
     } else {
       // Image or GIF
