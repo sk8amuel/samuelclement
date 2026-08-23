@@ -8,20 +8,32 @@ document.addEventListener('DOMContentLoaded', () => {
     vid.setAttribute('playsinline', '');
     vid.setAttribute('webkit-playsinline', '');
     vid.setAttribute('muted', '');
-    
-    // Attempt play immediately
-    const playPromise = vid.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // Fallback: play on user touch / scroll if autoplay blocked by low power mode
-        const playOnInteraction = () => {
-          vid.play().catch(() => {});
-          window.removeEventListener('touchstart', playOnInteraction);
-          window.removeEventListener('scroll', playOnInteraction);
-        };
-        window.addEventListener('touchstart', playOnInteraction, { passive: true });
-        window.addEventListener('scroll', playOnInteraction, { passive: true });
-      });
+    vid.setAttribute('autoplay', '');
+    vid.setAttribute('loop', '');
+
+    // Safari fix: force video play on canplay / loadedmetadata
+    const tryPlay = () => {
+      const playPromise = vid.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Play on user interaction fallback for Safari Low Power Mode
+          const playOnInteraction = () => {
+            vid.play().catch(() => {});
+            window.removeEventListener('touchstart', playOnInteraction);
+            window.removeEventListener('scroll', playOnInteraction);
+            window.removeEventListener('click', playOnInteraction);
+          };
+          window.addEventListener('touchstart', playOnInteraction, { passive: true });
+          window.addEventListener('scroll', playOnInteraction, { passive: true });
+          window.addEventListener('click', playOnInteraction, { passive: true });
+        });
+      }
+    };
+
+    if (vid.readyState >= 2) {
+      tryPlay();
+    } else {
+      vid.addEventListener('loadeddata', tryPlay, { once: true });
     }
   });
 
