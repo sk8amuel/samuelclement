@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (type === 'video') {
       const video = document.createElement('video');
+      video.src = src;
       video.autoplay = true;
       video.controls = true;
       video.loop = true;
