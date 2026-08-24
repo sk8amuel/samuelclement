@@ -1,0 +1,16 @@
+# Force correct MIME types for video and Lottie files
+AddType video/mp4 .mp4
+AddType video/webm .webm
+AddType application/json .json
+
+# Enable Byte-Range Requests for Safari AVFoundation streaming
+<IfModule mod_headers.c>
+    Header set Accept-Ranges bytes
+</IfModule>
+
+# Browser Caching rules
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType video/mp4 "access plus 1 month"
+    ExpiresByType application/json "access plus 1 month"
+</IfModule>
