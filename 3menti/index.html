@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>3 Menti</title>
+
+    <!-- PWA & Apple Meta -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="3 Menti">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+    <link rel="apple-touch-startup-image" href="icons/splash.png">
+
+    <!-- Prevent zoom on input focus (iOS) -->
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+
+    <!-- ==================== HOME SCREEN ==================== -->
+    <div id="home-screen" class="screen active">
+        <div class="home-header">
+            <div class="home-badge">
+                <span class="home-badge-icon"></span>
+                <span>Reazione a Catena</span>
+            </div>
+            <div class="home-logo-container">
+                <h1 class="home-logo">3 <span>Menti</span></h1>
+            </div>
+            <p class="home-tagline">Il gioco delle parole</p>
+            <p class="home-subtitle">Fai indovinare più parole al tuo compagno in 60 secondi!</p>
+        </div>
+
+        <div class="home-visual-emblem">
+            <div class="emblem-pill"><span class="emblem-icon">🗣️</span><span class="emblem-label">Descrivi</span></div>
+            <div class="emblem-pill"><span class="emblem-icon">🧠</span><span class="emblem-label">Indovina</span></div>
+            <div class="emblem-pill"><span class="emblem-icon">🏆</span><span class="emblem-label">Vinci</span></div>
+        </div>
+
+        <div class="home-actions">
+            <button id="btn-start-game" type="button">
+                <span class="btn-primary-play-icon">▶</span>
+                <span>Inizia a giocare</span>
+            </button>
+
+            <button id="btn-manage-words" class="btn-goto-words" type="button">
+                <span>📝</span>
+                <span>Gestione Parole</span>
+            </button>
+        </div>
+
+        <div class="home-info-bar" id="home-word-count"></div>
+    </div>
+
+    <!-- ==================== GAME SCREEN ==================== -->
+    <div id="game-screen" class="screen">
+        <div class="game-hud">
+            <div class="game-score-badge">
+                <span class="game-score-label">Punti</span>
+                <span class="game-score-val" id="game-score">0</span>
+            </div>
+            <div class="game-hud-actions">
+                <button id="btn-exit-game" class="btn-hud-icon" aria-label="Esci dalla partita">✕</button>
+            </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="game-timer-wrapper">
+            <div class="timer-box" id="timer-box">
+                <span class="timer-label">Tempo</span>
+                <span class="timer-display" id="timer-display">60</span>
+                <div class="timer-bar-track">
+                    <div class="timer-bar-fill" id="timer-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Display -->
+        <div class="game-word-card">
+            <span class="word-category-badge">Indovina la parola</span>
+            <span class="word-display" id="current-word">Pronto?</span>
+        </div>
+
+        <div class="game-feedback-overlay" id="game-feedback-overlay"></div>
+
+        <!-- Action Buttons -->
+        <div class="game-controls">
+            <div class="game-controls-row">
+                <button id="btn-correct" class="btn-game-action btn-correct" aria-label="Corretto">
+                    <span class="btn-game-title">✓ Corretto</span>
+                    <span class="btn-game-sub">+1 punto</span>
+                </button>
+                <button id="btn-wrong" class="btn-game-action btn-wrong" aria-label="Sbagliato">
+                    <span class="btn-game-title">✕ Sbagliato</span>
+                    <span class="btn-game-sub">0 punti</span>
+                </button>
+            </div>
+            <button id="btn-skip" class="btn-game-action btn-skip" aria-label="Salta">
+                <span class="btn-game-title">↻ Salta</span>
+                <span class="btn-game-sub">0 punti</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== RESULTS SCREEN ==================== -->
+    <div id="results-screen" class="screen">
+        <div class="results-content">
+            <div class="results-trophy-badge">🏆</div>
+            <h2 class="results-title">Tempo scaduto!</h2>
+            <p class="results-subtitle">Ecco come è andata la partita</p>
+
+            <div class="results-score-card">
+                <span class="results-score-label">Punteggio finale</span>
+                <div class="results-score-value" id="final-score">0</div>
+                <div class="results-rating" id="results-rating"></div>
+            </div>
+
+            <div class="results-stats-grid">
+                <div class="stat-card stat--correct">
+                    <span class="stat-val" id="stat-correct-count">0</span>
+                    <span class="stat-label">Corrette</span>
+                </div>
+                <div class="stat-card stat--wrong">
+                    <span class="stat-val" id="stat-wrong-count">0</span>
+                    <span class="stat-label">Sbagliate</span>
+                </div>
+                <div class="stat-card stat--skip">
+                    <span class="stat-val" id="stat-skip-count">0</span>
+                    <span class="stat-label">Saltate</span>
+                </div>
+            </div>
+
+            <div class="results-word-list-container">
+                <h3 class="results-list-title">Riepilogo parole</h3>
+                <ul class="results-word-list" id="results-word-list"></ul>
+            </div>
+        </div>
+
+        <div class="results-actions">
+            <button id="btn-replay" class="btn-replay">
+                <span>🔄</span>
+                <span>RIGIOCA</span>
+            </button>
+            <button id="btn-home" class="btn-home">
+                <span>🏠</span>
+                <span>Torna alla Home</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== WORDS MANAGEMENT SCREEN ==================== -->
+    <div id="words-screen" class="screen">
+        <div class="words-header">
+            <div class="words-header-top">
+                <button id="btn-back-home" class="btn-back-header" aria-label="Torna alla Home">← Home</button>
+                <h2 class="words-title">Gestione Parole</h2>
+                <span class="words-total-badge" id="word-count">0 / 0</span>
+            </div>
+        </div>
+
+        <div class="words-controls-bar">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Cerca parola..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <button id="btn-clear-search" class="btn-clear-search" aria-label="Cancella ricerca" style="display:none;">✕</button>
+            </div>
+            <div class="words-filter-row">
+                <div class="words-filter-pills">
+                    <button id="btn-enable-all" class="filter-pill" type="button">Attiva tutte</button>
+                    <button id="btn-disable-all" class="filter-pill" type="button">Disattiva tutte</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="words-list-container">
+            <ul class="words-list" id="word-list"></ul>
+            <div class="words-empty-state" id="word-list-empty" style="display:none;">
+                <div class="empty-state-icon">📭</div>
+                <div class="empty-state-title">Nessuna parola trovata</div>
+                <p class="empty-state-text">Prova a modificare la ricerca o aggiungi una nuova parola.</p>
+            </div>
+        </div>
+
+        <button id="btn-add-word" class="fab-add-word" aria-label="Aggiungi parola">+</button>
+    </div>
+
+    <!-- ==================== MODAL: ADD/EDIT WORD ==================== -->
+    <div id="word-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-drag-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Aggiungi parola</h3>
+                <button id="modal-close" class="modal-close-btn" aria-label="Chiudi">✕</button>
+            </div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label class="form-label" for="modal-word-input">Parola da indovinare</label>
+                    <input type="text" id="modal-word-input" class="form-input" placeholder="Scrivi una parola..." autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" maxlength="50">
+                </div>
+                <p class="modal-error" id="modal-error" style="display:none;"></p>
+                <div class="modal-actions">
+                    <button id="modal-cancel" class="btn-modal-cancel" type="button">Annulla</button>
+                    <button id="modal-confirm" class="btn-modal-save" type="button">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: CONFIRM DELETE ==================== -->
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-drag-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Elimina parola</h3>
+                <button id="delete-cancel-top" class="modal-close-btn" aria-label="Chiudi">✕</button>
+            </div>
+            <p class="modal-message" id="delete-modal-message">Vuoi eliminare questa parola?</p>
+            <div class="modal-actions">
+                <button id="delete-cancel" class="btn-modal-cancel" type="button">Annulla</button>
+                <button id="delete-confirm" class="btn-modal-delete" type="button">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div id="toast" class="toast">
+        <span id="toast-message"></span>
+    </div>
+
+    </div><!-- /#app-container -->
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
