@@ -84,7 +84,7 @@
   --text-light-inverse: #ffffff;
 
   /* --- Typography --- */
-  --font-family-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-family-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-family-mono: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   --fs-xs: 0.75rem;    /* 12px */
@@ -2115,6 +2115,221 @@ input, select, textarea {
 .toast--success { border-color: rgba(16, 185, 129, 0.6); }
 .toast--error { border-color: rgba(239, 68, 68, 0.6); }
 .toast--warning { border-color: rgba(245, 158, 11, 0.6); }
+
+/* ============================================================================
+   8-quinquies. INTERMISSION COUNTDOWN OVERLAY
+   ============================================================================ */
+.intermission-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  z-index: 50;
+  background: rgba(5, 8, 17, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.intermission-overlay.active {
+  display: flex;
+  animation: screenFadeIn 200ms ease-out forwards;
+}
+
+.intermission-label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-electric-cyan-light);
+}
+
+.intermission-count {
+  font-size: clamp(5rem, 28vw, 9rem);
+  font-weight: var(--fw-black);
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 0 40px rgba(59, 130, 246, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   8-sexies. TIME PRESETS (SETTINGS MODAL)
+   ============================================================================ */
+.time-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.time-preset {
+  flex: 1;
+  min-width: 64px;
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  color: var(--text-dark-secondary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+}
+
+.time-preset:active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #ffffff;
+}
+
+/* ============================================================================
+   8-septies. DARK THEME OVERRIDES (WORDS SCREEN & MODALS)
+   Single dark aesthetic across the whole app
+   ============================================================================ */
+#words-screen {
+  background-color: var(--bg-dark-game);
+}
+
+.words-controls-bar {
+  background: var(--bg-dark-card-solid);
+  border-bottom: 1px solid var(--border-dark);
+  box-shadow: none;
+}
+
+.search-input,
+#words-search-input {
+  background-color: rgba(30, 41, 69, 0.65);
+  border-color: var(--border-dark);
+  color: var(--text-dark-primary);
+}
+
+.search-input:focus,
+#words-search-input:focus {
+  background-color: #131b2e;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.28);
+}
+
+.search-input::placeholder,
+.search-icon,
+.btn-clear-search {
+  color: var(--text-dark-muted);
+}
+
+.words-filter-pills {
+  background: rgba(30, 41, 69, 0.5);
+}
+
+.filter-pill {
+  color: var(--text-dark-secondary);
+}
+
+.filter-pill.active {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.words-total-badge {
+  color: var(--text-dark-muted);
+}
+
+.word-item {
+  background: var(--bg-dark-card-solid);
+  border-color: var(--border-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.word-item:active {
+  background-color: #1a2438;
+}
+
+.word-item.inactive {
+  background-color: #0f172a;
+  opacity: 0.5;
+}
+
+.word-item-title {
+  color: var(--text-dark-primary);
+}
+
+.word-item.inactive .word-item-title {
+  color: var(--text-dark-muted);
+}
+
+.btn-word-action {
+  color: var(--text-dark-muted);
+}
+
+.toggle-slider {
+  background-color: #334155;
+}
+
+.word-edit-input {
+  background-color: #131b2e;
+  color: var(--text-dark-primary);
+  border-color: var(--color-primary);
+}
+
+.words-empty-state,
+.empty-state-title {
+  color: var(--text-dark-secondary);
+}
+
+.empty-state-text {
+  color: var(--text-dark-muted);
+}
+
+.modal-sheet,
+.modal-card {
+  background: var(--bg-dark-card-solid);
+  color: var(--text-dark-primary);
+}
+
+.modal-title {
+  color: #ffffff;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-dark-secondary);
+}
+
+.modal-drag-handle {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-label {
+  color: var(--text-dark-secondary);
+}
+
+.form-input {
+  background-color: rgba(30, 41, 69, 0.65);
+  border-color: var(--border-dark);
+  color: var(--text-dark-primary);
+}
+
+.form-input:focus {
+  background-color: #131b2e;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.28);
+}
+
+.btn-modal-cancel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-dark);
+  color: var(--text-dark-secondary);
+}
+
+.btn-modal-cancel:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.modal-message {
+  color: var(--text-dark-secondary);
+}
+
+.modal-error {
+  color: var(--color-wrong-light);
+}
 
 /* ============================================================================
    9. STANDALONE PWA MODE OPTIMIZATIONS

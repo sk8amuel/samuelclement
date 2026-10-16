@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>3 Menti</title>
+    <title>3 Dementi</title>
 
     <!-- PWA & Apple Meta -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="3 Menti">
+    <meta name="apple-mobile-web-app-title" content="3 Dementi">
     <link rel="apple-touch-icon" href="icons/icon-180.png">
     <link rel="apple-touch-startup-image" href="icons/splash.png">
 
@@ -21,6 +21,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,21 +35,10 @@
     <!-- ==================== HOME SCREEN ==================== -->
     <div id="home-screen" class="screen active">
         <div class="home-header">
-            <div class="home-badge">
-                <span class="home-badge-icon"></span>
-                <span>Reazione a Catena</span>
-            </div>
             <div class="home-logo-container">
-                <h1 class="home-logo">3 <span>Menti</span></h1>
+                <h1 class="home-logo">3 <span>Dementi</span></h1>
             </div>
-            <p class="home-tagline">Il gioco delle parole</p>
-            <p class="home-subtitle">Fai indovinare più parole al tuo compagno in 60 secondi!</p>
-        </div>
-
-        <div class="home-visual-emblem">
-            <div class="emblem-pill"><span class="emblem-icon">🗣️</span><span class="emblem-label">Descrivi</span></div>
-            <div class="emblem-pill"><span class="emblem-icon">🧠</span><span class="emblem-label">Indovina</span></div>
-            <div class="emblem-pill"><span class="emblem-icon">🏆</span><span class="emblem-label">Vinci</span></div>
+            <p class="home-subtitle">Fai indovinare la parola al tuo compagno comunicando attraverso un altro compagno. Potrete dire una sola parola a testa per turno e il compagno che deve indovinare avrà un solo tentativo per dare la risposta corretta.</p>
         </div>
 
         <div class="home-actions">
@@ -56,6 +50,11 @@
             <button id="btn-manage-words" class="btn-goto-words" type="button">
                 <span>📝</span>
                 <span>Gestione Parole</span>
+            </button>
+
+            <button id="btn-settings" class="btn-goto-words" type="button">
+                <span>⏱️</span>
+                <span>Imposta Tempo</span>
             </button>
         </div>
 
@@ -109,6 +108,12 @@
                 <span class="btn-game-title">↻ Salta</span>
                 <span class="btn-game-sub">0 punti</span>
             </button>
+        </div>
+
+        <!-- Intermission countdown overlay -->
+        <div class="intermission-overlay" id="intermission-overlay">
+            <span class="intermission-label">Prossima parola in</span>
+            <span class="intermission-count" id="intermission-count">3</span>
         </div>
     </div>
 
@@ -228,6 +233,34 @@
             <div class="modal-actions">
                 <button id="delete-cancel" class="btn-modal-cancel" type="button">Annulla</button>
                 <button id="delete-confirm" class="btn-modal-delete" type="button">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: SET TIME ==================== -->
+    <div id="time-modal" class="modal-overlay">
+        <div class="modal-sheet">
+            <div class="modal-drag-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Durata partita</h3>
+                <button id="time-modal-close" class="modal-close-btn" aria-label="Chiudi">✕</button>
+            </div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label class="form-label" for="time-input">Secondi per partita</label>
+                    <input type="number" id="time-input" class="form-input" min="10" max="600" step="5" inputmode="numeric" value="60">
+                </div>
+                <div class="time-presets">
+                    <button class="filter-pill time-preset" data-seconds="30" type="button">30s</button>
+                    <button class="filter-pill time-preset" data-seconds="60" type="button">60s</button>
+                    <button class="filter-pill time-preset" data-seconds="90" type="button">90s</button>
+                    <button class="filter-pill time-preset" data-seconds="120" type="button">120s</button>
+                    <button class="filter-pill time-preset" data-seconds="180" type="button">3 min</button>
+                </div>
+                <div class="modal-actions">
+                    <button id="time-modal-cancel" class="btn-modal-cancel" type="button">Annulla</button>
+                    <button id="time-modal-save" class="btn-modal-save" type="button">Salva</button>
+                </div>
             </div>
         </div>
     </div>

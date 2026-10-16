@@ -14,62 +14,115 @@
 const STORAGE_KEYS = {
   WORDS: '3menti_words',
   STATS: '3menti_stats',
+  SETTINGS: '3menti_settings',
 };
 
 const GAME_CONFIG = {
   ROUND_DURATION_SEC: 60,
+  MIN_DURATION_SEC: 10,
+  MAX_DURATION_SEC: 600,
+  INTERMISSION_SEC: 2, // Timer freeze between words
   DEBOUNCE_DELAY_MS: 180, // Prevent accidental double taps
 };
 
 /**
- * 120 curated Italian words covering animals, foods, sports, everyday objects,
- * places, emotions, actions, professions, and nature.
+ * 300+ curated Italian words covering animals, foods, sports, everyday objects,
+ * places, emotions, actions, professions, pop culture and nature.
  */
 const DEFAULT_WORDS_LIST = [
-  // Animali
+  // Originali
   'Farfalla', 'Leone', 'Elefante', 'Aquila', 'Tartaruga',
   'Squalo', 'Delfino', 'Pipistrello', 'Cavallo', 'Giraffa',
   'Coccodrillo', 'Pinguino', 'Cane', 'Gatto', 'Lupo', 'Balena',
-
-  // Cibo e Bevande
   'Spaghetti', 'Pizza', 'Gelato', 'Cappuccino', 'Cioccolato',
   'Tiramisù', 'Lasagna', 'Pomodoro', 'Mela', 'Formaggio',
   'Pane', 'Limone', 'Anguria', 'Fragola', 'Risotto', 'Panino',
-
-  // Sport e Giochi
   'Calcio', 'Tennis', 'Nuoto', 'Pallavolo', 'Sci',
   'Ciclismo', 'Scacchi', 'Pugilato', 'Basket', 'Surf',
-  'Pattinaggio',
-
-  // Oggetti Quotidiani
-  'Ombrello', 'Orologio', 'Chitarra', 'Telefono', 'Specchio',
+  'Pattinaggio', 'Ombrello', 'Orologio', 'Chitarra', 'Telefono', 'Specchio',
   'Libro', 'Cuscino', 'Valigia', 'Lampada', 'Zaino',
   'Occhiali', 'Bicicletta', 'Forchetta', 'Pettine', 'Bottiglia',
-  'Finestra', 'Candela',
-
-  // Luoghi
-  'Montagna', 'Spiaggia', 'Bosco', 'Castello', 'Ospedale',
+  'Finestra', 'Candela', 'Montagna', 'Spiaggia', 'Bosco', 'Castello', 'Ospedale',
   'Aeroporto', 'Biblioteca', 'Vulcano', 'Isola', 'Cinema',
   'Stazione', 'Museo', 'Deserto', 'Fontana', 'Ponte',
-
-  // Emozioni e Concetti
   'Felicità', 'Paura', 'Sorpresa', 'Coraggio', 'Amore',
   'Rabbia', 'Nostalgia', 'Speranza', 'Silenzio', 'Libertà',
-  'Allegria', 'Tristezza',
-
-  // Azioni e Verbi
-  'Ballare', 'Dormire', 'Viaggiare', 'Cantare', 'Ridere',
+  'Allegria', 'Tristezza', 'Ballare', 'Dormire', 'Viaggiare', 'Cantare', 'Ridere',
   'Nuotare', 'Disegnare', 'Cucinare', 'Correre', 'Volare',
   'Leggere', 'Giocare', 'Scrivere', 'Guidare',
-
-  // Ruoli e Mestieri
   'Pirata', 'Dottore', 'Cuoco', 'Astronauta', 'Mago',
   'Detective', 'Pompiere', 'Pilota', 'Pittore', 'Re',
   'Regina', 'Scienziato', 'Musicista', 'Fotografo',
-
-  // Natura ed Elementi
   'Sole', 'Arcobaleno', 'Temporale', 'Luna', 'Cascata',
   'Fulmine', 'Nuvola', 'Neve', 'Stella', 'Terremoto',
+
+  // Nuove Aggiunte (Pop Culture, Italia, Concetti Moderni)
+  'Jannik Sinner', 'Carbonara', 'Seghina', 'Shrek', 'Caciocavallo', 'Maranza',
+  'Darth Vader', 'Aperol Spritz', 'Micheal Merlo', 'Ornitorinco', 'Mamma mia',
+  'Ciuchino', 'Pirla', 'Panettone', 'GigaChad', 'Harry Potter', 'Pummarola',
+  'Sbrodolone', 'Cinghiale', 'Francesco Totti', 'Supercazzola', 'Kung Fu Panda',
+  'Bombolone', 'Che sbatti', 'Voldemort', 'Mandolino', 'Puzzetta', 'Capibara',
+  'Ferrari', 'Minchia', 'SpongeBob', 'Ciucciabrodo', 'Rocky Balboa',
+  'Bidet', 'Tamarrissimo', 'Panzerotto', 'Gollum', 'Trallallero', 'Valentino Rossi',
+  'Mozzarella', 'Sgamato', 'Jack Sparrow', 'Caccola', 'Vespa', 'Bro', 'Padrino',
+  'Parmigiano', 'Zuzzurellone', 'Balengo', 'Mario Kart', 'Cotechino', 'Homer Simpson',
+  'Salsicciotto', 'Bella zio', 'Batman', 'Ferragosto', 'Sgommata', 'Ciambellone',
+  'Rocky', 'Sticazzi', 'Truzzo', 'Cannolo', 'Super Mario', 'Brontolone', 'Colosseo',
+  'Pirlone', 'Shrek verde', 'Gnocchi', 'Flexare', 'Fantozzi', 'Sgnappero',
+  'Buzz Lightyear', 'Caciara', 'Cocco bello', 'Checco Zalone', 'Polenta',
+  'Cringe', 'Ratatouille', 'Coglione cosmico', 'Leonardo DiCaprio',
+  'Pasticcione', 'Spritz', 'Anakin Skywalker', 'Babbalù', 'Gabbiano', 'Boia dé',
+  'Donkey Kong', 'Zarro', 'Pinocchio', 'Baccalà', 'Sbrocco', 'Kung Fu',
+  'Polpetta', 'Ciuccio', 'Il Signore degli Anelli', 'Checco', 'Caciarone',
+  'Capitan Uncino', 'Maremma maiala', 'Scamorza', 'Tarzan', 'Babbione',
+  'Tartaruga ninja', 'Fregna', 'Cannelloni', 'Poldo', 'Cenerentola',
+  'Sturalavandini', 'Salamandra', 'Ci sta', 'Don Vito Corleone', 'Bombetta',
+  'Cinghialone', 'Tricheco', 'Bohemian Rhapsody', 'Salsiccia', 'Piripicchio',
+  'Matrix', 'Cacasenno', 'Paninaro', 'Piadina', 'Gandalf', 'Mappazzone',
+  'Zio pera', 'Totò', 'Bud Spencer', 'Patatone', 'Pasticciotto', 'Bidet d\'oro',
+  'Frittatona', 'Sottone', 'Ciuccia', 'Il Gladiatore',
+  'Bisteccone', 'Pappagorgio', 'Checco il bomber', 'Pingu', 'Bresaola',
+  'Zerbino', 'Fleximan', 'Porca miseria', 'Berlusconi', 'Gerry Scotti', 'Amadeus',
+  'Barbara D\'Urso', 'Fedez', 'Chiara Ferragni', 'Kebab', 'Porchetta', 'Arrosticini',
+  'Chinotto', 'Tavernello', 'Red Bull', 'Sofficino', 'Doge', 'Skibidi', 'Khaby Lame',
+  'Povero Gabbiano', 'Saluta Andonio', 'Bugo', 'Spider-Man', 'Elsa', 'Peppa Pig',
+  'Pikachu', 'Charizard', 'Goku', 'Luffy', 'Scappellamento', 'Blinda', 'Inciucio',
+  'Paccotto', 'Cazzeggio', 'Fuffa', 'Telecomandi', 'Zoccolo', 'Pantofola', 'Mocio',
+  'Folletto', 'Bimby', 'Autogrill', 'Telepass', 'Tangenziale', 'Area C', 'ZTL',
+  'Multa', 'Ceres', 'Ichnusa', 'Negroni', 'Mojito', 'Pina Colada', 'Limoncello',
+  'Sanremo', 'Eurovision', 'X Factor', 'Grande Fratello', 'Uomini e Donne',
+  'Vasco Rossi', 'Ligabue', 'Maneskin', 'Sfera Ebbasta', 'Geolier', 'Piazza Duomo',
+  'Torre di Pisa', 'Venezia', 'Vesuvio', 'Etna', 'Panda', 'Nutella', 'Kinder Bueno',
+  'Estathé', 'Fonzies', 'Golia', 'Smemoranda', 'Invicta', 'Eastpak', 'Nokia 3310',
+  'Game Boy', 'Pippo Baudo', 'Mike Bongiorno', 'Raffaella Carrà', 'Enrico Papi',
+  'Moana Pozzi', 'Rocco Siffredi', 'Cicciolina', 'Valentina Nappi', 'Ugo Fantozzi',
+  'Fracchia', 'Filini', 'La Pina', 'Contessa Serbelloni', 'Pino dei Palazzi',
+  'Cirilli', 'Zelig', 'Colorado', 'Made in Sud', 'CapaRezza', 'Fabri Fibra',
+  'Guè', 'Marracash', 'Salmo', 'TikTok', 'Instagram', 'BeReal', 'Snapchat',
+  'WhatsApp', 'Telegram', 'ChatGPT', 'Elon Musk', 'Mark Zuckerberg', 'Jeff Bezos',
+  'Bill Gates', 'Bitcoin', 'NFT', 'Metaverso', 'Intelligenza Artificiale', 'Robot',
+  'Sushi', 'Poké', 'Avocado Toast', 'Starbucks', 'McDonald\'s', 'Burger King',
+  'Pizzetta', 'Suppli', 'Arancino', 'Focaccia', 'Taralli', 'Grissini', 'Burrata',
+  'Stracciatella', 'Gorgonzola', 'Pecorino', 'Taleggio', 'Vespa 50 Special',
+  'Fiat 500', 'Lancia Delta', 'Alfa Romeo', 'Lamborghini', 'Max Biaggi',
+  'Charles Leclerc', 'Lewis Hamilton', 'Maradona', 'Pelé', 'Cristiano Ronaldo',
+  'Messi', 'Mbappé', 'Neymar', 'Juve', 'Inter', 'Milan', 'Roma', 'Lazio', 'Napoli',
+  'Cinepanettone', 'Christian De Sica', 'Massimo Boldi', 'Biagio Izzo',
+  'Aldo Giovanni e Giacomo', 'Ficarra e Picone', 'Pio e Amedeo', 'Maccio Capatonda',
+  'Herbert Ballerina', 'Ivo Avido', 'Rupert Sciamenna', 'Elettra Lamborghini',
+  'Malgioglio', 'Orietta Berti', 'Gianni Morandi', 'Sabrina Salerno', 'Jo Squillo',
+  'Cristina D\'Avena', 'Giorgio Vanni', 'Vegeta', 'Piccolo', 'Gohan', 'Trunks',
+  'Bulma', 'Maestro Muten', 'Zoro', 'Nami', 'Sanji', 'Chopper', 'Robin', 'Franky',
+  'Brook', 'Naruto', 'Sasuke', 'Sakura', 'Kakashi', 'Itachi', 'Madara', 'Gaara',
+  'Hermione', 'Ron', 'Silente', 'Pitona', 'Hagrid', 'Dobby', 'Frodo', 'Sam',
+  'Aragorn', 'Legolas', 'Gimli', 'Sauron', 'Joker', 'Harley Quinn', 'Iron Man',
+  'Thor', 'Hulk', 'Captain America', 'Thanos', 'Deadpool', 'Wolverine',
+  'Barbossa', 'Davy Jones', 'Indiana Jones', 'James Bond', 'Ethan Hunt',
+  'John Wick', 'Neo', 'Terminator', 'Robocop', 'Alien', 'Predator', 'Godzilla',
+  'King Kong', 'Patrick', 'Squidward', 'Mr Krabs', 'Sandy', 'Plankton',
+  'Simpsons', 'Marge', 'Bart', 'Lisa', 'Maggie', 'Ned Flanders', 'Peter Griffin',
+  'Stewie', 'Brian', 'Quagmire', 'Joe', 'Cleveland', 'South Park', 'Cartman',
+  'Stan', 'Kyle', 'Kenny', 'Butters'
 ];
 
 // ============================================================================
@@ -328,6 +381,42 @@ class StatsManager {
 }
 
 // ============================================================================
+// SETTINGS MANAGER
+// Persists user preferences (e.g. round duration) in LocalStorage
+// ============================================================================
+
+class SettingsManager {
+  static load() {
+    const defaults = { roundDuration: GAME_CONFIG.ROUND_DURATION_SEC };
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+      if (!data) return defaults;
+      const parsed = JSON.parse(data);
+      return { ...defaults, ...parsed };
+    } catch (_) {
+      return defaults;
+    }
+  }
+
+  static save(settings) {
+    try {
+      const merged = { ...SettingsManager.load(), ...settings };
+      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(merged));
+      return merged;
+    } catch (err) {
+      console.warn('Impossibile salvare le impostazioni:', err);
+      return SettingsManager.load();
+    }
+  }
+
+  static clampDuration(seconds) {
+    const n = parseInt(seconds, 10);
+    if (Number.isNaN(n)) return GAME_CONFIG.ROUND_DURATION_SEC;
+    return Math.min(GAME_CONFIG.MAX_DURATION_SEC, Math.max(GAME_CONFIG.MIN_DURATION_SEC, n));
+  }
+}
+
+// ============================================================================
 // HIGH-PRECISION GAME TIMER
 // Uses Date.now() for drift-free timing & requestAnimationFrame for smooth display
 // ============================================================================
@@ -345,6 +434,8 @@ class AccurateTimer {
     this.endTime = null;
     this.rafId = null;
     this.isRunning = false;
+    this.isPaused = false;
+    this.pauseRemainingMs = null;
     this.lastSecond = null;
 
     // Handle background tab switching gracefully
@@ -352,17 +443,57 @@ class AccurateTimer {
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
   }
 
+  /**
+   * Update the round duration (used when the user changes the time setting)
+   * @param {number} durationSeconds 
+   */
+  setDuration(durationSeconds) {
+    this.durationMs = durationSeconds * 1000;
+  }
+
   start() {
     this.stop();
     this.isRunning = true;
+    this.isPaused = false;
+    this.pauseRemainingMs = null;
     this.endTime = Date.now() + this.durationMs;
     this.lastSecond = Math.ceil(this.durationMs / 1000);
 
     // Initial immediate tick
     this.onTick(this.lastSecond, 1.0);
+    this.scheduleFrame();
+  }
 
+  /**
+   * Freeze the countdown without resetting it
+   */
+  pause() {
+    if (!this.isRunning || this.isPaused) return;
+    this.isPaused = true;
+    this.pauseRemainingMs = Math.max(0, this.endTime - Date.now());
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  /**
+   * Resume the countdown after a pause
+   */
+  resume() {
+    if (!this.isRunning || !this.isPaused) return;
+    this.isPaused = false;
+    this.endTime = Date.now() + this.pauseRemainingMs;
+    this.pauseRemainingMs = null;
+    this.scheduleFrame();
+  }
+
+  /**
+   * Schedule the next animation frame tick
+   */
+  scheduleFrame() {
     const step = () => {
-      if (!this.isRunning) return;
+      if (!this.isRunning || this.isPaused) return;
 
       const now = Date.now();
       const remainingMs = Math.max(0, this.endTime - now);
@@ -388,6 +519,8 @@ class AccurateTimer {
 
   stop() {
     this.isRunning = false;
+    this.isPaused = false;
+    this.pauseRemainingMs = null;
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
@@ -395,7 +528,7 @@ class AccurateTimer {
   }
 
   handleVisibilityChange() {
-    if (!this.isRunning || !this.endTime) return;
+    if (!this.isRunning || !this.endTime || this.isPaused) return;
 
     const now = Date.now();
     const remainingMs = Math.max(0, this.endTime - now);
@@ -439,9 +572,13 @@ class GameEngine {
 
     this.isGameActive = false;
     this.isActionLocked = false;
+    this.isIntermission = false;
+    this.intermissionTimer = null;
+
+    this.settings = SettingsManager.load();
 
     this.timer = new AccurateTimer(
-      GAME_CONFIG.ROUND_DURATION_SEC,
+      this.settings.roundDuration,
       (sec, fraction) => this.ui.updateTimer(sec, fraction),
       () => this.endGame()
     );
@@ -466,17 +603,63 @@ class GameEngine {
     this.history = [];
     this.isGameActive = true;
     this.isActionLocked = false;
+    this.isIntermission = false;
+
+    // Apply the configured round duration
+    this.settings = SettingsManager.load();
+    this.timer.setDuration(this.settings.roundDuration);
 
     // Switch screen & prepare UI
     this.ui.showScreen('game-screen');
     this.ui.setGameButtonsEnabled(true);
     this.ui.updateGameScore(0);
+    this.ui.hideIntermission();
     this.displayCurrentWord();
 
     // Start timer
     this.timer.start();
     triggerHaptic(50);
     return true;
+  }
+
+  /**
+   * Freeze the timer for a few seconds so players can prepare the next round
+   */
+  startIntermission() {
+    if (!this.isGameActive) return;
+
+    this.isIntermission = true;
+    this.isActionLocked = true;
+    this.timer.pause();
+    this.ui.setGameButtonsEnabled(false);
+
+    let remaining = GAME_CONFIG.INTERMISSION_SEC;
+    this.ui.showIntermission(remaining);
+
+    this.intermissionTimer = setInterval(() => {
+      remaining -= 1;
+      if (remaining > 0) {
+        this.ui.showIntermission(remaining);
+      } else {
+        this.endIntermission();
+      }
+    }, 1000);
+  }
+
+  /**
+   * Resume the game after the intermission freeze
+   */
+  endIntermission() {
+    clearInterval(this.intermissionTimer);
+    this.intermissionTimer = null;
+    this.isIntermission = false;
+    this.isActionLocked = false;
+    this.ui.hideIntermission();
+
+    if (this.isGameActive) {
+      this.ui.setGameButtonsEnabled(true);
+      this.timer.resume();
+    }
   }
 
   /**
@@ -497,13 +680,10 @@ class GameEngine {
    * @param {'correct' | 'wrong' | 'skip'} action 
    */
   handleAction(action) {
-    if (!this.isGameActive || this.isActionLocked) return;
+    if (!this.isGameActive || this.isActionLocked || this.isIntermission) return;
 
     // Lock interactions briefly to prevent double taps
     this.isActionLocked = true;
-    setTimeout(() => {
-      this.isActionLocked = false;
-    }, GAME_CONFIG.DEBOUNCE_DELAY_MS);
 
     if (this.currentIndex >= this.deck.length) {
       this.endGame();
@@ -538,6 +718,9 @@ class GameEngine {
     this.ui.updateGameScore(this.score.correct);
     this.currentIndex++;
     this.displayCurrentWord();
+
+    // Freeze the timer so players can prepare the next turn
+    this.startIntermission();
   }
 
   /**
@@ -547,7 +730,11 @@ class GameEngine {
     if (!this.isGameActive) return;
 
     this.isGameActive = false;
+    clearInterval(this.intermissionTimer);
+    this.intermissionTimer = null;
+    this.isIntermission = false;
     this.timer.stop();
+    this.ui.hideIntermission();
     this.ui.setGameButtonsEnabled(false);
     triggerHaptic([60, 60, 100]);
 
@@ -571,7 +758,11 @@ class GameEngine {
    */
   abort() {
     this.isGameActive = false;
+    clearInterval(this.intermissionTimer);
+    this.intermissionTimer = null;
+    this.isIntermission = false;
     this.timer.stop();
+    this.ui.hideIntermission();
     this.ui.setGameButtonsEnabled(false);
   }
 }
@@ -666,6 +857,16 @@ class UIManager {
       deleteConfirm: document.getElementById('delete-confirm'),
       toast: document.getElementById('toast'),
       toastMessage: document.getElementById('toast-message'),
+
+      // Intermission & Time settings
+      intermissionOverlay: document.getElementById('intermission-overlay'),
+      intermissionCount: document.getElementById('intermission-count'),
+      btnSettings: document.getElementById('btn-settings'),
+      timeModal: document.getElementById('time-modal'),
+      timeInput: document.getElementById('time-input'),
+      timeModalClose: document.getElementById('time-modal-close'),
+      timeModalCancel: document.getElementById('time-modal-cancel'),
+      timeModalSave: document.getElementById('time-modal-save'),
     };
   }
 
@@ -711,7 +912,8 @@ class UIManager {
     }
 
     if (this.elements.homeWordCount) {
-      this.elements.homeWordCount.innerHTML = `<strong>${active}</strong> parole attive su <strong>${total}</strong>`;
+      const duration = SettingsManager.load().roundDuration;
+      this.elements.homeWordCount.innerHTML = `<strong>${active}</strong> parole attive su <strong>${total}</strong> · ⏱️ <strong>${duration}s</strong>`;
     }
 
     if (this.elements.btnStartGame) {
@@ -1045,6 +1247,62 @@ class UIManager {
   }
 
   /**
+   * Show the intermission countdown overlay
+   * @param {number} seconds 
+   */
+  showIntermission(seconds) {
+    if (!this.elements.intermissionOverlay) return;
+    if (this.elements.intermissionCount) {
+      this.elements.intermissionCount.textContent = seconds;
+    }
+    this.elements.intermissionOverlay.classList.add('active');
+  }
+
+  /**
+   * Hide the intermission countdown overlay
+   */
+  hideIntermission() {
+    if (this.elements.intermissionOverlay) {
+      this.elements.intermissionOverlay.classList.remove('active');
+    }
+  }
+
+  /**
+   * Open the time settings modal
+   */
+  openTimeModal() {
+    if (!this.elements.timeModal) return;
+    const settings = SettingsManager.load();
+    if (this.elements.timeInput) {
+      this.elements.timeInput.value = settings.roundDuration;
+    }
+    this.elements.timeModal.classList.add('active');
+  }
+
+  /**
+   * Close the time settings modal
+   */
+  closeTimeModal() {
+    if (this.elements.timeModal) {
+      this.elements.timeModal.classList.remove('active');
+    }
+  }
+
+  /**
+   * Persist the chosen round duration
+   */
+  confirmTimeModal() {
+    if (!this.elements.timeInput) return;
+    const seconds = SettingsManager.clampDuration(this.elements.timeInput.value);
+    SettingsManager.save({ roundDuration: seconds });
+    if (this.elements.timeInput) this.elements.timeInput.value = seconds;
+    this.closeTimeModal();
+    if (this.gameEngine) this.gameEngine.settings = { roundDuration: seconds };
+    this.updateWordCount();
+    this.showNotification(`Durata impostata a ${seconds} secondi`, 'success');
+  }
+
+  /**
    * Setup all event listeners (buttons, inputs, delegation)
    */
   bindEvents() {
@@ -1170,6 +1428,32 @@ class UIManager {
         }
         this.renderWordsList('');
         this.elements.btnClearSearch.style.display = 'none';
+      });
+    }
+
+    // Time settings modal
+    if (this.elements.btnSettings) {
+      this.elements.btnSettings.addEventListener('click', () => this.openTimeModal());
+    }
+    if (this.elements.timeModalSave) {
+      this.elements.timeModalSave.addEventListener('click', () => this.confirmTimeModal());
+    }
+    if (this.elements.timeModalCancel) {
+      this.elements.timeModalCancel.addEventListener('click', () => this.closeTimeModal());
+    }
+    if (this.elements.timeModalClose) {
+      this.elements.timeModalClose.addEventListener('click', () => this.closeTimeModal());
+    }
+    if (this.elements.timeModal) {
+      this.elements.timeModal.addEventListener('click', (e) => {
+        if (e.target === this.elements.timeModal) this.closeTimeModal();
+      });
+      this.elements.timeModal.querySelectorAll('.time-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (this.elements.timeInput) {
+            this.elements.timeInput.value = btn.dataset.seconds;
+          }
+        });
       });
     }
 
