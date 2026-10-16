@@ -815,7 +815,6 @@ body.privacy-open .project-detail.is-open {
 }
 
 /* ========== FIXED HOVER BOX (Bottom Right) ========== */
-/* ========== FIXED HOVER BOX (Bottom Right) ========== */
 .fixed-bottom-right {
   position: fixed;
   right: calc(50% - 0.5 * var(--container-width) - 50px);
@@ -941,5 +940,55 @@ body.privacy-open .project-detail.is-open {
   .fixed-video-preview video {
     box-shadow: none !important;
     background: transparent !important;
+  }
+}
+
+/* ========== FIXED CONTACT INFO (Bottom Left) ========== */
+.fixed-contact-info {
+  position: fixed !important;
+  left: calc(50% - 0.5 * var(--container-width)) !important;
+  bottom: 45px !important; /* Alzato da 25px a 45px */
+  transform: translateY(0) !important;
+  width: auto !important;
+  max-width: 800px !important;
+  display: block !important;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+  transition: opacity 0.35s ease;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: left !important;
+  font-family: 'Stack Sans Text', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 32px !important;
+  line-height: 1.0 !important;
+  color: #fff !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.fixed-contact-info a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.fixed-contact-info a:hover {
+  opacity: 0.7;
+}
+
+.fixed-contact-info.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .fixed-contact-info {
+    left: calc(50% - 0.5 * var(--container-width));
+    bottom: 35px; /* Abbassato anche su mobile */
+    font-size: 18px;
+  }
+}
   }
 }
