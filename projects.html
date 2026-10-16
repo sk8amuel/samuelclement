@@ -402,7 +402,10 @@
     </div>
   </main>
 
-  </main>
+  <!-- BOTTOM LEFT CONTACT -->
+  <div class="projects-bottom-contact">
+    To see more projects, contact me at <a href="mailto:samuelclement300@gmail.com">samuelclement300@gmail.com</a>
+  </div>
 
   <!-- BOTTOM LEFT -->
   <div class="fixed-bottom-left">
@@ -449,9 +452,14 @@
       function checkFixedBoxVisibility() {
         const anyOpen = document.querySelectorAll('.project-item.is-open').length > 0;
         const box = document.querySelector('.fixed-bottom-right');
+        const contact = document.querySelector('.projects-bottom-contact');
         if (box) {
           if (anyOpen) box.classList.add('is-hidden');
           else box.classList.remove('is-hidden');
+        }
+        if (contact) {
+          if (anyOpen) contact.classList.add('is-hidden');
+          else contact.classList.remove('is-hidden');
         }
       }
 
