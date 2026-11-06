@@ -8,17 +8,26 @@
   <link rel="canonical" href="portfolio.html">
   <meta name="claude:viewport-fit-sides" content="cover">
 
+  <!-- Risoluzione base percorsi online -->
+  <script>
+    if (location.protocol.startsWith("http")) {
+      const b = document.createElement("base");
+      b.href = "/";
+      document.head.appendChild(b);
+    }
+  </script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-2.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
 
   <!-- Base Site Styles -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -391,7 +400,7 @@
     const PROJECTS = shuffleArray(RAW_PROJECTS);
 
     const N = PROJECTS.length;
-    const SLOTS = N * 2; // 58 slot: sufficienti per loop continuo, dimezza carico DOM
+    const SLOTS = N * 2;
     const TILT = -48;
     const BASE_SPEED = 0.38;
     const NEAR_PX = 200;
@@ -440,7 +449,7 @@
             };
             vid.onloadeddata = done;
             vid.onerror = done;
-            setTimeout(done, 1500); // timeout di sicurezza per video
+            setTimeout(done, 1500);
             vid.src = p.src;
           });
         } else {
@@ -449,7 +458,6 @@
         }
       });
 
-      // Timeout massimo di sicurezza
       const maxTimeout = new Promise(resolve => setTimeout(resolve, 4000));
       await Promise.race([Promise.all(tasks), maxTimeout]);
     }
@@ -458,7 +466,9 @@
     function buildCardContent(p) {
       if (p.type === "video") {
         return `<div class="card-media">
-          <video src="${p.src}" muted loop playsinline webkit-playsinline preload="auto"></video>
+          <video autoplay muted loop playsinline webkit-playsinline preload="auto">
+            <source src="${p.src}" type="video/mp4">
+          </video>
         </div>`;
       }
       if (p.type === "lottie") {
@@ -491,9 +501,33 @@
       a.setAttribute("aria-label", `${p.name}, ${p.cat}`);
       if (i >= N) { a.tabIndex = -1; a.setAttribute("aria-hidden", "true"); }
       a.innerHTML = buildCardContent(p);
+
+      // Assicura proprietà di autoplay silenzioso per WebKit/iOS/Safari
+      const v = a.querySelector("video");
+      if (v) {
+        v.muted = true;
+        v.defaultMuted = true;
+        v.playsInline = true;
+        v.setAttribute("muted", "");
+        v.setAttribute("playsinline", "");
+        v.setAttribute("webkit-playsinline", "");
+        v.setAttribute("autoplay", "");
+      }
+
       scene.appendChild(a);
       cards.push(a);
     }
+
+    // Sblocco video al primo evento utente
+    function unlockVideos() {
+      document.querySelectorAll(".card video").forEach(v => {
+        v.muted = true;
+        if (v.paused) v.play().catch(() => {});
+      });
+    }
+    ["pointerdown", "touchstart", "wheel", "keydown", "click"].forEach(evt => {
+      window.addEventListener(evt, unlockVideos, { passive: true });
+    });
 
     // Inizializza animazioni Lottie locali
     function initLotties() {
@@ -509,7 +543,7 @@
               container: container,
               renderer: "svg",
               loop: true,
-              autoplay: false, // controllato in base alla vicinanza
+              autoplay: false,
               animationData: animData
             });
             lottieAnims[idx] = anim;
@@ -629,7 +663,10 @@
       selected = slot;
       hovered = slot;
       const v = cards[slot].querySelector("video");
-      if (v) v.play().catch(() => {});
+      if (v) {
+        v.muted = true;
+        v.play().catch(() => {});
+      }
     }
     function close() {
       if (selected < 0) return;
@@ -740,7 +777,7 @@
       if (selected < 0 && (mouse.type !== "mouse" || !mouse.inside)) hovered = -1;
     });
 
-    // ---------- Loop di Animazione a 60 FPS ottimizzato ----------
+    // ---------- Loop di Animazione ----------
     const ease = (v) => v * v * v * (v * (v * 6 - 15) + 10);
     const spring = (x, v, goal, w, dt) => {
       v += (-w * w * (x - goal) - 2 * w * v) * dt;
@@ -797,21 +834,18 @@
         if (s > m1) { m2 = m1; m1 = s; idx1 = i; } else if (s > m2) m2 = s;
       }
 
-      // 5) Posizionamento, rendering e gestione intelligente dei media
+      // 5) Posizionamento e rendering
       for (let i = 0; i < SLOTS; i++) ts[i] = wrap(i - pos);
       for (let i = 0; i < SLOTS; i++) {
         const t = ts[i];
         const absT = Math.abs(t);
         const c = cards[i];
 
-        // Se la card è completamente fuori campo (> 7 posizioni), virtualizza per azzerare carico GPU
         if (absT > 7.5 && i !== selected) {
           if (c.style.visibility !== "hidden") {
             c.style.visibility = "hidden";
-            // ferma video se presente
             const v = c.querySelector("video");
             if (v && !v.paused) v.pause();
-            // ferma lottie se presente
             if (lottieAnims[i]) lottieAnims[i].pause();
           }
           continue;
@@ -866,8 +900,8 @@
         c.classList.toggle("is-open", open[i] > 0.5 || ue > 0.05);
         c.classList.toggle("is-selected", i === selected);
 
-        // Controllo riproduzione intelligente (solo media vicini/visibili)
-        const isNearFront = (absT < 3.2 && op > 0.12) || i === selected;
+        // Riproduzione video attiva quando in vista
+        const isNearFront = (absT < 4.2 && op > 0.08) || i === selected;
         const v = c.querySelector("video");
         if (v) {
           if (isNearFront) {
@@ -895,6 +929,11 @@
     preloadAllAssets().then(() => {
       setTimeout(() => {
         document.body.classList.add("preloader-done");
+        // Avvia i video iniziali
+        document.querySelectorAll(".card video").forEach(v => {
+          v.muted = true;
+          v.play().catch(() => {});
+        });
         requestAnimationFrame(frame);
       }, 150);
     });
