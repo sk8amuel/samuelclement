@@ -757,7 +757,7 @@
 
     const N = PROJECTS.length;
     const SLOTS = N * 2;
-    const TILT = -48;
+    const TILT = -30;
     const BASE_SPEED = 0.38;
     const NEAR_PX = 200;
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -791,23 +791,9 @@
             }
           });
         } else if (p.type === "video" && p.src) {
-          return new Promise(resolve => {
-            const vid = document.createElement("video");
-            vid.preload = "auto";
-            vid.muted = true;
-            let resolved = false;
-            const done = () => {
-              if (!resolved) {
-                resolved = true;
-                step();
-                resolve();
-              }
-            };
-            vid.onloadeddata = done;
-            vid.onerror = done;
-            setTimeout(done, 1500);
-            vid.src = encodeURI(p.src);
-          });
+          // I video vengono caricati/riprodotti on-demand dalle card vicine al fronte
+          step();
+          return Promise.resolve();
         } else {
           step();
           return Promise.resolve();
@@ -823,7 +809,7 @@
       if (p.type === "video") {
         const safeSrc = encodeURI(p.src);
         return `<div class="card-media">
-          <video autoplay muted loop playsinline webkit-playsinline preload="auto">
+          <video muted loop playsinline webkit-playsinline preload="metadata">
             <source src="${safeSrc}" type="video/mp4">
           </video>
         </div>`;
@@ -868,7 +854,6 @@
         v.setAttribute("muted", "");
         v.setAttribute("playsinline", "");
         v.setAttribute("webkit-playsinline", "");
-        v.setAttribute("autoplay", "");
       }
 
       scene.appendChild(a);
@@ -879,7 +864,6 @@
     function unlockVideos() {
       document.querySelectorAll(".card video").forEach(v => {
         v.muted = true;
-        if (v.paused) v.play().catch(() => {});
       });
     }
     ["pointerdown", "touchstart", "wheel", "keydown", "click"].forEach(evt => {
@@ -1198,7 +1182,7 @@
         const absT = Math.abs(t);
         const c = cards[i];
 
-        if (absT > 7.5 && i !== selected) {
+        if (absT > 6.9 && i !== selected) {
           if (c.style.visibility !== "hidden") {
             c.style.visibility = "hidden";
             const v = c.querySelector("video");
@@ -1225,8 +1209,14 @@
         let y = Y0 + t * DY + offY + oe * H * 0.12;
         let z = t * DZ + offZ + oe * LIFT_Z;
         let rot = TILT * (1 - oe);
-        const edge = SLOTS / 2 - absT;
-        let op = clamp(edge / 1.5, 0, 1);
+        const FADE_START = 4.2;
+        const FADE_END = 6.4;
+        const fe = clamp((FADE_END - absT) / (FADE_END - FADE_START), 0, 1);
+        let op = fe * fe * (3 - 2 * fe);
+
+        // Sollevamento: le card salgono più in alto prima di scomparire
+        const rise = (1 - fe) * H * 0.7;
+        y -= rise;
 
         const others = i === idx1 ? m2 : m1;
         op *= 1 - ease(clamp(others * 2.2, 0, 1));
@@ -1289,7 +1279,6 @@
         // Avvia i video iniziali
         document.querySelectorAll(".card video").forEach(v => {
           v.muted = true;
-          v.play().catch(() => {});
         });
         requestAnimationFrame(frame);
       }, 150);
