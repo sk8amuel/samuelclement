@@ -761,6 +761,7 @@
     const BASE_SPEED = 0.38;
     const NEAR_PX = 200;
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = matchMedia("(pointer: coarse)").matches || innerWidth <= 700;
 
     const hero = document.getElementById("hero");
     const stack = document.getElementById("stack");
@@ -770,6 +771,11 @@
     // ---------- Preloading completo e decodifica preventiva in memoria ----------
     async function preloadAllAssets() {
       const progressEl = document.getElementById("preloaderProgress");
+      // Su mobile evitiamo il download massivo parallelo di tutte le immagini
+      if (isMobile) {
+        if (progressEl) progressEl.textContent = "100%";
+        return;
+      }
       let count = 0;
       const total = PROJECTS.length;
 
@@ -809,9 +815,7 @@
       if (p.type === "video") {
         const safeSrc = encodeURI(p.src);
         return `<div class="card-media">
-          <video muted loop playsinline webkit-playsinline preload="metadata">
-            <source src="${safeSrc}" type="video/mp4">
-          </video>
+          <video muted loop playsinline webkit-playsinline preload="none" data-src="${safeSrc}"></video>
         </div>`;
       }
       if (p.type === "lottie") {
@@ -825,8 +829,47 @@
         </div>`;
       }
       return `<div class="card-media">
-        <img src="${encodeURI(p.src)}" alt="${p.name}" loading="eager" decoding="async">
+        <img data-src="${encodeURI(p.src)}" alt="${p.name}" loading="lazy" decoding="async">
       </div>`;
+    }
+
+    // Carica i media (immagine/video/lottie) solo quando la card è vicina al fronte
+    function hydrateMedia(card) {
+      const img = card.querySelector("img[data-src]");
+      if (img) {
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+        return true;
+      }
+      const v = card.querySelector("video[data-src]");
+      if (v) {
+        const src = v.dataset.src;
+        v.removeAttribute("data-src");
+        v.preload = "auto";
+        const s = document.createElement("source");
+        s.src = src;
+        s.type = "video/mp4";
+        v.appendChild(s);
+        v.load();
+        return true;
+      }
+      const lc = card.querySelector(".lottie-container[data-lottie-id]:not([data-loaded])");
+      if (lc && window.lottie && window.VALTNET_LOTTIE) {
+        const animData = window.VALTNET_LOTTIE[lc.dataset.lottieId];
+        if (animData) {
+          const idx = +card.dataset.slot;
+          lc.setAttribute("data-loaded", "true");
+          lottieAnims[idx] = window.lottie.loadAnimation({
+            container: lc,
+            renderer: "svg",
+            loop: true,
+            autoplay: false,
+            animationData: animData
+          });
+          return true;
+        }
+      }
+      return false;
     }
 
     const scene = document.createElement("div");
@@ -1247,8 +1290,9 @@
         c.classList.toggle("is-open", open[i] > 0.5 || ue > 0.05);
         c.classList.toggle("is-selected", i === selected);
 
-        // Riproduzione video attiva quando in vista
+        // Carica i media e riproduci i video quando la card è vicina al fronte
         const isNearFront = (absT < 4.2 && op > 0.08) || i === selected;
+        if (isNearFront) hydrateMedia(c);
         const v = c.querySelector("video");
         if (v) {
           if (isNearFront) {
@@ -1272,7 +1316,6 @@
     }
 
     // Inizializza lottie, esegue preload completo asincrono e rivela la scena al 100%
-    initLotties();
     preloadAllAssets().then(() => {
       setTimeout(() => {
         document.body.classList.add("preloader-done");
