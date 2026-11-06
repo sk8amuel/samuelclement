@@ -1,20 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progetti Valtnet — Samuel Clement</title>
-  <meta name="description"
-    content="Progetti Valtnet - Asset visivi, gif, video e animazioni vettoriali per Pedu, Raselli, Valtnet e Vecellio.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Archivio Progetti — Samuel Clement</title>
+  <meta name="description" content="Archivio Progetti - Asset visivi, gif, video e animazioni vettoriali di Samuel Clement.">
   <link rel="canonical" href="portfolio.html">
+  <meta name="claude:viewport-fit-sides" content="cover">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-    rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=PT+Mono&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
@@ -22,16 +20,296 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
 
-  <!-- Base CSS -->
+  <!-- Base Site Styles -->
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/projects.css">
-  <link rel="stylesheet" href="assets/css/portfolio.css">
 
-  <!-- Lottie Player Web Component -->
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <!-- Lottie Library & Data -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script src="assets/js/valtnet-lottie-data.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --fg: #ededea;
+      --muted: #8b8b86;
+      --line: #222226;
+      --accent: #ffffff;
+      --accent-fg: #000000;
+      --shadow: rgba(0, 0, 0, 0.7);
+      --sans: "Geist", "Space Mono", "Helvetica Neue", Arial, sans-serif;
+      --mono: "PT Mono", "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ---------- PRELOADER ---------- */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .preloader-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    #preloader img {
+      max-width: 130px;
+      width: 18vw;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .preloader-progress {
+      color: #777770;
+      font-size: 11px;
+      letter-spacing: .12em;
+    }
+    body.preloader-done #preloader {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ---------- HEADER VISIBILE ---------- */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    .top-header::before {
+      background: rgba(11, 11, 13, 0.5);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
+    .top-left .brand,
+    .top-left .role,
+    .top-nav a {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    .top-line {
+      position: fixed;
+      top: 40px;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+    }
+
+    /* ---------- HERO & STACK 3D ---------- */
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      min-height: 560px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    body.preloader-done .hero {
+      opacity: 1;
+    }
+    .stack {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: var(--w);
+      transform: translateX(-50%);
+      touch-action: none;
+    }
+    .scene {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+    .scene .card { pointer-events: auto; }
+    .card {
+      position: absolute;
+      top: 50%;
+      display: block;
+      border-radius: 6px;
+      overflow: hidden;
+      will-change: transform, opacity;
+      transform-origin: 50% 100%;
+      outline: none;
+      cursor: pointer;
+      background: #151518;
+      box-shadow: 0 16px 36px -10px rgba(0,0,0,0.65);
+      user-select: none;
+      -webkit-user-select: none;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    .card.is-open {
+      box-shadow: 0 32px 75px -20px var(--shadow);
+    }
+    .scene.has-sel .card { pointer-events: none; }
+    .scene.has-sel .card.is-selected { pointer-events: auto; }
+    .card:focus-visible::after {
+      box-shadow: inset 0 0 0 2px var(--accent);
+    }
+
+    /* Contenuto Multimediale delle Card */
+    .card-media {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #121215;
+    }
+    .card-media img,
+    .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+    .card-media.lottie-container {
+      background: #0e0e11;
+      padding: 14px;
+    }
+    .card-media.lottie-container svg {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .card-link-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      background: #151519;
+      color: #fff;
+      text-align: center;
+      gap: 12px;
+      transition: background 0.25s ease;
+    }
+    .card:hover .card-link-box {
+      background: #1c1c22;
+    }
+    .card-link-box .link-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      opacity: .6;
+      text-transform: uppercase;
+    }
+    .card-link-box .link-title {
+      font-size: clamp(22px, 4.5cqw, 36px);
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+    .card-link-box .link-url {
+      font-family: var(--mono);
+      font-size: 12px;
+      opacity: .5;
+    }
+
+    /* Etichette ai lati */
+    .meta {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      display: grid;
+      gap: 4px;
+      pointer-events: none;
+    }
+    .meta-left {
+      left: max(32px, env(safe-area-inset-left, 0px));
+      max-width: 280px;
+    }
+    .meta .small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .meta .big {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -.01em;
+      color: var(--fg);
+    }
+    .swap { display: block; }
+
+    @media (max-width: 700px) {
+      .stack {
+        left: 0;
+        width: 100%;
+        transform: none;
+        top: 60px;
+        bottom: 80px;
+        overflow: hidden;
+        -webkit-mask: linear-gradient(transparent, #000 6%, #000 94%, transparent);
+        mask: linear-gradient(transparent, #000 6%, #000 94%, transparent);
+      }
+      .meta {
+        top: auto;
+        bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+        transform: none;
+        left: 20px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .swap { animation: none; }
+    }
+  </style>
 </head>
-
 <body class="portfolio-page">
+
+  <!-- PRELOADER CON PERCENTUALE -->
+  <div id="preloader">
+    <div class="preloader-inner">
+      <img src="assets/img/preloader.png" alt="Samuel Clement">
+      <div id="preloaderProgress" class="preloader-progress mono">0%</div>
+    </div>
+  </div>
 
   <!-- HEADER -->
   <header class="top-header">
@@ -48,194 +326,579 @@
 
   <div class="top-line"></div>
 
-  <!-- MAIN PORTFOLIO -->
-  <main class="portfolio-main">
-
-    <!-- HERO HEADER -->
-    <section class="portfolio-hero">
-      <div class="portfolio-hero-label">(VALTNET PORTFOLIO)</div>
-      <h1 class="portfolio-hero-title">Progetti Valtnet</h1>
+  <!-- MAIN SECTION CON STACK 3D -->
+  <main id="top">
+    <section class="hero" id="hero" aria-label="Archivio progetti">
+      <div class="meta meta-left" aria-live="polite">
+        <span class="small mono"><span class="swap" id="metaCat">Indice</span></span>
+        <span class="big"><span class="swap" id="metaName">Archivio progetti</span></span>
+      </div>
+      <div class="stack" id="stack"></div>
     </section>
-
-    <!-- SECTION 01: PEDU -->
-    <section class="folder-section" id="pedu">
-      <div class="folder-header">
-        <div class="folder-title-wrap">
-          <span class="folder-number">01.</span>
-          <h2 class="folder-title">Pedu</h2>
-        </div>
-        <span class="folder-count">10 Assets</span>
-      </div>
-
-      <div class="portfolio-masonry">
-        <a href="https://dev.pedu-original.com/" target="_blank" rel="noopener" class="portfolio-item portfolio-link-card">
-          <div class="link-card-inner">
-            <span class="link-card-tag">WEBSITE LINK ↗</span>
-            <span class="link-card-url">https://dev.pedu-original.com/</span>
-          </div>
-        </a>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-1.gif">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-1.gif" alt="Pedu asset 1" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-2.jpg">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-2.jpg" alt="Pedu asset 2" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-3.jpg">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-3.jpg" alt="Pedu asset 3" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-4.jpg">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-4.jpg" alt="Pedu asset 4" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-5.gif">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-5.gif" alt="Pedu asset 5" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-6.jpg">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-6.jpg" alt="Pedu asset 6" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-7.webp">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-7.webp" alt="Pedu asset 7" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-8.png">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-8.png" alt="Pedu asset 8" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/pedu/pedu-progetto-9.jpg">
-          <img src="projects/progetti_valtnet/pedu/pedu-progetto-9.jpg" alt="Pedu asset 9" loading="lazy">
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 02: RASELLI -->
-    <section class="folder-section" id="raselli">
-      <div class="folder-header">
-        <div class="folder-title-wrap">
-          <span class="folder-number">02.</span>
-          <h2 class="folder-title">Raselli</h2>
-        </div>
-        <span class="folder-count">8 Assets</span>
-      </div>
-
-      <div class="portfolio-masonry">
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-1.jpg">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-1.jpg" alt="Raselli asset 1" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-2.jpeg">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-2.jpeg" alt="Raselli asset 2" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-3.jpeg">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-3.jpeg" alt="Raselli asset 3" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-4.jpeg">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-4.jpeg" alt="Raselli asset 4" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-5.jpg">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-5.jpg" alt="Raselli asset 5" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/raselli/raselli-progetto-6.png">
-          <img src="projects/progetti_valtnet/raselli/raselli-progetto-6.png" alt="Raselli asset 6" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="video" data-src="projects/progetti_valtnet/raselli/raselli-progetto-7.mp4?v=2">
-          <video src="projects/progetti_valtnet/raselli/raselli-progetto-7.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="projects/progetti_valtnet/raselli/raselli-progetto-7.mp4?v=2" type="video/mp4">
-          </video>
-        </div>
-        <div class="portfolio-item" data-type="video" data-src="projects/progetti_valtnet/raselli/raselli-progetto-8.mp4?v=2">
-          <video src="projects/progetti_valtnet/raselli/raselli-progetto-8.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="projects/progetti_valtnet/raselli/raselli-progetto-8.mp4?v=2" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 03: VALTNET -->
-    <section class="folder-section" id="valtnet">
-      <div class="folder-header">
-        <div class="folder-title-wrap">
-          <span class="folder-number">03.</span>
-          <h2 class="folder-title">Valtnet</h2>
-        </div>
-        <span class="folder-count">7 Assets</span>
-      </div>
-
-      <div class="portfolio-masonry">
-        <a href="https://valtnet.com/" target="_blank" rel="noopener" class="portfolio-item portfolio-link-card">
-          <div class="link-card-inner">
-            <span class="link-card-tag">WEBSITE LINK ↗</span>
-            <span class="link-card-url">https://valtnet.com/</span>
-          </div>
-        </a>
-        <div class="portfolio-item" data-type="lottie" data-mode="bounce" data-src="projects/progetti_valtnet/valtnet/Graphic%20Design%20Icon.json">
-          <lottie-player src="projects/progetti_valtnet/valtnet/Graphic%20Design%20Icon.json" background="transparent" speed="1" loop mode="bounce" autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="lottie" data-mode="bounce" data-src="projects/progetti_valtnet/valtnet/Media%20Library%20Icon.json">
-          <lottie-player src="projects/progetti_valtnet/valtnet/Media%20Library%20Icon.json" background="transparent" speed="1" loop mode="bounce" autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="lottie" data-mode="bounce" data-src="projects/progetti_valtnet/valtnet/Strategia%20Icon.json">
-          <lottie-player src="projects/progetti_valtnet/valtnet/Strategia%20Icon.json" background="transparent" speed="1" loop mode="bounce" autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="lottie" data-mode="bounce" data-src="projects/progetti_valtnet/valtnet/Valtnet%20Branding%20Icon.json">
-          <lottie-player src="projects/progetti_valtnet/valtnet/Valtnet%20Branding%20Icon.json" background="transparent" speed="1" loop mode="bounce" autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="lottie" data-mode="bounce" data-src="projects/progetti_valtnet/valtnet/Web%20Icon.json">
-          <lottie-player src="projects/progetti_valtnet/valtnet/Web%20Icon.json" background="transparent" speed="1" loop mode="bounce" autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="video" data-src="projects/progetti_valtnet/valtnet/valtnet-progetto.mp4?v=2">
-          <video src="projects/progetti_valtnet/valtnet/valtnet-progetto.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="projects/progetti_valtnet/valtnet/valtnet-progetto.mp4?v=2" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 04: VECELLIO -->
-    <section class="folder-section" id="vecellio">
-      <div class="folder-header">
-        <div class="folder-title-wrap">
-          <span class="folder-number">04.</span>
-          <h2 class="folder-title">Vecellio</h2>
-        </div>
-        <span class="folder-count">4 Assets</span>
-      </div>
-
-      <div class="portfolio-masonry">
-        <a href="https://valtnet.eu/vecellio/" target="_blank" rel="noopener" class="portfolio-item portfolio-link-card">
-          <div class="link-card-inner">
-            <span class="link-card-tag">WEBSITE LINK ↗</span>
-            <span class="link-card-url">https://valtnet.eu/vecellio/</span>
-          </div>
-        </a>
-        <div class="portfolio-item" data-type="lottie" data-src="projects/progetti_valtnet/vecellio/animazione%20logo.json">
-          <lottie-player src="projects/progetti_valtnet/vecellio/animazione%20logo.json" background="transparent" speed="1" loop autoplay></lottie-player>
-        </div>
-        <div class="portfolio-item" data-type="image" data-src="projects/progetti_valtnet/vecellio/vecellio-progetto-1.png">
-          <img src="projects/progetti_valtnet/vecellio/vecellio-progetto-1.png" alt="Vecellio asset 1" loading="lazy">
-        </div>
-        <div class="portfolio-item" data-type="video" data-src="projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4?v=2">
-          <video src="projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto">
-            <source src="projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4?v=2" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </section>
-
   </main>
 
-  <!-- LIGHTBOX MODAL -->
-  <div class="portfolio-modal" id="portfolioModal" aria-hidden="true">
-    <button class="modal-close-btn" id="modalCloseBtn" aria-label="Chiudi Modal">×</button>
-    <div class="modal-content-wrap">
-      <div class="modal-media-box" id="modalMediaBox"></div>
-    </div>
-  </div>
+  <script>
+  (() => {
+    // ---------- Elenco progetti con formati e ratio originali ----------
+    const RAW_PROJECTS = [
+      // PEDU
+      { name: "Pedu — Website", cat: "Pedu", slug: "pedu-website", type: "link", link: "https://dev.pedu-original.com/", ratio: 1.5 },
+      { name: "Pedu — Asset 01", cat: "Pedu", slug: "pedu-01", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-1.gif", ratio: 0.563 },
+      { name: "Pedu — Asset 02", cat: "Pedu", slug: "pedu-02", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-2.jpg", ratio: 3.504 },
+      { name: "Pedu — Asset 03", cat: "Pedu", slug: "pedu-03", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-3.jpg", ratio: 1.747 },
+      { name: "Pedu — Asset 04", cat: "Pedu", slug: "pedu-04", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-4.jpg", ratio: 0.8 },
+      { name: "Pedu — Asset 05", cat: "Pedu", slug: "pedu-05", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-5.gif", ratio: 1.0 },
+      { name: "Pedu — Asset 06", cat: "Pedu", slug: "pedu-06", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-6.jpg", ratio: 1.0 },
+      { name: "Pedu — Asset 07", cat: "Pedu", slug: "pedu-07", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-7.webp", ratio: 1.707 },
+      { name: "Pedu — Asset 08", cat: "Pedu", slug: "pedu-08", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-8.png", ratio: 1.016 },
+      { name: "Pedu — Asset 09", cat: "Pedu", slug: "pedu-09", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-9.jpg", ratio: 2.27 },
 
-  <!-- FIXED BOTTOM LEFT FOOTER -->
-  <div class="fixed-bottom-left">
-    <span id="privacyLink">© 2025</span>
-    <a href="#" id="privacyLinkDesktop">Privacy policy</a>
-  </div>
+      // RASELLI
+      { name: "Raselli — Visual 01", cat: "Raselli", slug: "raselli-01", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-1.jpg", ratio: 2.647 },
+      { name: "Raselli — Visual 02", cat: "Raselli", slug: "raselli-02", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-2.jpeg", ratio: 1.414 },
+      { name: "Raselli — Visual 03", cat: "Raselli", slug: "raselli-03", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-3.jpeg", ratio: 1.414 },
+      { name: "Raselli — Visual 04", cat: "Raselli", slug: "raselli-04", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-4.jpeg", ratio: 1.414 },
+      { name: "Raselli — Visual 05", cat: "Raselli", slug: "raselli-05", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-5.jpg", ratio: 1.5 },
+      { name: "Raselli — Visual 06", cat: "Raselli", slug: "raselli-06", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-6.png", ratio: 3.4 },
+      { name: "Raselli — Video 01", cat: "Raselli", slug: "raselli-07", type: "video", src: "projects/progetti_valtnet/raselli/raselli-progetto-7.mp4", ratio: 1.777 },
+      { name: "Raselli — Video 02", cat: "Raselli", slug: "raselli-08", type: "video", src: "projects/progetti_valtnet/raselli/raselli-progetto-8.mp4", ratio: 1.777 },
 
-  <!-- JS Scripts -->
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/portfolio.js"></script>
+      // VALTNET
+      { name: "Valtnet — Website", cat: "Valtnet", slug: "valtnet-website", type: "link", link: "https://valtnet.com/", ratio: 1.5 },
+      { name: "Valtnet — Graphic Design", cat: "Valtnet", slug: "valtnet-lottie-1", type: "lottie", lottieId: "graphic-design", ratio: 1.343 },
+      { name: "Valtnet — Media Library", cat: "Valtnet", slug: "valtnet-lottie-2", type: "lottie", lottieId: "media-library", ratio: 1.343 },
+      { name: "Valtnet — Strategia", cat: "Valtnet", slug: "valtnet-lottie-3", type: "lottie", lottieId: "strategia", ratio: 1.343 },
+      { name: "Valtnet — Branding", cat: "Valtnet", slug: "valtnet-lottie-4", type: "lottie", lottieId: "branding", ratio: 1.343 },
+      { name: "Valtnet — Web", cat: "Valtnet", slug: "valtnet-lottie-5", type: "lottie", lottieId: "web", ratio: 1.343 },
+      { name: "Valtnet — Video Showcase", cat: "Valtnet", slug: "valtnet-video", type: "video", src: "projects/progetti_valtnet/valtnet/valtnet-progetto.mp4", ratio: 1.777 },
+
+      // VECELLIO
+      { name: "Vecellio — Website", cat: "Vecellio", slug: "vecellio-website", type: "link", link: "https://valtnet.eu/vecellio/", ratio: 1.5 },
+      { name: "Vecellio — Logo Motion", cat: "Vecellio", slug: "vecellio-lottie", type: "lottie", lottieId: "vecellio-logo", ratio: 1.0 },
+      { name: "Vecellio — Visual 01", cat: "Vecellio", slug: "vecellio-img", type: "image", src: "projects/progetti_valtnet/vecellio/vecellio-progetto-1.png", ratio: 0.724 },
+      { name: "Vecellio — Video 02", cat: "Vecellio", slug: "vecellio-video", type: "video", src: "projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4", ratio: 1.777 }
+    ];
+
+    // Rimescolamento casuale Fisher-Yates
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    const PROJECTS = shuffleArray(RAW_PROJECTS);
+
+    const N = PROJECTS.length;
+    const SLOTS = N * 2; // 58 slot: sufficienti per loop continuo, dimezza carico DOM
+    const TILT = -48;
+    const BASE_SPEED = 0.38;
+    const NEAR_PX = 200;
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const hero = document.getElementById("hero");
+    const stack = document.getElementById("stack");
+    const metaCat = document.getElementById("metaCat");
+    const metaName = document.getElementById("metaName");
+
+    // ---------- Preloading completo e decodifica preventiva in memoria ----------
+    async function preloadAllAssets() {
+      const progressEl = document.getElementById("preloaderProgress");
+      let count = 0;
+      const total = PROJECTS.length;
+
+      function step() {
+        count++;
+        const pct = Math.min(100, Math.round((count / total) * 100));
+        if (progressEl) progressEl.textContent = pct + "%";
+      }
+
+      const tasks = PROJECTS.map(p => {
+        if (p.type === "image" && p.src) {
+          return new Promise(resolve => {
+            const img = new Image();
+            img.src = p.src;
+            if (img.decode) {
+              img.decode().then(() => { step(); resolve(); }).catch(() => { step(); resolve(); });
+            } else {
+              img.onload = img.onerror = () => { step(); resolve(); };
+            }
+          });
+        } else if (p.type === "video" && p.src) {
+          return new Promise(resolve => {
+            const vid = document.createElement("video");
+            vid.preload = "auto";
+            vid.muted = true;
+            let resolved = false;
+            const done = () => {
+              if (!resolved) {
+                resolved = true;
+                step();
+                resolve();
+              }
+            };
+            vid.onloadeddata = done;
+            vid.onerror = done;
+            setTimeout(done, 1500); // timeout di sicurezza per video
+            vid.src = p.src;
+          });
+        } else {
+          step();
+          return Promise.resolve();
+        }
+      });
+
+      // Timeout massimo di sicurezza
+      const maxTimeout = new Promise(resolve => setTimeout(resolve, 4000));
+      await Promise.race([Promise.all(tasks), maxTimeout]);
+    }
+
+    // ---------- Costruzione schede ----------
+    function buildCardContent(p) {
+      if (p.type === "video") {
+        return `<div class="card-media">
+          <video src="${p.src}" muted loop playsinline webkit-playsinline preload="auto"></video>
+        </div>`;
+      }
+      if (p.type === "lottie") {
+        return `<div class="card-media lottie-container" data-lottie-id="${p.lottieId}"></div>`;
+      }
+      if (p.type === "link") {
+        return `<div class="card-link-box">
+          <span class="link-badge">WEBSITE ↗</span>
+          <span class="link-title">${p.cat}</span>
+          <span class="link-url">${p.link.replace(/^https?:\/\//, '')}</span>
+        </div>`;
+      }
+      return `<div class="card-media">
+        <img src="${p.src}" alt="${p.name}" loading="eager" decoding="async">
+      </div>`;
+    }
+
+    const scene = document.createElement("div");
+    scene.className = "scene";
+    stack.appendChild(scene);
+    const cards = [];
+    const lottieAnims = [];
+
+    for (let i = 0; i < SLOTS; i++) {
+      const p = PROJECTS[i % N];
+      const a = document.createElement("a");
+      a.className = "card";
+      a.href = "#" + p.slug;
+      a.dataset.slot = i;
+      a.setAttribute("aria-label", `${p.name}, ${p.cat}`);
+      if (i >= N) { a.tabIndex = -1; a.setAttribute("aria-hidden", "true"); }
+      a.innerHTML = buildCardContent(p);
+      scene.appendChild(a);
+      cards.push(a);
+    }
+
+    // Inizializza animazioni Lottie locali
+    function initLotties() {
+      if (!window.lottie || !window.VALTNET_LOTTIE) return;
+      cards.forEach((card, idx) => {
+        const container = card.querySelector(".lottie-container");
+        if (container && !container.hasAttribute("data-loaded")) {
+          container.setAttribute("data-loaded", "true");
+          const id = container.dataset.lottieId;
+          const animData = window.VALTNET_LOTTIE[id];
+          if (animData) {
+            const anim = window.lottie.loadAnimation({
+              container: container,
+              renderer: "svg",
+              loop: true,
+              autoplay: false, // controllato in base alla vicinanza
+              animationData: animData
+            });
+            lottieAnims[idx] = anim;
+          }
+        }
+      });
+    }
+
+    // ---------- Dimensioni e Prospettiva 3D ----------
+    let W, H, P, DY, DZ, Y0, SP, FRONT_Y, FRONT_Z, BACK_Y, BACK_Z, LIFT_Z, STACK_H;
+    const cardW = new Float32Array(SLOTS);
+    const cardH = new Float32Array(SLOTS);
+    const cardSelW = new Float32Array(SLOTS);
+    const cardSelH = new Float32Array(SLOTS);
+
+    function measure() {
+      const vw = innerWidth;
+      const small = vw <= 700;
+      W = small ? Math.min(vw * 0.84, 440) : Math.min(600, vw * 0.44, hero.clientHeight * 0.72);
+      H = W * 0.625;
+      const targetArea = W * H;
+
+      P = W * 4.3;
+      DZ = W * 0.143;
+      DY = W * 0.071;
+      Y0 = H * 0.55;
+      SP = W * 0.12;
+      const sinT = Math.abs(Math.sin(TILT * Math.PI / 180));
+      FRONT_Z = DZ * 0.4;
+      FRONT_Y = H * 0.3;
+      BACK_Z = -H * sinT * 0.95;
+      BACK_Y = -H * 0.12;
+      LIFT_Z = DZ * 0.5;
+
+      STACK_H = stack.clientHeight;
+      const maxSelW = small ? vw * 0.94 : Math.min(vw * 0.86, 1200);
+      const maxSelH = small ? (STACK_H - 100) : (STACK_H - 120);
+
+      for (let i = 0; i < SLOTS; i++) {
+        const p = PROJECTS[i % N];
+        const r = p.ratio || 1.6;
+        const rClamp = Math.max(0.55, Math.min(3.4, r));
+
+        let ch = Math.sqrt(targetArea / rClamp);
+        let cw = ch * rClamp;
+
+        if (small && cw > vw * 0.88) {
+          cw = vw * 0.88;
+          ch = cw / rClamp;
+        }
+
+        cardW[i] = cw;
+        cardH[i] = ch;
+
+        if (maxSelW / maxSelH > r) {
+          cardSelH[i] = maxSelH;
+          cardSelW[i] = maxSelH * r;
+        } else {
+          cardSelW[i] = maxSelW;
+          cardSelH[i] = maxSelW / r;
+        }
+
+        const c = cards[i];
+        c.style.width = cw.toFixed(1) + "px";
+        c.style.height = ch.toFixed(1) + "px";
+        c.style.left = `calc(50% - ${(cw / 2).toFixed(1)}px)`;
+        c.style.marginTop = (-ch / 2).toFixed(1) + "px";
+      }
+
+      hero.style.setProperty("--w", W + "px");
+      hero.style.setProperty("--h", H + "px");
+      stack.style.perspective = P + "px";
+      stack.style.perspectiveOrigin = `50% ${-(W * 1.25)}px`;
+    }
+    measure();
+    addEventListener("resize", measure);
+
+    // ---------- Stato ----------
+    let pos = 0, target = 0, speed = reduceMotion ? 0 : BASE_SPEED;
+    let hovered = -1;
+    const open = new Float32Array(SLOTS);
+    const mouse = { x: -9999, y: -9999, inside: false, type: "mouse" };
+    let touchHold = false, resumeTimer = null;
+    const sel = new Float32Array(SLOTS);
+    const sized = new Uint8Array(SLOTS);
+    const ts = new Float32Array(SLOTS);
+    const openV = new Float32Array(SLOTS), selV = new Float32Array(SLOTS);
+    let posV = 0;
+    let selected = -1, candSlot = -2, candT = 0;
+
+    const wrap = (v) => { const h = SLOTS / 2; return ((((v + h) % SLOTS) + SLOTS) % SLOTS) - h; };
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const damp = (k, dt) => 1 - Math.exp(-k * dt);
+
+    // ---------- Etichetta laterale ----------
+    let shownProject = -2;
+    function swapText(el, text) {
+      if (el.textContent === text) return;
+      el.textContent = text;
+      el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 420, easing: "cubic-bezier(.2,.7,.2,1)" });
+    }
+    function updateMeta() {
+      const p = hovered >= 0 ? hovered % N : -1;
+      if (p === shownProject) return;
+      shownProject = p;
+      if (p < 0) {
+        swapText(metaCat, "Indice");
+        swapText(metaName, "Archivio progetti");
+      } else {
+        swapText(metaCat, PROJECTS[p].cat);
+        swapText(metaName, PROJECTS[p].name);
+      }
+    }
+
+    // ---------- Selezione Card ----------
+    function select(slot) {
+      selected = slot;
+      hovered = slot;
+      const v = cards[slot].querySelector("video");
+      if (v) v.play().catch(() => {});
+    }
+    function close() {
+      if (selected < 0) return;
+      selected = -1;
+      candSlot = -2;
+      const a = document.activeElement;
+      if (a && a.closest && a.closest(".card")) a.blur();
+      if (mouse.type !== "mouse") {
+        hovered = -1;
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(() => { touchHold = false; }, 1200);
+      }
+    }
+    addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+    // ---------- Input: Mouse ----------
+    addEventListener("pointermove", (e) => {
+      mouse.type = e.pointerType;
+      if (e.pointerType !== "mouse") return;
+      mouse.x = e.clientX; mouse.y = e.clientY; mouse.inside = true;
+    }, { passive: true });
+    addEventListener("pointerdown", (e) => {
+      mouse.type = e.pointerType;
+      if (e.pointerType !== "mouse") mouse.inside = false;
+    }, { capture: true, passive: true });
+    document.addEventListener("pointerleave", () => { mouse.inside = false; });
+    addEventListener("blur", () => { mouse.inside = false; });
+    stack.addEventListener("mousedown", (e) => e.preventDefault());
+
+    // Rotella
+    stack.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      if (selected >= 0) return;
+      let d = e.deltaY;
+      if (e.deltaMode === 1) d *= 16; else if (e.deltaMode === 2) d *= innerHeight;
+      target += d / SP * 0.55;
+    }, { passive: false });
+
+    // ---------- Input: Touch ----------
+    let drag = null;
+    stack.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse") return;
+      touchHold = true;
+      clearTimeout(resumeTimer);
+      drag = { id: e.pointerId, y0: e.clientY, y: e.clientY, t: performance.now(), v: 0, moved: 0 };
+      stack.setPointerCapture(e.pointerId);
+    });
+    stack.addEventListener("pointermove", (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const now = performance.now(), dy = e.clientY - drag.y;
+      if (selected < 0) {
+        target -= dy / SP;
+        drag.v = 0.8 * drag.v + 0.2 * (dy / Math.max(1, now - drag.t));
+      }
+      drag.y = e.clientY; drag.t = now; drag.moved += Math.abs(dy);
+    });
+    const endDrag = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (drag.moved < 8) {
+        const el = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card");
+        if (el) {
+          const slot = +el.dataset.slot;
+          selected === slot ? close() : select(slot);
+        } else close();
+      } else if (selected < 0) {
+        target -= drag.v * 260 / SP;
+        hovered = -1;
+      }
+      drag = null;
+      if (selected < 0 && hovered < 0) resumeTimer = setTimeout(() => { touchHold = false; }, 1800);
+    };
+    stack.addEventListener("pointerup", endDrag);
+    stack.addEventListener("pointercancel", endDrag);
+    hero.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse" && selected >= 0 && !e.target.closest(".stack")) close();
+    });
+
+    // ---------- Click ----------
+    hero.addEventListener("click", (e) => {
+      const el = e.target.closest(".card");
+      if (el) e.preventDefault();
+      if (mouse.type !== "mouse" && e.detail !== 0) return;
+      if (el) {
+        const slot = +el.dataset.slot;
+        if (selected === slot) {
+          const p = PROJECTS[slot % N];
+          if (p.type === "link" && p.link) {
+            window.open(p.link, "_blank", "noopener");
+          } else {
+            close();
+          }
+        } else {
+          select(slot);
+        }
+      } else if (selected >= 0) {
+        close();
+      }
+    });
+
+    // Focus tastiera
+    stack.addEventListener("focusin", (e) => {
+      const el = e.target.closest(".card"); if (!el) return;
+      const slot = +el.dataset.slot;
+      if (selected >= 0) { select(slot); return; }
+      hovered = slot; target = pos + wrap(slot - pos);
+    });
+    stack.addEventListener("focusout", () => {
+      if (selected < 0 && (mouse.type !== "mouse" || !mouse.inside)) hovered = -1;
+    });
+
+    // ---------- Loop di Animazione a 60 FPS ottimizzato ----------
+    const ease = (v) => v * v * v * (v * (v * 6 - 15) + 10);
+    const spring = (x, v, goal, w, dt) => {
+      v += (-w * w * (x - goal) - 2 * w * v) * dt;
+      x += v * dt;
+      return [x, v];
+    };
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      const hr = hero.getBoundingClientRect();
+      const sr = stack.getBoundingClientRect();
+      const hasSel = selected >= 0;
+
+      // 1) Prossimità mouse
+      let near = 0;
+      if (!hasSel && mouse.type === "mouse" && mouse.inside && mouse.y >= hr.top && mouse.y <= hr.bottom) {
+        const dx = Math.max(sr.left - mouse.x, 0, mouse.x - sr.right);
+        near = clamp(1 - dx / NEAR_PX, 0, 1);
+        near = near * near * (3 - 2 * near);
+      }
+
+      // 2) Hover intention
+      if (hasSel) {
+        hovered = selected;
+        candSlot = -2;
+      } else if (mouse.type === "mouse" && !drag && document.activeElement?.closest?.(".card") == null) {
+        let slot = -1;
+        if (mouse.inside && mouse.y >= hr.top && mouse.y <= hr.bottom) {
+          const el = document.elementFromPoint(mouse.x, mouse.y);
+          const c = el && el.closest(".card");
+          if (c) slot = +c.dataset.slot;
+        }
+        if (slot !== candSlot) { candSlot = slot; candT = now; }
+        if (slot !== hovered && now - candT > (slot < 0 ? 170 : 90)) hovered = slot;
+      }
+
+      // 3) Velocità loop
+      const paused = reduceMotion || touchHold || hovered >= 0 || hasSel || document.hidden;
+      const targetSpeed = paused ? 0 : BASE_SPEED * (1 - near);
+      speed += (targetSpeed - speed) * damp(targetSpeed < speed ? 2.0 : 1.1, dt);
+      target += speed * dt;
+      [pos, posV] = spring(pos, posV, target, 4.2, dt);
+
+      // 4) Apertura e ingrandimento
+      let m1 = 0, m2 = 0, idx1 = -1;
+      for (let i = 0; i < SLOTS; i++) {
+        let r = spring(open[i], openV[i], i === hovered ? 1 : 0, 6, dt);
+        open[i] = clamp(r[0], 0, 1); openV[i] = r[1];
+        r = spring(sel[i], selV[i], i === selected ? 1 : 0, 5, dt);
+        sel[i] = clamp(r[0], 0, 1); selV[i] = r[1];
+        const s = sel[i];
+        if (s > m1) { m2 = m1; m1 = s; idx1 = i; } else if (s > m2) m2 = s;
+      }
+
+      // 5) Posizionamento, rendering e gestione intelligente dei media
+      for (let i = 0; i < SLOTS; i++) ts[i] = wrap(i - pos);
+      for (let i = 0; i < SLOTS; i++) {
+        const t = ts[i];
+        const absT = Math.abs(t);
+        const c = cards[i];
+
+        // Se la card è completamente fuori campo (> 7 posizioni), virtualizza per azzerare carico GPU
+        if (absT > 7.5 && i !== selected) {
+          if (c.style.visibility !== "hidden") {
+            c.style.visibility = "hidden";
+            // ferma video se presente
+            const v = c.querySelector("video");
+            if (v && !v.paused) v.pause();
+            // ferma lottie se presente
+            if (lottieAnims[i]) lottieAnims[i].pause();
+          }
+          continue;
+        }
+
+        if (c.style.visibility === "hidden") {
+          c.style.visibility = "visible";
+        }
+
+        let offY = 0, offZ = 0;
+        for (let k = 0; k < SLOTS; k++) {
+          if (k === i || open[k] < 0.002) continue;
+          const d = wrap(t - ts[k]);
+          const g = clamp(open[k] * 2.4, 0, 1);
+          const e = (g * g * (3 - 2 * g)) * clamp(Math.abs(d) * 1.5, 0, 1);
+          if (d > 0) { offY += FRONT_Y * e; offZ += FRONT_Z * e; }
+          else { offY += BACK_Y * e; offZ += BACK_Z * e; }
+        }
+        const oe = ease(open[i]);
+        let y = Y0 + t * DY + offY + oe * H * 0.12;
+        let z = t * DZ + offZ + oe * LIFT_Z;
+        let rot = TILT * (1 - oe);
+        const edge = SLOTS / 2 - absT;
+        let op = clamp(edge / 1.5, 0, 1);
+
+        const others = i === idx1 ? m2 : m1;
+        op *= 1 - ease(clamp(others * 2.2, 0, 1));
+
+        const ue = ease(sel[i]);
+        if (ue > 0.0005) {
+          const curW = cardW[i] + (cardSelW[i] - cardW[i]) * ue;
+          const curH = cardH[i] + (cardSelH[i] - cardH[i]) * ue;
+          y *= (1 - ue);
+          z *= (1 - ue);
+          rot *= (1 - ue);
+          op += (1 - op) * ue;
+          c.style.width = curW.toFixed(1) + "px";
+          c.style.height = curH.toFixed(1) + "px";
+          c.style.left = `calc(50% - ${(curW / 2).toFixed(1)}px)`;
+          c.style.marginTop = (-curH / 2).toFixed(1) + "px";
+          sized[i] = 1;
+        } else if (sized[i]) {
+          c.style.width = cardW[i].toFixed(1) + "px";
+          c.style.height = cardH[i].toFixed(1) + "px";
+          c.style.left = `calc(50% - ${(cardW[i] / 2).toFixed(1)}px)`;
+          c.style.marginTop = (-cardH[i] / 2).toFixed(1) + "px";
+          sized[i] = 0;
+        }
+
+        c.style.transform = `translate3d(0, ${y.toFixed(2)}px, ${z.toFixed(2)}px) rotateX(${rot.toFixed(2)}deg)`;
+        c.style.opacity = op.toFixed(3);
+        c.classList.toggle("is-open", open[i] > 0.5 || ue > 0.05);
+        c.classList.toggle("is-selected", i === selected);
+
+        // Controllo riproduzione intelligente (solo media vicini/visibili)
+        const isNearFront = (absT < 3.2 && op > 0.12) || i === selected;
+        const v = c.querySelector("video");
+        if (v) {
+          if (isNearFront) {
+            if (v.paused) v.play().catch(() => {});
+          } else {
+            if (!v.paused) v.pause();
+          }
+        }
+        if (lottieAnims[i]) {
+          if (isNearFront) {
+            if (lottieAnims[i].isPaused) lottieAnims[i].play();
+          } else {
+            if (!lottieAnims[i].isPaused) lottieAnims[i].pause();
+          }
+        }
+      }
+      scene.classList.toggle("has-sel", hasSel);
+
+      updateMeta();
+      requestAnimationFrame(frame);
+    }
+
+    // Inizializza lottie, esegue preload completo asincrono e rivela la scena al 100%
+    initLotties();
+    preloadAllAssets().then(() => {
+      setTimeout(() => {
+        document.body.classList.add("preloader-done");
+        requestAnimationFrame(frame);
+      }, 150);
+    });
+  })();
+  </script>
 </body>
-
 </html>
