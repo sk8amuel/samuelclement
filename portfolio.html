@@ -285,6 +285,13 @@
       letter-spacing: -.01em;
       color: var(--fg);
     }
+    .meta .desc {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      max-width: 260px;
+      margin-top: 2px;
+    }
     .swap { display: block; }
 
     @media (max-width: 700px) {
@@ -341,6 +348,7 @@
       <div class="meta meta-left" aria-live="polite">
         <span class="small mono"><span class="swap" id="metaCat">Indice</span></span>
         <span class="big"><span class="swap" id="metaName">Archivio progetti</span></span>
+        <span class="desc"><span class="swap" id="metaDesc">Visual design, motion and photography.</span></span>
       </div>
       <div class="stack" id="stack"></div>
     </section>
@@ -350,467 +358,67 @@
   (() => {
     // ---------- Elenco progetti con formati e ratio originali ----------
     const RAW_PROJECTS = [
-      {
-            "name": "Pedu — Website",
-            "cat": "Pedu",
-            "slug": "pedu-website",
-            "type": "link",
-            "link": "https://pedu-original.com/",
-            "ratio": 1.5
-      },
-      {
-            "name": "Vecellio Legno — Website",
-            "cat": "Vecellio Legno",
-            "slug": "vecellio-legno-website",
-            "type": "link",
-            "link": "https://vecelliolegno.ch/",
-            "ratio": 1.5
-      },
-      {
-            "name": "Valtnet — Website",
-            "cat": "Valtnet",
-            "slug": "valtnet-website",
-            "type": "link",
-            "link": "https://valtnet.ch/",
-            "ratio": 1.5
-      },
-      {
-            "name": "Valtnet — Graphic Design",
-            "cat": "Valtnet",
-            "slug": "valtnet-graphic-design",
-            "type": "lottie",
-            "lottieId": "graphic-design",
-            "ratio": 1.343
-      },
-      {
-            "name": "Valtnet — Media Library",
-            "cat": "Valtnet",
-            "slug": "valtnet-media-library",
-            "type": "lottie",
-            "lottieId": "media-library",
-            "ratio": 1.343
-      },
-      {
-            "name": "Valtnet — Strategia",
-            "cat": "Valtnet",
-            "slug": "valtnet-strategia",
-            "type": "lottie",
-            "lottieId": "strategia",
-            "ratio": 1.343
-      },
-      {
-            "name": "Valtnet — Branding",
-            "cat": "Valtnet",
-            "slug": "valtnet-branding",
-            "type": "lottie",
-            "lottieId": "branding",
-            "ratio": 1.343
-      },
-      {
-            "name": "Valtnet — Web",
-            "cat": "Valtnet",
-            "slug": "valtnet-web",
-            "type": "lottie",
-            "lottieId": "web",
-            "ratio": 1.343
-      },
-      {
-            "name": "Vecellio Legno — Logo Motion",
-            "cat": "Vecellio Legno",
-            "slug": "vecellio-legno-logo-motion",
-            "type": "lottie",
-            "lottieId": "vecellio-logo",
-            "ratio": 1
-      },
-      {
-            "name": "Editorial — 03",
-            "cat": "Visual",
-            "slug": "editorial-03",
-            "type": "image",
-            "src": "projects/progetti_valtnet/3.jpg",
-            "ratio": 0.75
-      },
-      {
-            "name": "Arizona — Poster",
-            "cat": "Arizona",
-            "slug": "arizona-poster",
-            "type": "image",
-            "src": "projects/progetti_valtnet/ARIZONA.jpg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Cards Motion 3D",
-            "cat": "Motion",
-            "slug": "cards-motion-3d",
-            "type": "video",
-            "src": "projects/progetti_valtnet/Animazione cards-optimised.mp4",
-            "poster": "projects/progetti_valtnet/Animazione cards-optimised-poster.webp",
-            "ratio": 1.607
-      },
-      {
-            "name": "Pastiglie Leone — Presentation",
-            "cat": "Pastiglie Leone",
-            "slug": "pastiglie-leone-presentation",
-            "type": "video",
-            "src": "projects/progetti_valtnet/DEF presentazione leone-LQ.mp4",
-            "poster": "projects/progetti_valtnet/DEF presentazione leone-LQ-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "Logo Animation",
-            "cat": "Motion",
-            "slug": "logo-animation",
-            "type": "video",
-            "src": "projects/progetti_valtnet/Logo animation-LQ.mp4",
-            "poster": "projects/progetti_valtnet/Logo animation-LQ-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "App Design — Screenshot 2026-11-0",
-            "cat": "Digital",
-            "slug": "app-design-screenshot-2026-11-0",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot 2026-11-06 at 22.32.12-LQ.png",
-            "ratio": 1.621
-      },
-      {
-            "name": "App Design — Screenshot 2026-11-0",
-            "cat": "Digital",
-            "slug": "app-design-screenshot-2026-11-0",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot 2026-11-06 at 23.15.13.png",
-            "ratio": 0.719
-      },
-      {
-            "name": "App Design — Screenshot 2026-11-0",
-            "cat": "Digital",
-            "slug": "app-design-screenshot-2026-11-0",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot 2026-11-06 at 23.16.07.png",
-            "ratio": 0.815
-      },
-      {
-            "name": "Tavola Riassuntiva 2100",
-            "cat": "Editorial",
-            "slug": "tavola-riassuntiva-2100",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Tavola Riassuntiva_2100.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Knoted — Tavola Riassuntiva",
-            "cat": "Knoted",
-            "slug": "knoted-tavola-riassuntiva",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Tavola Riassuntiva_Knoted.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Knoted — App Architecture",
-            "cat": "Knoted",
-            "slug": "knoted-app-architecture",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot-2026-1.png",
-            "ratio": 1.465
-      },
-      {
-            "name": "Cumpa — Interview Layout",
-            "cat": "Cumpa",
-            "slug": "cumpa-interview-layout",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot-2026-2.png",
-            "ratio": 1.408
-      },
-      {
-            "name": "Knoted — Visual Composition",
-            "cat": "Knoted",
-            "slug": "knoted-visual-composition",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot-2026-3.png",
-            "ratio": 0.836
-      },
-      {
-            "name": "Knoted — Typography System",
-            "cat": "Knoted",
-            "slug": "knoted-typography-system",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot-2026-4.png",
-            "ratio": 1.47
-      },
-      {
-            "name": "Knoted — Brand Identity",
-            "cat": "Knoted",
-            "slug": "knoted-brand-identity",
-            "type": "image",
-            "src": "projects/progetti_valtnet/Screenshot-2026-5.png",
-            "ratio": 1.47
-      },
-      {
-            "name": "Rooftop — Shot 19",
-            "cat": "Rooftop",
-            "slug": "rooftop-shot-19",
-            "type": "image",
-            "src": "projects/progetti_valtnet/foto rooftop-19_2000.jpg",
-            "ratio": 1.333
-      },
-      {
-            "name": "Rooftop — Shot 20",
-            "cat": "Rooftop",
-            "slug": "rooftop-shot-20",
-            "type": "image",
-            "src": "projects/progetti_valtnet/foto rooftop-20_2000.jpg",
-            "ratio": 1.333
-      },
-      {
-            "name": "Rooftop — Shot 04",
-            "cat": "Rooftop",
-            "slug": "rooftop-shot-04",
-            "type": "image",
-            "src": "projects/progetti_valtnet/foto rooftop-4_2000.jpg",
-            "ratio": 1.333
-      },
-      {
-            "name": "Rooftop — Shot 06",
-            "cat": "Rooftop",
-            "slug": "rooftop-shot-06",
-            "type": "image",
-            "src": "projects/progetti_valtnet/foto rooftop-6_2000.jpg",
-            "ratio": 1.333
-      },
-      {
-            "name": "Giona — Poster",
-            "cat": "Giona",
-            "slug": "giona-poster",
-            "type": "image",
-            "src": "projects/progetti_valtnet/giona 2-LQ.jpg",
-            "ratio": 0.667
-      },
-      {
-            "name": "Lokomotive — Artwork",
-            "cat": "Lokomotive",
-            "slug": "lokomotive-artwork",
-            "type": "image",
-            "src": "projects/progetti_valtnet/lokomotive.jpg",
-            "ratio": 1.668
-      },
-      {
-            "name": "Mr Money — Animation",
-            "cat": "Motion",
-            "slug": "mr-money-animation",
-            "type": "video",
-            "src": "projects/progetti_valtnet/mr-money.mp4",
-            "poster": "projects/progetti_valtnet/mr-money-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "Pedu — Asset 1",
-            "cat": "Pedu",
-            "slug": "pedu-asset-1",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-1.gif",
-            "ratio": 0.563
-      },
-      {
-            "name": "Pedu — Asset 2",
-            "cat": "Pedu",
-            "slug": "pedu-asset-2",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-2.jpg",
-            "ratio": 3.504
-      },
-      {
-            "name": "Pedu — Asset 3",
-            "cat": "Pedu",
-            "slug": "pedu-asset-3",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-3.jpg",
-            "ratio": 1.747
-      },
-      {
-            "name": "Pedu — Asset 4",
-            "cat": "Pedu",
-            "slug": "pedu-asset-4",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-4.jpg",
-            "ratio": 0.8
-      },
-      {
-            "name": "Pedu — Asset 5",
-            "cat": "Pedu",
-            "slug": "pedu-asset-5",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-5.gif",
-            "ratio": 1
-      },
-      {
-            "name": "Pedu — Asset 6",
-            "cat": "Pedu",
-            "slug": "pedu-asset-6",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-6.jpg",
-            "ratio": 1
-      },
-      {
-            "name": "Pedu — Asset 7",
-            "cat": "Pedu",
-            "slug": "pedu-asset-7",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-7.webp",
-            "ratio": 1.707
-      },
-      {
-            "name": "Pedu — Asset 8",
-            "cat": "Pedu",
-            "slug": "pedu-asset-8",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-8.png",
-            "ratio": 1.016
-      },
-      {
-            "name": "Pedu — Asset 9",
-            "cat": "Pedu",
-            "slug": "pedu-asset-9",
-            "type": "image",
-            "src": "projects/progetti_valtnet/pedu/pedu-progetto-9.jpg",
-            "ratio": 2.27
-      },
-      {
-            "name": "Pedu — Brand Book",
-            "cat": "Pedu",
-            "slug": "pedu-brand-book",
-            "type": "video",
-            "src": "projects/progetti_valtnet/Comp 1-LQ.mp4",
-            "poster": "projects/progetti_valtnet/Comp 1-LQ-poster.webp",
-            "ratio": 1.776
-      },
-      {
-            "name": "Posterzz — Artwork",
-            "cat": "Posterzz",
-            "slug": "posterzz-artwork",
-            "type": "image",
-            "src": "projects/progetti_valtnet/posterzz-LQ.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Raselli — Visual 1",
-            "cat": "Raselli",
-            "slug": "raselli-visual-1",
-            "type": "image",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-1.jpg",
-            "ratio": 2.647
-      },
-      {
-            "name": "Raselli — Visual 2",
-            "cat": "Raselli",
-            "slug": "raselli-visual-2",
-            "type": "image",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-2.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Raselli — Visual 3",
-            "cat": "Raselli",
-            "slug": "raselli-visual-3",
-            "type": "image",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-3.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Raselli — Visual 4",
-            "cat": "Raselli",
-            "slug": "raselli-visual-4",
-            "type": "image",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-4.jpeg",
-            "ratio": 1.414
-      },
-      {
-            "name": "Raselli — Visual 5",
-            "cat": "Raselli",
-            "slug": "raselli-visual-5",
-            "type": "image",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-5.jpg",
-            "ratio": 1.5
-      },
-      {
-            "name": "Raselli — Video 01",
-            "cat": "Raselli",
-            "slug": "raselli-video-01",
-            "type": "video",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-7.mp4",
-            "poster": "projects/progetti_valtnet/raselli/raselli-progetto-7-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "Raselli — Video 02",
-            "cat": "Raselli",
-            "slug": "raselli-video-02",
-            "type": "video",
-            "src": "projects/progetti_valtnet/raselli/raselli-progetto-8.mp4",
-            "poster": "projects/progetti_valtnet/raselli/raselli-progetto-8-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "Rocca Grande — Still Life",
-            "cat": "Rocca Grande",
-            "slug": "rocca-grande-still-life",
-            "type": "image",
-            "src": "projects/progetti_valtnet/rocca-grande.jpg",
-            "ratio": 1.5
-      },
-      {
-            "name": "Sketch Struttura",
-            "cat": "Concept",
-            "slug": "sketch-struttura",
-            "type": "image",
-            "src": "projects/progetti_valtnet/sketch-struttura.png",
-            "ratio": 1.664
-      },
-      {
-            "name": "Sketch 2100",
-            "cat": "Concept",
-            "slug": "sketch-2100",
-            "type": "image",
-            "src": "projects/progetti_valtnet/sketch_2100.png",
-            "ratio": 1.821
-      },
-      {
-            "name": "Valtnet — Showcase",
-            "cat": "Valtnet",
-            "slug": "valtnet-showcase",
-            "type": "video",
-            "src": "projects/progetti_valtnet/valtnet/valtnet-progetto.mp4",
-            "poster": "projects/progetti_valtnet/valtnet/valtnet-progetto-poster.webp",
-            "ratio": 1.778
-      },
-      {
-            "name": "Vecellio Legno — Asset 1",
-            "cat": "Vecellio Legno",
-            "slug": "vecellio-legno-asset-1",
-            "type": "image",
-            "src": "projects/progetti_valtnet/vecellio/vecellio-progetto-1.png",
-            "ratio": 0.724
-      },
-      {
-            "name": "Vecellio Legno — Asset 2",
-            "cat": "Vecellio Legno",
-            "slug": "vecellio-legno-asset-2",
-            "type": "video",
-            "src": "projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4",
-            "poster": "projects/progetti_valtnet/vecellio/vecellio-progetto-2-poster.webp",
-            "ratio": 1.778
-      }
-];
-
-    // Rimescolamento casuale Fisher-Yates
-    function shuffleArray(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-    const PROJECTS = shuffleArray(RAW_PROJECTS);
+      // ---------- Pedu ----------
+      { name: "Pedu — Website", cat: "Pedu", slug: "pedu-website", type: "link", link: "https://pedu-original.com/", ratio: 1.5, desc: "Official website for the Pedu brand." },
+      { name: "Pedu — Brand Book", cat: "Pedu", slug: "pedu-brand-book", type: "video", src: "projects/progetti_valtnet/pedu/Comp 1-LQ.mp4", poster: "projects/progetti_valtnet/pedu/Comp 1-LQ-poster.webp", ratio: 1.776, desc: "Animated brand book presenting the Pedu identity." },
+      { name: "Pedu — Photoshoot", cat: "Pedu", slug: "pedu-photoshoot", type: "image", src: "projects/progetti_valtnet/pedu/shooting-pedu.jpg", ratio: 1.5, desc: "Photograph from the Pedu shoot." },
+      { name: "Pedu — Asset 01", cat: "Pedu", slug: "pedu-asset-01", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-1.gif", ratio: 0.563, desc: "Animated asset from the Pedu project." },
+      { name: "Pedu — Asset 02", cat: "Pedu", slug: "pedu-asset-02", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-2.jpg", ratio: 3.504, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 03", cat: "Pedu", slug: "pedu-asset-03", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-3.jpg", ratio: 1.747, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 04", cat: "Pedu", slug: "pedu-asset-04", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-4.jpg", ratio: 0.8, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 05", cat: "Pedu", slug: "pedu-asset-05", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-5.gif", ratio: 1, desc: "Animated asset from the Pedu project." },
+      { name: "Pedu — Asset 06", cat: "Pedu", slug: "pedu-asset-06", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-6.jpg", ratio: 1, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 07", cat: "Pedu", slug: "pedu-asset-07", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-7.webp", ratio: 1.707, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 08", cat: "Pedu", slug: "pedu-asset-08", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-8.png", ratio: 1.016, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — Asset 09", cat: "Pedu", slug: "pedu-asset-09", type: "image", src: "projects/progetti_valtnet/pedu/pedu-progetto-9.jpg", ratio: 2.27, desc: "Visual asset from the Pedu project." },
+      { name: "Pedu — App Design 01", cat: "Pedu", slug: "pedu-app-design-01", type: "image", src: "projects/progetti_valtnet/pedu/Screenshot 2026-11-06 at 22.32.12-LQ.png", ratio: 1.621, desc: "Interface screen from the Pedu project." },
+      { name: "Pedu — App Design 02", cat: "Pedu", slug: "pedu-app-design-02", type: "image", src: "projects/progetti_valtnet/pedu/Screenshot 2026-11-06 at 23.15.13.png", ratio: 0.719, desc: "Interface screen from the Pedu project." },
+      { name: "Pedu — App Design 03", cat: "Pedu", slug: "pedu-app-design-03", type: "image", src: "projects/progetti_valtnet/pedu/Screenshot 2026-11-06 at 23.16.07.png", ratio: 0.815, desc: "Interface screen from the Pedu project." },
+      // ---------- Raselli ----------
+      { name: "Raselli — Visual 01", cat: "Raselli", slug: "raselli-visual-01", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-1.jpg", ratio: 2.647, desc: "Visual asset from the Raselli project." },
+      { name: "Raselli — Visual 02", cat: "Raselli", slug: "raselli-visual-02", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-2.jpeg", ratio: 1.414, desc: "Visual asset from the Raselli project." },
+      { name: "Raselli — Visual 03", cat: "Raselli", slug: "raselli-visual-03", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-3.jpeg", ratio: 1.414, desc: "Visual asset from the Raselli project." },
+      { name: "Raselli — Visual 04", cat: "Raselli", slug: "raselli-visual-04", type: "image", src: "projects/progetti_valtnet/raselli/raselli-progetto-4.jpeg", ratio: 1.414, desc: "Visual asset from the Raselli project." },
+      { name: "Raselli — Video 01", cat: "Raselli", slug: "raselli-video-01", type: "video", src: "projects/progetti_valtnet/raselli/raselli-progetto-7.mp4", poster: "projects/progetti_valtnet/raselli/raselli-progetto-7-poster.webp", ratio: 1.778, desc: "Motion piece for the Raselli project." },
+      { name: "Raselli — Video 02", cat: "Raselli", slug: "raselli-video-02", type: "video", src: "projects/progetti_valtnet/raselli/raselli-progetto-8.mp4", poster: "projects/progetti_valtnet/raselli/raselli-progetto-8-poster.webp", ratio: 1.778, desc: "Motion piece for the Raselli project." },
+      // ---------- School Project ----------
+      { name: "Arizona — Poster", cat: "School Project", slug: "arizona-poster", type: "image", src: "projects/progetti_valtnet/school project/ARIZONA.jpg", ratio: 1.414, desc: "Poster design for the Arizona project." },
+      { name: "Cards Motion — 3D", cat: "School Project", slug: "cards-motion-3d", type: "video", src: "projects/progetti_valtnet/school project/Animazione cards-optimised.mp4", poster: "projects/progetti_valtnet/school project/Animazione cards-optimised-poster.webp", ratio: 1.607, desc: "3D motion study animating a stack of cards." },
+      { name: "Pastiglie Leone — Presentation", cat: "School Project", slug: "pastiglie-leone-presentation", type: "video", src: "projects/progetti_valtnet/school project/DEF presentazione leone-LQ.mp4", poster: "projects/progetti_valtnet/school project/DEF presentazione leone-LQ-poster.webp", ratio: 1.778, desc: "Presentation video for the Pastiglie Leone rebrand." },
+      { name: "Logo Animation", cat: "School Project", slug: "logo-animation", type: "video", src: "projects/progetti_valtnet/school project/Logo animation-LQ.mp4", poster: "projects/progetti_valtnet/school project/Logo animation-LQ-poster.webp", ratio: 1.778, desc: "Animated logo sequence." },
+      { name: "Knoted — App Architecture", cat: "School Project", slug: "knoted-app-architecture", type: "image", src: "projects/progetti_valtnet/school project/Screenshot-2026-1.png", ratio: 1.465, desc: "App architecture overview for the Knoted thesis." },
+      { name: "Cumpa — Interview Layout", cat: "School Project", slug: "cumpa-interview-layout", type: "image", src: "projects/progetti_valtnet/school project/Screenshot-2026-2.png", ratio: 1.408, desc: "Editorial interview layout from Cumpa magazine." },
+      { name: "Knoted — Visual Composition", cat: "School Project", slug: "knoted-visual-composition", type: "image", src: "projects/progetti_valtnet/school project/Screenshot-2026-3.png", ratio: 0.836, desc: "Visual composition study for Knoted." },
+      { name: "Knoted — Typography System", cat: "School Project", slug: "knoted-typography-system", type: "image", src: "projects/progetti_valtnet/school project/Screenshot-2026-4.png", ratio: 1.47, desc: "Typography system for the Knoted identity." },
+      { name: "Knoted — Brand Identity", cat: "School Project", slug: "knoted-brand-identity", type: "image", src: "projects/progetti_valtnet/school project/Screenshot-2026-5.png", ratio: 1.47, desc: "Brand identity exploration for Knoted." },
+      { name: "Tavola Riassuntiva — 2100", cat: "School Project", slug: "tavola-riassuntiva-2100", type: "image", src: "projects/progetti_valtnet/school project/Tavola Riassuntiva_2100.jpeg", ratio: 1.414, desc: "Summary board for the 2100 concept." },
+      { name: "Knoted — Tavola Riassuntiva", cat: "School Project", slug: "knoted-tavola-riassuntiva", type: "image", src: "projects/progetti_valtnet/school project/Tavola Riassuntiva_Knoted.jpeg", ratio: 1.414, desc: "Summary board for the Knoted thesis project." },
+      { name: "Rooftop — Shot 19", cat: "School Project", slug: "rooftop-shot-19", type: "image", src: "projects/progetti_valtnet/school project/foto rooftop-19_2000.jpg", ratio: 1.333, desc: "Photograph from the rooftop series." },
+      { name: "Rooftop — Shot 20", cat: "School Project", slug: "rooftop-shot-20", type: "image", src: "projects/progetti_valtnet/school project/foto rooftop-20_2000.jpg", ratio: 1.333, desc: "Photograph from the rooftop series." },
+      { name: "Rooftop — Shot 04", cat: "School Project", slug: "rooftop-shot-04", type: "image", src: "projects/progetti_valtnet/school project/foto rooftop-4_2000.jpg", ratio: 1.333, desc: "Photograph from the rooftop series." },
+      { name: "Rooftop — Shot 06", cat: "School Project", slug: "rooftop-shot-06", type: "image", src: "projects/progetti_valtnet/school project/foto rooftop-6_2000.jpg", ratio: 1.333, desc: "Photograph from the rooftop series." },
+      { name: "Giona — Poster", cat: "School Project", slug: "giona-poster", type: "image", src: "projects/progetti_valtnet/school project/giona 2-LQ.jpg", ratio: 0.667, desc: "Illustrated poster for Giona." },
+      { name: "Mr Money — Animation", cat: "School Project", slug: "mr-money-animation", type: "video", src: "projects/progetti_valtnet/school project/mr-money.mp4", poster: "projects/progetti_valtnet/school project/mr-money-poster.webp", ratio: 1.778, desc: "Animated character short, Mr Money." },
+      { name: "Posterzz — Artwork", cat: "School Project", slug: "posterzz-artwork", type: "image", src: "projects/progetti_valtnet/school project/posterzz-LQ.jpeg", ratio: 1.414, desc: "Poster artwork experiment." },
+      { name: "Sketch — Struttura", cat: "School Project", slug: "sketch-struttura", type: "image", src: "projects/progetti_valtnet/school project/sketch-struttura.png", ratio: 1.664, desc: "Structural sketch exploring the layout." },
+      { name: "Sketch — 2100", cat: "School Project", slug: "sketch-2100", type: "image", src: "projects/progetti_valtnet/school project/sketch_2100.png", ratio: 1.821, desc: "Concept sketch for the 2100 project." },
+      // ---------- Valtnet ----------
+      { name: "Valtnet — Website", cat: "Valtnet", slug: "valtnet-website", type: "link", link: "https://valtnet.ch/", ratio: 1.5, desc: "Official website for Valtnet." },
+      { name: "Valtnet — Graphic Design", cat: "Valtnet", slug: "valtnet-graphic-design", type: "lottie", lottieId: "graphic-design", ratio: 1.343, desc: "Animated icon from the Valtnet design system." },
+      { name: "Valtnet — Media Library", cat: "Valtnet", slug: "valtnet-media-library", type: "lottie", lottieId: "media-library", ratio: 1.343, desc: "Animated icon from the Valtnet design system." },
+      { name: "Valtnet — Strategia", cat: "Valtnet", slug: "valtnet-strategia", type: "lottie", lottieId: "strategia", ratio: 1.343, desc: "Animated icon from the Valtnet design system." },
+      { name: "Valtnet — Branding", cat: "Valtnet", slug: "valtnet-branding", type: "lottie", lottieId: "branding", ratio: 1.343, desc: "Animated icon from the Valtnet design system." },
+      { name: "Valtnet — Web", cat: "Valtnet", slug: "valtnet-web", type: "lottie", lottieId: "web", ratio: 1.343, desc: "Animated icon from the Valtnet design system." },
+      { name: "Valtnet — Showcase", cat: "Valtnet", slug: "valtnet-showcase", type: "video", src: "projects/progetti_valtnet/valtnet/valtnet-progetto.mp4", poster: "projects/progetti_valtnet/valtnet/valtnet-progetto-poster.webp", ratio: 1.778, desc: "Showcase video for the Valtnet project." },
+      { name: "Lokomotive — Artwork", cat: "Valtnet", slug: "lokomotive-artwork", type: "image", src: "projects/progetti_valtnet/valtnet/lokomotive.jpg", ratio: 1.668, desc: "Artwork from the Lokomotive project." },
+      { name: "Rocca Grande — Still Life", cat: "Valtnet", slug: "rocca-grande-still-life", type: "image", src: "projects/progetti_valtnet/valtnet/rocca-grande.jpg", ratio: 1.5, desc: "Still life photograph for Rocca Grande." },
+      // ---------- Vecellio Legno ----------
+      { name: "Vecellio Legno — Website", cat: "Vecellio Legno", slug: "vecellio-legno-website", type: "link", link: "https://vecelliolegno.ch/", ratio: 1.5, desc: "Official website for Vecellio Legno." },
+      { name: "Vecellio Legno — Logo Motion", cat: "Vecellio Legno", slug: "vecellio-legno-logo-motion", type: "lottie", lottieId: "vecellio-logo", ratio: 1, desc: "Animated logo for Vecellio Legno." },
+      { name: "Vecellio Legno — Asset 01", cat: "Vecellio Legno", slug: "vecellio-legno-asset-01", type: "image", src: "projects/progetti_valtnet/vecellio/vecellio-progetto-1.png", ratio: 0.724, desc: "Visual asset from the Vecellio Legno project." },
+      { name: "Vecellio Legno — Asset 02", cat: "Vecellio Legno", slug: "vecellio-legno-asset-02", type: "video", src: "projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4", poster: "projects/progetti_valtnet/vecellio/vecellio-progetto-2-poster.webp", ratio: 1.778, desc: "Motion asset for the Vecellio Legno project." }
+    ];
+    const PROJECTS = RAW_PROJECTS;
 
     const N = PROJECTS.length;
     const SLOTS = N * 2;
@@ -824,6 +432,7 @@
     const stack = document.getElementById("stack");
     const metaCat = document.getElementById("metaCat");
     const metaName = document.getElementById("metaName");
+    const metaDesc = document.getElementById("metaDesc");
 
     // ---------- Preloading completo e decodifica preventiva in memoria ----------
     async function preloadAllAssets() {
@@ -1100,9 +709,11 @@
       if (p < 0) {
         swapText(metaCat, "Indice");
         swapText(metaName, "Archivio progetti");
+        swapText(metaDesc, "Visual design, motion and photography.");
       } else {
         swapText(metaCat, PROJECTS[p].cat);
         swapText(metaName, PROJECTS[p].name);
+        swapText(metaDesc, PROJECTS[p].desc || "");
       }
     }
 
