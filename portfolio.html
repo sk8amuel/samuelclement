@@ -444,6 +444,7 @@
             "slug": "cards-motion-3d",
             "type": "video",
             "src": "projects/progetti_valtnet/Animazione cards-optimised.mp4",
+            "poster": "projects/progetti_valtnet/Animazione cards-optimised-poster.webp",
             "ratio": 1.607
       },
       {
@@ -451,7 +452,8 @@
             "cat": "Pastiglie Leone",
             "slug": "pastiglie-leone-presentation",
             "type": "video",
-            "src": "projects/progetti_valtnet/DEF presentazione leone-LQ.m4v",
+            "src": "projects/progetti_valtnet/DEF presentazione leone-LQ.mp4",
+            "poster": "projects/progetti_valtnet/DEF presentazione leone-LQ-poster.webp",
             "ratio": 1.778
       },
       {
@@ -460,6 +462,7 @@
             "slug": "logo-animation",
             "type": "video",
             "src": "projects/progetti_valtnet/Logo animation-LQ.mp4",
+            "poster": "projects/progetti_valtnet/Logo animation-LQ-poster.webp",
             "ratio": 1.778
       },
       {
@@ -556,6 +559,7 @@
             "slug": "mr-money-animation",
             "type": "video",
             "src": "projects/progetti_valtnet/mr-money.mp4",
+            "poster": "projects/progetti_valtnet/mr-money-poster.webp",
             "ratio": 1.778
       },
       {
@@ -684,6 +688,7 @@
             "slug": "raselli-video-01",
             "type": "video",
             "src": "projects/progetti_valtnet/raselli/raselli-progetto-7.mp4",
+            "poster": "projects/progetti_valtnet/raselli/raselli-progetto-7-poster.webp",
             "ratio": 1.778
       },
       {
@@ -692,6 +697,7 @@
             "slug": "raselli-video-02",
             "type": "video",
             "src": "projects/progetti_valtnet/raselli/raselli-progetto-8.mp4",
+            "poster": "projects/progetti_valtnet/raselli/raselli-progetto-8-poster.webp",
             "ratio": 1.778
       },
       {
@@ -724,6 +730,7 @@
             "slug": "valtnet-showcase",
             "type": "video",
             "src": "projects/progetti_valtnet/valtnet/valtnet-progetto.mp4",
+            "poster": "projects/progetti_valtnet/valtnet/valtnet-progetto-poster.webp",
             "ratio": 1.778
       },
       {
@@ -740,6 +747,7 @@
             "slug": "vecellio-legno-asset-2",
             "type": "video",
             "src": "projects/progetti_valtnet/vecellio/vecellio-progetto-2.mp4",
+            "poster": "projects/progetti_valtnet/vecellio/vecellio-progetto-2-poster.webp",
             "ratio": 1.778
       }
 ];
@@ -786,20 +794,17 @@
       }
 
       const tasks = PROJECTS.map(p => {
-        if (p.type === "image" && p.src) {
+        const imgSrc = (p.type === "image" && p.src) ? p.src : (p.type === "video" && p.poster ? p.poster : null);
+        if (imgSrc) {
           return new Promise(resolve => {
             const img = new Image();
-            img.src = encodeURI(p.src);
+            img.src = encodeURI(imgSrc);
             if (img.decode) {
               img.decode().then(() => { step(); resolve(); }).catch(() => { step(); resolve(); });
             } else {
               img.onload = img.onerror = () => { step(); resolve(); };
             }
           });
-        } else if (p.type === "video" && p.src) {
-          // I video vengono caricati/riprodotti on-demand dalle card vicine al fronte
-          step();
-          return Promise.resolve();
         } else {
           step();
           return Promise.resolve();
@@ -814,8 +819,9 @@
     function buildCardContent(p) {
       if (p.type === "video") {
         const safeSrc = encodeURI(p.src);
+        const posterAttr = p.poster ? ` poster="${encodeURI(p.poster)}"` : "";
         return `<div class="card-media">
-          <video muted loop playsinline webkit-playsinline preload="none" data-src="${safeSrc}"></video>
+          <video muted loop playsinline webkit-playsinline preload="metadata"${posterAttr} data-src="${safeSrc}"></video>
         </div>`;
       }
       if (p.type === "lottie") {
@@ -846,6 +852,7 @@
         const src = v.dataset.src;
         v.removeAttribute("data-src");
         v.preload = "auto";
+        v.src = src;
         const s = document.createElement("source");
         s.src = src;
         s.type = "video/mp4";
@@ -907,7 +914,15 @@
     function unlockVideos() {
       document.querySelectorAll(".card video").forEach(v => {
         v.muted = true;
+        v.defaultMuted = true;
+        v.playsInline = true;
       });
+      for (let i = 0; i < SLOTS; i++) {
+        if (Math.abs(ts[i]) < 4.2 || i === selected) {
+          const v = cards[i].querySelector("video");
+          if (v && v.paused) v.play().catch(() => {});
+        }
+      }
     }
     ["pointerdown", "touchstart", "wheel", "keydown", "click"].forEach(evt => {
       window.addEventListener(evt, unlockVideos, { passive: true });
@@ -1046,6 +1061,7 @@
     function select(slot) {
       selected = slot;
       hovered = slot;
+      hydrateMedia(cards[slot]);
       const v = cards[slot].querySelector("video");
       if (v) {
         v.muted = true;
@@ -1290,14 +1306,25 @@
         c.classList.toggle("is-open", open[i] > 0.5 || ue > 0.05);
         c.classList.toggle("is-selected", i === selected);
 
-        // Carica i media e riproduci i video quando la card è vicina al fronte
+        // Carica i media quando la card è visibile o vicina al fronte
+        const isVisible = absT < 6.5 || i === selected;
+        if (isVisible) hydrateMedia(c);
+
+        // Riproduci i video quando la card è vicina al fronte
         const isNearFront = (absT < 4.2 && op > 0.08) || i === selected;
-        if (isNearFront) hydrateMedia(c);
         const v = c.querySelector("video");
         if (v) {
           if (isNearFront) {
-            if (v.paused) v.play().catch(() => {});
+            if (v.paused && !v.dataset.pendingPlay) {
+              v.dataset.pendingPlay = "1";
+              v.play()
+                .catch(() => {})
+                .finally(() => {
+                  delete v.dataset.pendingPlay;
+                });
+            }
           } else {
+            delete v.dataset.pendingPlay;
             if (!v.paused) v.pause();
           }
         }
@@ -1319,9 +1346,11 @@
     preloadAllAssets().then(() => {
       setTimeout(() => {
         document.body.classList.add("preloader-done");
-        // Avvia i video iniziali
+        // Assicura stato audio/video corretto
         document.querySelectorAll(".card video").forEach(v => {
           v.muted = true;
+          v.defaultMuted = true;
+          v.playsInline = true;
         });
         requestAnimationFrame(frame);
       }, 150);
