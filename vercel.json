@@ -31,6 +31,10 @@
     ],
     "rewrites": [
         {
+            "source": "/hidden-portfolio",
+            "destination": "/hidden-portfolio.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
